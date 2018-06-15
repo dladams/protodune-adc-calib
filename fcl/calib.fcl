@@ -1,0 +1,181 @@
+#include "services_dune.fcl"
+
+#This is the default configuration file
+#include "RawDecoder.fcl"
+
+# This must come after all prologs.
+#include "protodune_tools_dune.fcl"
+
+services:
+{
+  TimeTracker:       {}
+  RandomNumberGenerator: {} 
+  ExptGeoHelperInterface:       @local::dune_geometry_helper
+  Geometry:                     @local::protodune_geo
+  DetectorClocksService:        @local::dunefd_detectorclocks
+  DetectorPropertiesService:    @local::protodune_detproperties
+  LArPropertiesService:         @local::dunefd_properties
+  LArFFT:                       @local::dunefd_larfft  
+  DatabaseUtil:                 @local::dunefd_database
+  ChannelStatusService:         @local::dunefd_channel_status
+  TFileService: { 
+   closeFileFast: true  # default
+   fileName:  "RunRawDecoderTFile.root"
+   tmpDir: "<parent-path-of-filename>"  # default
+  }
+  PdspChannelMapService: {
+    FileName:         "protoDUNETPCChannelMap_v3.txt"
+    #FileName:         "null.map"
+    SSPFileName:      "protoDUNESSPChannelMap_v1.txt"
+    LogLevel:         1
+  }
+  #RawDigitPrepService: @local::adcprep_readraw
+  #RawDigitExtractService: @local::rdx_std
+  RawDigitPrepService: {
+    service_provider: ToolBasedRawDigitPrepService
+    LogLevel: 3
+    DoWires: false
+    AdcChannelToolNames: [
+      "digitReader",
+      "adcPedestalFit",
+      "pdapa_adcChannelPedestalRmsPlotter",
+      "adcSampleFiller",
+      "adcThresholdSignalFinder",
+      #"cal_channelTickPlotApa1u",
+      #"cal_channelTickPlotApa1v",
+      #"cal_channelTickPlotApa1z",
+      #"cal_channelTickPlotApa1c",
+      #"roi_channelTickPlotApa1u",
+      #"roi_channelTickPlotApa1v",
+      #"roi_channelTickPlotApa1z",
+      #"roi_channelTickPlotApa1c",
+      #"{tool_type:AdcResultDumper LogLevel:2 Tool:adcRoiFitterPos}"
+      #"{tool_type:AdcResultDumper LogLevel:2 Tool:adcRoiFitterNeg}"
+      "adcRoiFitterPos", "adcRoiFitterNeg"
+    ]
+  }
+}
+
+tools.adcPedestalFit.PlotFileName: "adcped_run%0RUN%_evt%0EVENT%_chan%0CHAN%.png"
+tools.adcPedestalFit.PlotFileName: ""
+tools.adcPedestalFit.PlotSizeX: 1400
+tools.adcPedestalFit.PlotSizeY: 1000
+tools.adcPedestalFit.PlotSplitX: 4
+tools.adcPedestalFit.PlotSplitY: 4
+#tools.adcPedestalFit.RootFileName: "adcPedestalFit.root"
+
+tools.adcThresholdSignalFinder.Threshold: 50
+
+tools.adcThresholdSignalFinderPos: @local::tools.adcThresholdSignalFinder
+tools.adcThresholdSignalFinderPos.FlagPositive: true
+tools.adcThresholdSignalFinderPos.FlagNegative: false
+tools.adcThresholdSignalFinderPos.Threshold: 50
+
+tools.adcThresholdSignalFinderNeg: @local::tools.adcThresholdSignalFinder
+tools.adcThresholdSignalFinderNeg.FlagPositive: false
+tools.adcThresholdSignalFinderNeg.FlagNegative: true 
+tools.adcThresholdSignalFinderNeg.Threshold: 50
+
+tools.adcRoiFitterPos: @local::tools.adcRoiFitter
+tools.adcRoiFitterPos.LogLevel: 2
+tools.adcRoiFitterPos.SigThresh: 100.0
+tools.adcRoiFitterPos.RoiHistOpt: 1
+tools.adcRoiFitterPos.PulserStepCharge: 21.4
+tools.adcRoiFitterPos.PulserDacOffset: 0.34
+tools.adcRoiFitterPos.PulserChargeUnit: "ke"
+tools.adcRoiFitterPos.FitOpt: 1
+tools.adcRoiFitterPos.RunDataTool: protoduneRunDataTool
+tools.adcRoiFitterPos.RoiRootFileName: "roiroipos.root"
+tools.adcRoiFitterPos.SumRootFileName: "roisumpos.root"
+tools.adcRoiFitterPos.ChanSumRootFileName: "roichanpos.root"
+tools.adcRoiFitterPos.SumHists: [
+  {var:fitHeight       name:"hfh_ch%0CHAN%"     title:"ROI fit height run %RUN% channel %CHAN%"                  nbin:100 xmin:100  xmax:5     fit:gaus},
+  {var:fitHeight       name:"hfhw_ch%0CHAN%"    title:"ROI fit height run %RUN% channel %CHAN%"                  nbin:100 xmin:0    xmax:0     fit:gaus},
+  {var:fitWidth        name:"hfw_ch%0CHAN%"     title:"ROI fit width run %RUN% channel %CHAN%"                   nbin:100 xmin:4.0  xmax:4.5   fit:gaus},
+  {var:fitWidth        name:"hfww_ch%0CHAN%"    title:"ROI fit width run %RUN% channel %CHAN%"                   nbin:100 xmin:0.0  xmax:0.0   fit:gaus},
+  {var:fitPosition     name:"hfp_ch%0CHAN%"     title:"ROI fit position run %RUN% channel %CHAN%"                nbin:100 xmin:0.0  xmax:10000         },
+  {var:fitTickRem      name:"hfr_ch%0CHAN%"     title:"ROI fit position remainder run %RUN% channel %CHAN%"      nbin:100 xmin:-0.5 xmax:0.5   fit:gaus},
+  {var:fitPeriodRem    name:"hftw_ch%0CHAN%"    title:"ROI fit period remainder run %RUN% channel %CHAN%"        nbin:500 xmin:-250 xmax:250           },
+  {var:fitChiSquare    name:"hfcsw_ch%0CHAN%"   title:"ROI fit #chi^{2} run %RUN% channel %CHAN%"                nbin:100 xmin:0.0  xmax:0.0           },
+  {var:fitCSNormDof    name:"hfcsndw_ch%0CHAN%" title:"ROI normalized fit #chi^{2}/DOF run %RUN% channel %CHAN%" nbin:100 xmin:0.0  xmax:0.0           },
+  {var:fitHeightGain   name:"hfgw_ch%0CHAN%"    title:"ROI fit height gain run %RUN% channel %CHAN%"             nbin:100 xmin:0    xmax:0     fit:gaus}
+]
+tools.adcRoiFitterPos.ChannelRanges: [
+  {name:apa1u begin:0    end:800  label:"APA1u"},
+  {name:apa1v begin:800  end:1600 label:"APA1v"},
+  {name:apa1z begin:1600 end:2080 label:"APA1z"},
+  {name:apa1c begin:2080 end:2560 label:"APA1c"}
+]
+tools.adcRoiFitterPos.ChanSumHists: [
+  {name:"hcsHeight_%CRNAME%"    title:"ROI fit height run %RUN% %CRLABEL%"                  valHist:"hfhw_ch%0CHAN%"     valType:fitMean errType:fitSigma cr:apa1u},
+  {name:"hcsGain_%CRNAME%"      title:"ROI fit height gain run %RUN% %CRLABEL%"             valHist:"hfgw_ch%0CHAN%"     valType:fitMean errType:fitSigma cr:apa1u},
+  {name:"hcsShaping_%CRNAME%"   title:"ROI fit shaping time run %RUN% %CRLABEL%"            valHist:"hfww_ch%0CHAN%"     valType:fitMean errType:fitSigma cr:apa1u},
+  {name:"hcsChiSquare_%CRNAME%" title:"ROI fit #chi^{2} run %RUN% %CRLABEL%"                valHist:"hfcsw_ch%0CHAN%"    valType:mean    errType:none     cr:apa1u},
+  {name:"hcsCSNormDof_%CRNAME%" title:"ROI fit Normalized #chi^{2}/DOF run %RUN% %CRLABEL%" valHist:"hfcsndw_ch%0CHAN%"  valType:mean    errType:none     cr:apa1u}
+]
+
+tools.adcRoiFitterNeg: @local::tools.adcRoiFitterPos
+tools.adcRoiFitterNeg.SigThresh: -100.0
+tools.adcRoiFitterNeg.PulserStepCharge: -21.4
+tools.adcRoiFitterNeg.RoiRootFileName: "roiroineg.root"
+tools.adcRoiFitterNeg.SumRootFileName: "roisumneg.root"
+tools.adcRoiFitterNeg.ChanSumRootFileName: "roichanneg.root"
+tools.adcRoiFitterNeg.SumHists[0].var:fitHeightNeg
+tools.adcRoiFitterNeg.SumHists[1].var:fitHeightNeg
+
+#tools.adcRoiFitterPos.LogLevel: 4
+
+services.DetectorPropertiesService.NumberTimeSamples: 10000
+services.DetectorPropertiesService.ReadOutWindowSize: 10000
+
+physics:
+{
+  producers:
+  {
+
+    timingrawdecoder: @local::timing_raw_decoder   
+    ssprawdecoder: @local::ssp_raw_decoder  
+    tpcrawdecoder: @local::pdsp_tpc_raw_decoder
+    dataprep: {
+      module_type: DataPrepModule
+      DigitLabel: "tpcrawdecoder:daq"
+      LogLevel: 2
+      DoAssns: false
+      DoGroups: false
+      IntermediateStates: []
+      KeepChannelBegin:    0
+      KeepChannelEnd:    800
+    }
+  }
+
+  #Create path to run module
+  produce: [ timingrawdecoder, ssprawdecoder, tpcrawdecoder, dataprep ] 
+  output: [ out1 ]
+  trigger_paths : [ produce ]
+  end_paths: [ output ]
+}
+
+#services: {
+#}
+
+outputs:
+{
+  out1:
+  {
+    compressionLevel: 1
+    module_type: RootOutput
+    fileName: "RawDecoder.root"
+  }
+
+}
+
+source:
+{
+  module_type: RootInput
+  fileNames: [ "/home/dladams/data/dune/np04/np04_coldbox_test/np04_raw_run000720_1_dl1.root" ]
+  #fileNames: [ "/home/dladams/data/dune/np04/np04_coldbox_test_apa4/np04_raw_run000995_1_dl1.root" ]
+  maxEvents : -1
+}
+
+process_name: processNp04Data
+ 

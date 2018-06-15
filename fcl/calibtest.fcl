@@ -1,0 +1,4 @@
+#include "calib.fcl"
+
+physics.producers.dataprep.KeepChannelBegin: 500
+physics.producers.dataprep.KeepChannelEnd:   600
