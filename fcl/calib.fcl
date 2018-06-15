@@ -97,8 +97,7 @@ tools.adcRoiFitterPos.SumHists: [
   {var:fitTickRem      name:"hfr_ch%0CHAN%"     title:"ROI fit position remainder run %RUN% channel %CHAN%"      nbin:100 xmin:-0.5 xmax:0.5   fit:gaus},
   {var:fitPeriodRem    name:"hftw_ch%0CHAN%"    title:"ROI fit period remainder run %RUN% channel %CHAN%"        nbin:500 xmin:-250 xmax:250           },
   {var:fitChiSquare    name:"hfcsw_ch%0CHAN%"   title:"ROI fit #chi^{2} run %RUN% channel %CHAN%"                nbin:100 xmin:0.0  xmax:0.0           },
-  {var:fitCSNormDof    name:"hfcsndw_ch%0CHAN%" title:"ROI normalized fit #chi^{2}/DOF run %RUN% channel %CHAN%" nbin:100 xmin:0.0  xmax:0.0           },
-  {var:fitHeightGain   name:"hfgw_ch%0CHAN%"    title:"ROI fit height gain run %RUN% channel %CHAN%"             nbin:100 xmin:0    xmax:0     fit:gaus}
+  {var:fitCSNormDof    name:"hfcsndw_ch%0CHAN%" title:"ROI normalized fit #chi^{2}/DOF run %RUN% channel %CHAN%" nbin:100 xmin:0.0  xmax:0.0           }
 ]
 tools.adcRoiFitterPos.ChannelRanges: [
   {name:apa1u begin:0    end:800  label:"APA1u"},
@@ -108,7 +107,6 @@ tools.adcRoiFitterPos.ChannelRanges: [
 ]
 tools.adcRoiFitterPos.ChanSumHists: [
   {name:"hcsHeight_%CRNAME%"    title:"ROI fit height run %RUN% %CRLABEL%"                  valHist:"hfhw_ch%0CHAN%"     valType:fitMean errType:fitSigma cr:apa1u},
-  {name:"hcsGain_%CRNAME%"      title:"ROI fit height gain run %RUN% %CRLABEL%"             valHist:"hfgw_ch%0CHAN%"     valType:fitMean errType:fitSigma cr:apa1u},
   {name:"hcsShaping_%CRNAME%"   title:"ROI fit shaping time run %RUN% %CRLABEL%"            valHist:"hfww_ch%0CHAN%"     valType:fitMean errType:fitSigma cr:apa1u},
   {name:"hcsChiSquare_%CRNAME%" title:"ROI fit #chi^{2} run %RUN% %CRLABEL%"                valHist:"hfcsw_ch%0CHAN%"    valType:mean    errType:none     cr:apa1u},
   {name:"hcsCSNormDof_%CRNAME%" title:"ROI fit Normalized #chi^{2}/DOF run %RUN% %CRLABEL%" valHist:"hfcsndw_ch%0CHAN%"  valType:mean    errType:none     cr:apa1u}

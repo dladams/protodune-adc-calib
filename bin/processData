@@ -47,10 +47,10 @@ if ! fcldump $FCLFILE; then
   echo $FCLFILE
   exit 2
 fi
-DIR=${FCLNAME}00$IRUN
+DIR=${FCLNAME}/$RUNNAME
 echo Run directory: $DIR
 rm -rf $DIR
-mkdir $DIR
+mkdir -p $DIR
 cd $DIR
 FW_SEARCH_PATH="..:$FW_SEARCH_PATH"
 FHICL_FILE_PATH=".:..:../../run:$FHICL_FILE_PATH"

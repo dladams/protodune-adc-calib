@@ -69,21 +69,18 @@ int drawChanSum(int runIn=0) {
       TH1* phwp = dynamic_cast<TH1*>(pfp->Get("hcsShaping_apa1u"));
       TH1* phcp = dynamic_cast<TH1*>(pfp->Get("hcsChiSquare_apa1u"));
       TH1* phrp = dynamic_cast<TH1*>(pfp->Get("hcsCSNormDof_apa1u"));
-      TH1* phgp = dynamic_cast<TH1*>(pfp->Get("hcsGain_apa1u"));
       TH1* phhn = dynamic_cast<TH1*>(pfn->Get("hcsHeight_apa1u"));
       TH1* phwn = dynamic_cast<TH1*>(pfn->Get("hcsShaping_apa1u"));
       TH1* phcn = dynamic_cast<TH1*>(pfn->Get("hcsChiSquare_apa1u"));
       TH1* phrn = dynamic_cast<TH1*>(pfn->Get("hcsCSNormDof_apa1u"));
-      TH1* phgn = dynamic_cast<TH1*>(pfn->Get("hcsGain_apa1u"));
       double ymin = 0.0;
       double ymax = 600*(ipul - 1);
       phhp->GetYaxis()->SetRangeUser(ymin, ymax);
       phwp->GetYaxis()->SetRangeUser(0.0, 6.0);
       phcp->GetYaxis()->SetRangeUser(100.0, 10000000.0);
       phrp->GetYaxis()->SetRangeUser(0.0, 3.0);
-      phgp->GetYaxis()->SetRangeUser(0.0, 30.0);
-      vector<TH1*> histps = {phhp, phwp, phcp, phrp, phgp};
-      vector<TH1*> histns = {phhn, phwn, phcn, phrn, phgn};
+      vector<TH1*> histps = {phhp, phwp, phcp, phrp};
+      vector<TH1*> histns = {phhn, phwn, phcn, phrn};
       for ( TH1* ph : histps ) {
         ph->GetXaxis()->SetRangeUser(chan1, chan2);
         ph->SetMarkerStyle(2);
@@ -130,12 +127,8 @@ int drawChanSum(int runIn=0) {
       pcan2->cd(2);
       phrp->DrawCopy("P");
       phrn->DrawCopy("P same");
-      // Draw height gain
-      pcan3->cd(1);
-      phgp->DrawCopy("P");
-      phgn->DrawCopy("P same");
-      vector<TCanvas*> cans = {pcan1, pcan2, pcan3};
-      vector<string> labs = {"hw", "cs", "ga"};
+      vector<TCanvas*> cans = {pcan1, pcan2};
+      vector<string> labs = {"hw", "cs"};
       for ( unsigned int ican=0; ican<cans.size(); ++ican ) {
         pcan = cans[ican];
         string slab = labs[ican];
