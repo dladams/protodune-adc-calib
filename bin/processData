@@ -10,6 +10,7 @@ RUNS="1194 1195 1193 1197 1192 1198 1203"
 IRUN=1185
 FCLNAME=run
 NEVT=1
+NSKP=0
 #RUN=run001191
 if [ -n "$1" ]; then
   FCLNAME=$1
@@ -17,15 +18,18 @@ fi
 if [ -n "$3" ]; then
   NEVT=$3
 fi
+if [ -n "$4" ]; then
+  NSKP=$4
+fi
 if [ -n "$2" ]; then
   if [ $2 == all ]; then
     for RUN in $RUNS; do
-      $0 $FCLNAME $RUN $NEVT
+      $0 $FCLNAME $RUN $NEVT $NSKIP
     done
   fi
   IRUN=$2
 else
-  echo Usage: $0 FCL RUN [NEVT]
+  echo Usage: $0 FCL RUN [NEVT] [NSKIP]
   exit 0
 fi
 RUNNAME=run00$IRUN
@@ -56,7 +60,13 @@ FW_SEARCH_PATH="..:$FW_SEARCH_PATH"
 FHICL_FILE_PATH=".:..:../../run:$FHICL_FILE_PATH"
 fcldump $FCLFILE 5 >${FCLFILE}dump
 if [ $IRUN != '0' ]; then
-  lar -c $FCLFILE -s $INFILE -n $NEVT 2>&1 | tee run.log
+  lar -c $FCLFILE -s $INFILE -n $NEVT --nskip $NSKP 2>&1 | tee run.log
+  STAT=$?
+  if [ $STAT -ne 0 ]; then
+    echo "Job failed with error $STAT"
+  else
+    echo "Job succeeded."
+  fi
 fi
 echo Run directory: $DIR
-echo ARGS: '-c' $FCLFILE '-s' $INFILE '-n' $NEVT
+echo ARGS: '-c' $FCLFILE '-s' $INFILE '-n' $NEVT '--nskip' $NSKP

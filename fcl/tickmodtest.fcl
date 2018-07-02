@@ -1,0 +1,7 @@
+#include "tickmod.fcl"
+
+physics.producers.dataprep.KeepChannelBegin: 500
+physics.producers.dataprep.KeepChannelEnd:   510
+
+tools.pd_tickmodViewer.LogLevel: 3
+tools.pd_tickmodViewer.PlotChannels: [500]

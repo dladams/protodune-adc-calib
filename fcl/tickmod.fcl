@@ -1,0 +1,7 @@
+#include "ped_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "adcPedestalFit",
+  "pd_tickmodViewer"
+]
