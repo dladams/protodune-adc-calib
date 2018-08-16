@@ -1,1 +1,12 @@
 #include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "adcPedestalFit",
+  "pdtps_adcChannelFembPlotter",
+  "pdtps_adcChannelApaFembPlotter",
+  "pdtps_adcChannelFembChannelPlotter",
+  "pdtps_adcChannelPedestalPlotter",
+  "pdtps_adcChannelPedestalRmsPlotter",
+  "pdtps_adcChannelPedestalPeakBinExcessPlotter"
+]

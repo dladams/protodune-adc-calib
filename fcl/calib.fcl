@@ -38,6 +38,7 @@ services:
     AdcChannelToolNames: [
       "digitReader",
       "adcPedestalFit",
+      "pdapa_adcChannelPedestalPlotter",
       "pdapa_adcChannelPedestalRmsPlotter",
       "adcSampleFiller",
       "adcThresholdSignalFinder",
@@ -90,19 +91,23 @@ tools.adcRoiFitterPos.RoiRootFileName: "roiroipos.root"
 tools.adcRoiFitterPos.SumRootFileName: "roisumpos.root"
 tools.adcRoiFitterPos.ChanSumRootFileName: "roichanpos.root"
 tools.adcRoiFitterPos.SumHists: [
-  {var:fitHeight          name:"hfh_ch%0CHAN%"     title:"ROI fit height run %RUN% channel %CHAN%"                       nbin:100 xmin:100  xmax:5     fit:gaus},
-  {var:fitHeight          name:"hfhw_ch%0CHAN%"    title:"ROI fit height run %RUN% channel %CHAN%"                       nbin:100 xmin:0    xmax:0     fit:gaus},
-  {var:fitWidth           name:"hfw_ch%0CHAN%"     title:"ROI fit width run %RUN% channel %CHAN%"                        nbin:100 xmin:4.0  xmax:4.5   fit:gaus},
-  {var:fitWidth           name:"hfww_ch%0CHAN%"    title:"ROI fit width run %RUN% channel %CHAN%"                        nbin:100 xmin:0.0  xmax:0.0   fit:gaus},
-  {var:fitPos             name:"hfp_ch%0CHAN%"     title:"ROI fit tick run %RUN% channel %CHAN%"                         nbin:200 xmin:0.0  xmax:10000         },
-  {var:fitPosRem          name:"hfr_ch%0CHAN%"     title:"ROI fit tick remainder run %RUN% channel %CHAN%"               nbin:100 xmin:0    xmax:1.0   fit:gaus},
-  {var:fitToffPulser      name:"hftw_ch%0CHAN%"    title:"ROI offset fit tick wrt pulser run %RUN% channel %CHAN%"       nbin:500 xmin:0    xmax:500           },
-  {var:fitToffPulserMod10 name:"hftm_ch%0CHAN%"    title:"ROI offset fit tick wrt pulser run %RUN% channel %CHAN%" nbin:100 xmin:0    xmax:10.0        },
+  {var:fitHeight           name:"hfh_ch%0CHAN%"     title:"ROI fit height run %RUN% channel %CHAN%"                  nbin:100  xmin:100  xmax:5     fit:gaus},
+  {var:fitHeight           name:"hfhw_ch%0CHAN%"    title:"ROI fit height run %RUN% channel %CHAN%"                  nbin:100  xmin:0    xmax:0     fit:gaus},
+  {var:fitWidth            name:"hfw_ch%0CHAN%"     title:"ROI fit width run %RUN% channel %CHAN%"                   nbin:100  xmin:4.0  xmax:4.5   fit:gaus},
+  {var:fitWidth            name:"hfww_ch%0CHAN%"    title:"ROI fit width run %RUN% channel %CHAN%"                   nbin:100  xmin:0.0  xmax:0.0   fit:gaus},
+  {var:fitPos              name:"hfp_ch%0CHAN%"     title:"ROI fit tick run %RUN% channel %CHAN%"                    nbin:200  xmin:0.0  xmax:10000         },
+  {var:fitPosRem           name:"hfr_ch%0CHAN%"     title:"ROI fit tick remainder run %RUN% channel %CHAN%"          nbin:100  xmin:0    xmax:1.0   fit:gaus},
+  {var:fitToffPulser       name:"hftw_ch%0CHAN%"    title:"ROI offset fit tick wrt pulser run %RUN% channel %CHAN%"  nbin:5000 xmin:0    xmax:500           },
+  {var:event_fitToffPulser name:"hftwe_ch%0CHAN%"   title:"ROI offset fit tick wrt pulser run %RUN% channel %CHAN%"  nbin:500  xmin:0    xmax:500
+                                                                                                                     nbiny:100 ymin:0    ymax:400         },
+  {var:fitToffPulser       name:"hfetw_ev%0EVENT%_ch%0CHAN%"
+                                                   title:"ROI offset fit tick wrt pulser event %EVENT% run %RUN% channel %CHAN%"  nbin:500 xmin:0    xmax:500           },
+  {var:fitToffPulserMod10  name:"hftm_ch%0CHAN%"    title:"ROI offset fit tick wrt pulser run %RUN% channel %CHAN%"  nbin:100  xmin:0    xmax:10.0          },
   {var:timingPhase_fitToffPulserMod10
-                          name:"hftmo_ch%0CHAN%"   title:"ROI offset fit tick wrt pulser run %RUN% channel %CHAN%" nbin:100 xmin:0   xmax:10.0
-                                                                                                                         nbiny:25 ymin:0   ymax:1    },
-  {var:fitChiSquare       name:"hfcsw_ch%0CHAN%"   title:"ROI fit #chi^{2} run %RUN% channel %CHAN%"                     nbin:100 xmin:0.0  xmax:0.0           },
-  {var:fitCSNormDof       name:"hfcsndw_ch%0CHAN%" title:"ROI normalized fit #chi^{2}/DOF run %RUN% channel %CHAN%"      nbin:100 xmin:0.0  xmax:0.0           }
+                           name:"hftmo_ch%0CHAN%"   title:"ROI offset fit tick wrt pulser run %RUN% channel %CHAN%"  nbin:200  xmin:0    xmax:10.0
+                                                                                                                    nbiny:25  ymin:0    ymax:1             },
+  {var:fitChiSquare        name:"hfcsw_ch%0CHAN%"   title:"ROI fit #chi^{2} run %RUN% channel %CHAN%"                nbin:100  xmin:0.0  xmax:0.0           },
+  {var:fitCSNormDof        name:"hfcsndw_ch%0CHAN%" title:"ROI normalized fit #chi^{2}/DOF run %RUN% channel %CHAN%" nbin:100  xmin:0.0  xmax:0.0           }
 ]
 tools.adcRoiFitterPos.ChannelRanges: [
   {name:apa1u begin:0    end:800  label:"APA1u"},

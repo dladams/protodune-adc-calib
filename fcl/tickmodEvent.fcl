@@ -1,0 +1,11 @@
+# tickmodevent.fcl
+#
+# David Adams
+# August 2018
+#
+# Change tickmod phase variable from phase to event.
+#
+# Include when using pd_tickmodViewer. E.g.
+# > processData tickmodPhaseFemb/tickmodevent 1234 1
+
+tools.pd_tickmodViewer.PhaseVariable: event

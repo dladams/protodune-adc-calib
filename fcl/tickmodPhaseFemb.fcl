@@ -1,0 +1,12 @@
+# tickmodPhaseFemb.fcl
+#
+# David Adams
+# August 2018
+#
+# Make plots of timing phase vs. tickmod peak position for each FEMB.
+
+#include "tickmod.fcl"
+
+tools.pd_tickmodViewer.PhaseGrouping: femb
+tools.pd_tickmodViewer.PhasePlotFileName: "adctmphase_femb%0FEMB%.png"
+tools.pd_tickmodViewer.PhasePlotSplitX: 2

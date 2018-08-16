@@ -1,0 +1,11 @@
+# tickmodPhaseChannel.fcl
+#
+#
+# David Adams
+# August 2018
+#
+# Make plots of timing phase vs. tickmod peak position for each channel.
+
+#include "tickmod.fcl"
+
+tools.pd_tickmodViewer.PhasePlotFileName: "adctmphase_ch%0CHAN%.png"

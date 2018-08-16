@@ -22,9 +22,10 @@ ACLICBASE=$1
 
 # Do some work to get the directory where this script resides.
 CALLED=$0
-if [ "$CALLED" = bash ]; then
+if [ "$CALLED" = bash -o "$CALLED" = "-bash" ]; then
   CALLED=$BASH_SOURCE
 fi
+#echo $CALLED
 CALLDIR=`dirname $CALLED`
 # Handle absolute and relative path names.
 if [ ${CALLED:0:1} = / ]; then

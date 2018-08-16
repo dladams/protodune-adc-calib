@@ -6,14 +6,39 @@
 #
 # Script to process event data and create calibration histograms.
 
+makeFcl() {
+  FCLNAME=$1
+  FCLFILE=$FCLNAME.fcl
+  if [ -r $FCLFILE ]; then
+    echo makeFcl: File already exists: $FCLFILE
+    return 2
+  fi
+  if [ ${FCLNAME:0:4} = femb ]; then
+    NUM=${FCLNAME:4}
+    while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
+    echo "physics.producers.dataprep.KeepFembs: [$NUM]" >$FCLFILE
+  fi
+  if [ ${FCLNAME:0:4} = chan ]; then
+    NUM=${FCLNAME:4}
+    while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
+    echo "physics.producers.dataprep.KeepChannelBegin: $NUM" >$FCLFILE
+    echo "physics.producers.dataprep.KeepChannelEnd: $((NUM+1))" >>$FCLFILE
+  fi
+  if [ ! -r $FCLFILE ]; then
+    echo makeFcl: Unable to create $FCLFILE
+    return 1
+  fi
+  echo makeFcl: Created $FCLFILE
+}
+
 RUNS="1194 1195 1193 1197 1192 1198 1203"
 IRUN=1185
-FCLNAME=run
+FCLPATH=run
 NEVT=1
 NSKP=0
 #RUN=run001191
 if [ -n "$1" ]; then
-  FCLNAME=$1
+  FCLPATH=$1
 fi
 if [ -n "$3" ]; then
   NEVT=$3
@@ -24,7 +49,7 @@ fi
 if [ -n "$2" ]; then
   if [ $2 == all ]; then
     for RUN in $RUNS; do
-      $0 $FCLNAME $RUN $NEVT $NSKIP
+      $0 $FCLPATH $RUN $NEVT $NSKIP
     done
   fi
   IRUN=$2
@@ -34,33 +59,47 @@ else
 fi
 RUNNAME=run00$IRUN
 
-rm -f *.png *.log *.root
-INDIR=/home/dladams/data/dune/np04/np04_coldbox_test_apa5
-INNAME=np04_raw_${RUNNAME}_1_dl1.root
-INFILE=$INDIR/$INNAME
-if [ ! -r $INFILE -a $IRUN != 0 ]; then
-  echo Input data file not found:
-  echo $INFILE
-  exit 1
-fi
-
-
-FCLFILE=$FCLNAME.fcl
-if ! fcldump $FCLFILE; then
-  echo Top fcl file not found:
-  echo $FCLFILE
-  exit 2
-fi
-DIR=${FCLNAME}/$RUNNAME
+DIR=`echo ${FCLPATH}/$RUNNAME | sed 's#:#/#g'`
 echo Run directory: $DIR
 rm -rf $DIR
 mkdir -p $DIR
 cd $DIR
+
+INDIRS=/home/dladams/data/dune/np04/*
+INNAMES="np04_raw_${RUNNAME}_1_dl1.root np04_raw_${RUNNAME}_0001_dl1.root"
+INFILES=
+for INDIR in $INDIRS; do
+  for INFILE in $INDIR/np04_raw_${RUNNAME}_*_dl1.root; do
+    if [ -r $INFILE ]; then
+      INFILES="$INFILES $INFILE"
+    fi
+  done
+done
+if [ -z "$INFILES" ]; then
+  echo Input data file not found: $INNAME
+  exit 1
+fi
+echo "Input file(s):" $INFILES
+
+touch run.fcl
+for NAME in `echo $FCLPATH | sed 's#/# #g'`; do
+  if ! fcldump $NAME.fcl 2>&1 1>/dev/null; then 
+    if ! makeFcl $NAME; then
+      echo FCL not found: $NAME.fcl
+      exit 2
+    fi
+  fi
+  echo "#include \"$NAME.fcl\"" >>run.fcl
+done
+FCLFILE=run.fcl
+
 FW_SEARCH_PATH="..:$FW_SEARCH_PATH"
 FHICL_FILE_PATH=".:..:../../run:$FHICL_FILE_PATH"
-fcldump $FCLFILE 5 >${FCLFILE}dump
+if ! fcldump $FCLFILE 5 >${FCLFILE}dump; then
+  exit 3
+fi
 if [ $IRUN != '0' ]; then
-  lar -c $FCLFILE -s $INFILE -n $NEVT --nskip $NSKP 2>&1 | tee run.log
+  lar -c $FCLFILE -s $INFILES -n $NEVT --nskip $NSKP --no-output 2>&1 | tee run.log
   STAT=$?
   if [ $STAT -ne 0 ]; then
     echo "Job failed with error $STAT"
@@ -69,4 +108,4 @@ if [ $IRUN != '0' ]; then
   fi
 fi
 echo Run directory: $DIR
-echo ARGS: '-c' $FCLFILE '-s' $INFILE '-n' $NEVT '--nskip' $NSKP
+echo ARGS: '-c' $FCLFILE '-s' $INFILES '-n' $NEVT '--nskip' $NSKP

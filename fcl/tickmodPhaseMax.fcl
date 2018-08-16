@@ -1,0 +1,10 @@
+# tickmodPhaseMax.fcl
+#
+# David Adams
+# August 2018
+#
+# Make max tickmod plots for each channel.
+
+#include "tickmod.fcl"
+
+tools.pd_tickmodViewer.MaxPlotFileName: "adctmMax_run%RUN%_ch%0CHAN%.png"

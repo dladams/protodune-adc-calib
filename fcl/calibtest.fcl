@@ -1,6 +1,6 @@
 #include "calib.fcl"
 
-physics.producers.dataprep.KeepChannelBegin: 500
-physics.producers.dataprep.KeepChannelEnd:   501
+physics.producers.dataprep.KeepChannelBegin:   0
+physics.producers.dataprep.KeepChannelEnd:   800
 
 tmp: @local::services.RawDigitPrepService.AdcChannelToolNames

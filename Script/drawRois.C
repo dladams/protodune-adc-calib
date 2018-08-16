@@ -17,15 +17,16 @@ int drawRois(int run=1193, double ymax =0.0, int evt=4, int icha=500, int nroi=8
     cout << myname << "Unable to open file " << sfn << endl;
     return 2;
   }
-  vector<int> ipads = {1, 2, 3, 4, 9, 10, 11, 12};
+  vector<int> ipads = {0, 1, 2, 3, 8, 9, 10, 11};
   int iroiEnd = iroiBegin + nroi;
   int iroi = iroiBegin;
   bool done = iroi >= iroiEnd;
   while ( ! done ) {
     if ( done ) break;
-    TCanvas* pcan = new TCanvas;
-    pcan->SetWindowSize(1500, 1000);
-    pcan->Divide(4,4);
+    TPadManipulator man(1500, 1000, 4, 4);
+    //TCanvas* pcan = new TCanvas;
+    //pcan->SetWindowSize(1500, 1000);
+    //pcan->Divide(4,4);
     int iroi1 = -1;
     int iroi2 = -1;
     int npad = 0;
@@ -42,9 +43,10 @@ int drawRois(int run=1193, double ymax =0.0, int evt=4, int icha=500, int nroi=8
         done = true;
         break;
       } else {
-        pcan->cd(ipad);
+        //pcan->cd(ipad);
         if ( ymax > 0.0 ) php->GetYaxis()->SetRangeUser(-ymax, ymax);
-        php->DrawCopy();
+        //php->DrawCopy();
+        man.add(ipad, php);
         if ( npad == 0 ) iroi1 = iroi;
         iroi2 = iroi;
         ++npad;
@@ -55,9 +57,10 @@ int drawRois(int run=1193, double ymax =0.0, int evt=4, int icha=500, int nroi=8
         done = true;
         break;
       } else {
-        pcan->cd(ipad+4);
+        //pcan->cd(ipad+4);
         if ( ymax > 0.0 ) phn->GetYaxis()->SetRangeUser(-ymax, ymax);
-        phn->DrawCopy();
+        man.add(ipad+4, phn);
+        //phn->DrawCopy();
         if ( npad == 0 ) iroi1 = iroi;
         iroi2 = iroi;
         ++npad;
@@ -68,7 +71,8 @@ int drawRois(int run=1193, double ymax =0.0, int evt=4, int icha=500, int nroi=8
       ssout.str("");
       ssout << "hroi_run" << run << "_evt" << evt << "_chan" << icha << "_roi" << iroi1 << "-" << iroi2 << ".png";
       string fno = ssout.str();
-      pcan->Print(fno.c_str());
+      man.print(fno);
+      //pcan->Print(fno.c_str());
     }
   }
   return 0;

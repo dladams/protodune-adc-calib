@@ -1,6 +1,6 @@
 #include "services_dune.fcl"
 
-#This is the default configuration file
+# This is the default configuration file
 #include "RawDecoder.fcl"
 
 # This must come after all prologs.
@@ -39,6 +39,7 @@ services:
     AdcChannelToolNames: [
       "digitReader",
       "adcPedestalFit",
+      "pdapa_adcChannelPedestalPlotter",
       "pdapa_adcChannelPedestalRmsPlotter"
     ]
   }
@@ -61,13 +62,14 @@ physics:
       IntermediateStates: []
       KeepChannelBegin:    0
       KeepChannelEnd:      0
-      OnlineChannelMapTool: pd_onlineChannelMap
+      #OnlineChannelMapTool: pd_onlineChannelMap
+      OnlineChannelMapTool: pd_onlineChannelMapByFemb
     }
   }
 
   #Create path to run module
   produce: [ timingrawdecoder, ssprawdecoder, tpcrawdecoder, dataprep ] 
-  output: [ out1 ]
+  output: [ ]
   trigger_paths : [ produce ]
   end_paths: [ output ]
 }

@@ -49,7 +49,10 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
 
   // Append this package directory to the macro search path.
   // Needed if this script is run from a different directory.
-  gROOT->SetMacroPath(pkgDir.c_str());
+  string oldMacroPath = TROOT::GetMacroPath();
+  string newMacroPath = ".:" + pkgDir;
+  if ( oldMacroPath.size() ) newMacroPath += ":" + oldMacroPath;
+  gROOT->SetMacroPath(newMacroPath.c_str());
 
   // Load the dunetpc and other supporting libraries.
   vector<string> libs;
@@ -57,6 +60,8 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   libs.push_back("$DUNETPC_LIB/libdune_ArtSupport");
   libs.push_back("$DUNETPC_LIB/libdune_DuneServiceAccess");
   libs.push_back("$DUNETPC_LIB/libdune_DuneCommon");
+  libs.push_back("$DUNETPC_LIB/libdune_Geometry");
+  libs.push_back("$DUNETPC_LIB/libdune_DataPrep_Utility");
   string libext = "so";
   string arch = gSystem->GetBuildArch();
   if ( arch.substr(0,3) == "mac" ) libext = "dylib";
@@ -74,12 +79,16 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/ArtSupport/ArtServiceHelper.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/TPadManipulator.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/AdcChannelData.h+");
+  gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/Tool/IndexMapTool.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/Tool/AdcChannelTool.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/ArtSupport/ArtServiceHelper.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneServiceAccess/DuneServiceAccess.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/coldelecResponse.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/offsetLine.h+");
+  gROOT->ProcessLine(".L $DUNETPC_INC/dune/Geometry/ChannelGeo.h+");
+  gROOT->ProcessLine(".L $DUNETPC_INC/dune/DataPrep/Utility/TickModTreeData.h+");
   gROOT->ProcessLine(".L $DUNE_RAW_DATA_INC/dune-raw-data/Services/ChannelMap/PdspChannelMapService.h+");
+  gROOT->ProcessLine(".L $LARCORE_INC/larcore/Geometry/Geometry.h+");
 
   // Build scripts to be used only from the Root command line.
   cout << "Loading local libraries." << endl;

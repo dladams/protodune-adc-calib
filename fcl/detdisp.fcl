@@ -3,8 +3,9 @@
 services.RawDigitPrepService.AdcChannelToolNames: [
   "digitReader",
   "adcPedestalFit",
-  #"pdtps_adcChannelApaFembPlotter",
-  "pd_tickmodViewer"
+  "rawAdcDetectorPlotColl",
+  "rawAdcDetectorPlotInd1",
+  "rawAdcDetectorPlotInd2"
 ]
 
 #tools.pd_tickmodViewer.MaxPlotFileName: "adctmMax_run%RUN%_ch%0CHAN%.png"
