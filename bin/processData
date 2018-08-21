@@ -65,7 +65,7 @@ rm -rf $DIR
 mkdir -p $DIR
 cd $DIR
 
-INDIRS=/home/dladams/data/dune/np04/*
+INDIRS=$HOME/data/dune/np04/*
 INNAMES="np04_raw_${RUNNAME}_1_dl1.root np04_raw_${RUNNAME}_0001_dl1.root"
 INFILES=
 for INDIR in $INDIRS; do
@@ -76,7 +76,10 @@ for INDIR in $INDIRS; do
   done
 done
 if [ -z "$INFILES" ]; then
-  echo Input data file not found: $INNAME
+  echo "Input data file(s) not found:"
+  for INNAME in $INNAMES; do
+    echo "  $INNAME"
+  done
   exit 1
 fi
 echo "Input file(s):" $INFILES
