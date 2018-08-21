@@ -1,0 +1,10 @@
+# tickmodTree.fcl
+#
+# David Adams
+# August 2018
+#
+# Make plots of timing phase vs. tickmod peak position for each FEMB.
+
+#include "tickmod.fcl"
+
+tools.pd_tickmodViewer.TreeFileName: "tickmod_run%0RUN%.root"

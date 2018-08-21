@@ -1,0 +1,10 @@
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  #"adcPedestalFit",
+  "adcPlotRaw"
+]
+
+tools.adcPlotRaw.RootFileName: "adcplots.root"
+tools.adcPlotRaw.LogLevel: 3
