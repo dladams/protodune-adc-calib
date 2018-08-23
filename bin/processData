@@ -69,7 +69,7 @@ INDIRS=$HOME/data/dune/np04/*
 INNAMES="np04_raw_${RUNNAME}_1_dl1.root np04_raw_${RUNNAME}_0001_dl1.root"
 INFILES=
 for INDIR in $INDIRS; do
-  for INFILE in $INDIR/np04_raw_${RUNNAME}_*_dl1.root; do
+  for INFILE in $INDIR/np04_raw_${RUNNAME}_*_dl?.root; do
     if [ -r $INFILE ]; then
       INFILES="$INFILES $INFILE"
     fi
@@ -82,7 +82,10 @@ if [ -z "$INFILES" ]; then
   done
   exit 1
 fi
-echo "Input file(s):" $INFILES
+echo "Input file(s):"
+for INFILE in $INFILES; do
+  echo "  $INFILE"
+done
 
 touch run.fcl
 for NAME in `echo $FCLPATH | sed 's#/# #g'`; do
