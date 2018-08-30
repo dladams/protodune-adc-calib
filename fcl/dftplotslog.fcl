@@ -1,0 +1,21 @@
+# dftplots.fcl
+#
+# David Adams
+# August 2018
+#
+# Make plots of DFT poser for each event and channel.
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "adcPedestalFit",
+  "adcSampleFiller",
+  "adcFFT",
+  "adcPlotDftTickPowerLog"
+]
+
+tools.adcPedestalFit.PlotFileName: "peds_run%0RUN%_evt%0EVENT%_ch%0CHAN%.png"
+tools.adcPedestalFit.PlotSplitX: 4
+tools.adcPedestalFit.PlotSizeX: 1400
+tools.adcPedestalFit.PlotSizeY: 1000

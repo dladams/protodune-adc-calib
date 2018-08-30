@@ -8,3 +8,4 @@
 #include "tickmod.fcl"
 
 tools.pd_tickmodViewer.TreeFileName: "tickmod_run%0RUN%.root"
+tools.pd_tickmodViewer.LogLevel: 2

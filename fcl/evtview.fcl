@@ -1,0 +1,8 @@
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  #"adcPedestalFit",
+  #"pdtps_adcChannelApaFembPlotter",
+  "pd_evtview"
+]
