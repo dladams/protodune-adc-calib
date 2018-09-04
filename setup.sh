@@ -34,7 +34,12 @@ else
   PKGDIR=`pwd`/$CALLDIR
 fi
 PKGDIR=`readlink -f $PKGDIR`
-if [ ! -r $PKGDIR/setup.sh ]; then
+LOCAL_SETUP_NAME=setup_protodune-adc-calib.sh
+LOCAL_SETUP_FILE=`pwd`/$LOCAL_SETUP_NAME
+if false; then
+  echo "Local setup file is $LOCAL_SETUP_FILE"
+  echo "PKGDIR is $PKGDIR"
+elif [ ! -r $PKGDIR/setup.sh ]; then
   echo Unable to locate the sourced package script
 else
   echo Setting up package at $PKGDIR
@@ -93,6 +98,13 @@ else
       echo '  gROOT->ProcessLine("DuneToolManager::instance(\"protodune_tools_dune.fcl\")");' >> $FOUT
       echo '}' >> $FOUT
       echo Created $FOUT
+    fi
+
+    # Create local setup file.
+    if [ ! -r $LOCAL_SETUP_FILE ]; then
+      echo "source $PKGDIR/setup.sh" >$LOCAL_SETUP_FILE
+      echo "In future, set up with"
+      echo "> source $LOCAL_SETUP_NAME"
     fi
   fi
 fi
