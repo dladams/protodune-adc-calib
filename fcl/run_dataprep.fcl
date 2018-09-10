@@ -74,7 +74,7 @@ physics:
   end_paths: [ output ]
 }
 
-physics.producers.timingrawdecoder.MakeEventTimeFile: true
+#physics.producers.timingrawdecoder.MakeEventTimeFile: true
 
 outputs:
 {
