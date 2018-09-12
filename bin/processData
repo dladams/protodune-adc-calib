@@ -104,8 +104,11 @@ FHICL_FILE_PATH=".:..:../../run:$FHICL_FILE_PATH"
 if ! fcldump $FCLFILE 5 >${FCLFILE}dump; then
   exit 3
 fi
+echo "lar -c $FCLFILE -s $INFILES -n $NEVT --nskip $NSKP --no-output" >run
+chmod +x run
 if [ $IRUN != '0' ]; then
-  lar -c $FCLFILE -s $INFILES -n $NEVT --nskip $NSKP --no-output 2>&1 | tee run.log
+  #lar -c $FCLFILE -s $INFILES -n $NEVT --nskip $NSKP --no-output 2>&1 | tee run.log
+  ./run 2>&1 | tee run.log
   STAT=$?
   if [ $STAT -ne 0 ]; then
     echo "Job failed with error $STAT"
@@ -115,3 +118,4 @@ if [ $IRUN != '0' ]; then
 fi
 echo Run directory: $DIR
 echo ARGS: '-c' $FCLFILE '-s' $INFILES '-n' $NEVT '--nskip' $NSKP
+echo Command: `cat run`

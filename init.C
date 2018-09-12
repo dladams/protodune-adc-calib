@@ -78,6 +78,7 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/ArtSupport/DuneToolManager.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/ArtSupport/ArtServiceHelper.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/TPadManipulator.h+");
+  gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/RootPalette.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/AdcChannelData.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/Tool/IndexRangeTool.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/Tool/IndexMapTool.h+");
