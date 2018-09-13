@@ -110,10 +110,10 @@ tools.adcRoiFitterPos.SumHists: [
   {var:fitCSNormDof        name:"hfcsndw_ch%0CHAN%" title:"ROI normalized fit #chi^{2}/DOF run %RUN% channel %CHAN%" nbin:100  xmin:0.0  xmax:0.0           }
 ]
 tools.adcRoiFitterPos.ChannelRanges: [
-  {name:apa1u begin:0    end:800  label:"APA1u"},
-  {name:apa1v begin:800  end:1600 label:"APA1v"},
-  {name:apa1z begin:1600 end:2080 label:"APA1z"},
-  {name:apa1c begin:2080 end:2560 label:"APA1c"}
+  {name:apa1u begin:0    end:800  labels:["APA1u]"},
+  {name:apa1v begin:800  end:1600 labels:["APA1v]"},
+  {name:apa1z begin:1600 end:2080 labels:["APA1z]"},
+  {name:apa1c begin:2080 end:2560 labels:["APA1c]"}
 ]
 tools.adcRoiFitterPos.ChanSumHists: [
   {name:"hcsHeight_%CRNAME%"    title:"ROI fit height run %RUN% %CRLABEL%"                  valHist:"hfhw_ch%0CHAN%"     valType:fitMean errType:fitSigma cr:apa1u},
