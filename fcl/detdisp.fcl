@@ -3,9 +3,9 @@
 services.RawDigitPrepService.AdcChannelToolNames: [
   "digitReader",
   "adcPedestalFit",
-  "rawAdcDetectorPlotColl",
-  "rawAdcDetectorPlotInd1",
-  "rawAdcDetectorPlotInd2"
+  #"rawAdcDetectorPlotInd1",
+  #"rawAdcDetectorPlotInd2",
+  "rawAdcDetectorPlotColl"
 ]
 
-#tools.pd_tickmodViewer.MaxPlotFileName: "adctmMax_run%RUN%_ch%0CHAN%.png"
+#tools.rawAdcDetectorPlotColl.SignalThreshold: 20
