@@ -37,9 +37,9 @@ services:
     DoWires: false
     AdcChannelToolNames: [
       "digitReader",
-      "adcPedestalFit",
+      "pd_adcPedestalFit",
       "pdapa_adcChannelPedestalPlotter",
-      "pdapa_adcChannelPedestalRmsPlotter",
+      "pdapa_adcChannelPedestalNoisePlotter",
       "adcSampleFiller",
       "adcThresholdSignalFinder",
       #"cal_channelTickPlotApa1u",
@@ -57,13 +57,13 @@ services:
   }
 }
 
-tools.adcPedestalFit.PlotFileName: "adcped_run%0RUN%_evt%0EVENT%_chan%0CHAN%.png"
-#tools.adcPedestalFit.PlotFileName: ""
-tools.adcPedestalFit.PlotSizeX: 1400
-tools.adcPedestalFit.PlotSizeY: 1000
-tools.adcPedestalFit.PlotSplitX: 4
-tools.adcPedestalFit.PlotSplitY: 4
-#tools.adcPedestalFit.RootFileName: "adcPedestalFit.root"
+tools.pd_adcPedestalFit.PlotFileName: "adcped_run%0RUN%_evt%0EVENT%_chan%0CHAN%.png"
+#tools.pd_adcPedestalFit.PlotFileName: ""
+tools.pd_adcPedestalFit.PlotSizeX: 1400
+tools.pd_adcPedestalFit.PlotSizeY: 1000
+tools.pd_adcPedestalFit.PlotSplitX: 4
+tools.pd_adcPedestalFit.PlotSplitY: 4
+#tools.pd_adcPedestalFit.RootFileName: "adcPedestalFit.root"
 
 tools.adcThresholdSignalFinder.Threshold: 50
 

@@ -2,7 +2,7 @@
 
 services.RawDigitPrepService.AdcChannelToolNames: [
   "digitReader",
-  #"adcPedestalFit",
+  #"pd_adcPedestalFit",
   #"pdtps_adcChannelApaFembPlotter",
   "pd_evtview"
 ]

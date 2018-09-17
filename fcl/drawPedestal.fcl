@@ -1,4 +1,4 @@
-tools.adcPedestalFit.PlotFileName: "ped_evt%0EVENT%_ch%0CHAN%.png"
-tools.adcPedestalFit.PlotSplitX: 1
-tools.adcPedestalFit.LogLevel: 3
+tools.pd_adcPedestalFit.PlotFileName: "ped_evt%0EVENT%_ch%0CHAN%.png"
+tools.pd_adcPedestalFit.PlotSplitX: 1
+tools.pd_adcPedestalFit.LogLevel: 3
 

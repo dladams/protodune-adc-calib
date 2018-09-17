@@ -2,11 +2,11 @@
 
 services.RawDigitPrepService.AdcChannelToolNames: [
   "digitReader",
-  "adcPedestalFit",
+  "pd_adcPedestalFit",
   "pdtps_adcChannelFembPlotter",
   "pdtps_adcChannelApaFembPlotter",
   "pdtps_adcChannelFembChannelPlotter",
   "pdtps_adcChannelPedestalPlotter",
-  "pdtps_adcChannelPedestalRmsPlotter",
+  "pdtps_adcChannelPedestalNoisePlotter",
   "pdtps_adcChannelPedestalPeakBinExcessPlotter"
 ]

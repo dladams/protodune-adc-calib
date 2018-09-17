@@ -9,13 +9,13 @@
 
 services.RawDigitPrepService.AdcChannelToolNames: [
   "digitReader",
-  "adcPedestalFit",
+  "pd_adcPedestalFit",
   "adcSampleFiller",
   "adcFFT",
   "adcPlotDftTickPowerLog"
 ]
 
-tools.adcPedestalFit.PlotFileName: "peds_run%0RUN%_evt%0EVENT%_ch%0CHAN%.png"
-tools.adcPedestalFit.PlotSplitX: 4
-tools.adcPedestalFit.PlotSizeX: 1400
-tools.adcPedestalFit.PlotSizeY: 1000
+tools.pd_adcPedestalFit.PlotFileName: "peds_run%0RUN%_evt%0EVENT%_ch%0CHAN%.png"
+tools.pd_adcPedestalFit.PlotSplitX: 4
+tools.pd_adcPedestalFit.PlotSizeX: 1400
+tools.pd_adcPedestalFit.PlotSizeY: 1000

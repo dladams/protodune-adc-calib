@@ -38,9 +38,9 @@ services:
     DoWires: false
     AdcChannelToolNames: [
       "digitReader",
-      "adcPedestalFit",
+      "pd_adcPedestalFit",
       "pdapa_adcChannelPedestalPlotter",
-      "pdapa_adcChannelPedestalRmsPlotter"
+      "pdapa_adcChannelPedestalNoisePlotter"
     ]
   }
 }
