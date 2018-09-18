@@ -1,0 +1,17 @@
+# wf.fcl
+#
+# David Adams
+# September 2018
+#
+# Produce waveform plots.
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pd_adcPedestalFit",
+  "adcPlotRaw"
+]
+
+#tools.adcPlotRaw.RootFileName: "wf.root"
+tools.adcPlotRaw.PlotFileName: "wf%0CHAN%.png"
