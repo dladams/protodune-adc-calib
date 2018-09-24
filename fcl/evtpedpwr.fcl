@@ -3,5 +3,5 @@
 services.RawDigitPrepService.AdcChannelToolNames: [
   "digitReader",
   "pd_adcPedestalFit",
-  "pd_evtpedpwr"
+  "pd_evtviewPedpwr"
 ]
