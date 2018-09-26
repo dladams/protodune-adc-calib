@@ -1,0 +1,13 @@
+# metricNraw.fcl
+#
+# David Adams
+# September 2018
+#
+# Make plots of ntick for each event and channel.
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pdtps_adcChannelNrawPlotter"
+]
