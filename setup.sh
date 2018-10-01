@@ -95,7 +95,8 @@ else
     if [ ! -r $FOUT ]; then
       echo '{' >> $FOUT
       echo '  gROOT->ProcessLine(".x pkginit.C");' >> $FOUT
-      echo '  gROOT->ProcessLine("DuneToolManager::instance(\"protodune_tools_dune.fcl\")");' >> $FOUT
+      echo '  gROOT->ProcessLine("ArtServiceHelper::load(\"run_dataprep.fcl\")");' >> $FOUT
+      echo '  gROOT->ProcessLine("DuneToolManager::instance(\"run_dataprep.fcl\")");' >> $FOUT
       echo '}' >> $FOUT
       echo Created $FOUT
     fi
