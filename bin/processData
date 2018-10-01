@@ -57,7 +57,9 @@ else
   echo Usage: $0 FCL RUN [NEVT] [NSKIP]
   exit 0
 fi
-RUNNAME=run00$IRUN
+FRUN=$IRUN
+while [ ${#FRUN} -lt 6 ]; do FRUN=0$FRUN; done
+RUNNAME=run$FRUN
 
 DIR=`echo ${FCLPATH}/$RUNNAME | sed 's#:#/#g'`
 echo Run directory: $DIR
@@ -65,27 +67,36 @@ rm -rf $DIR
 mkdir -p $DIR
 cd $DIR
 
-INDIRS=$HOME/data/dune/np04/*
-INNAMES="np04_raw_${RUNNAME}_1_dl1.root np04_raw_${RUNNAME}_0001_dl1.root"
-INFILES=
-for INDIR in $INDIRS; do
-  for INFILE in $INDIR/np04_raw_${RUNNAME}_*_dl?.root; do
-    if [ -r $INFILE ]; then
-      INFILES="$INFILES $INFILE"
-    fi
+INSPEC=
+INFILELIST=$HOME/data/dune/np04/np04_cryostat_commissioning/np04_run${FRUN}_files.txt
+if [ -r $INFILELIST ]; then
+  echo Taking input files from $INFILELIST
+  INSPEC="-S $INFILELIST"
+else
+  INDIRS="$HOME/data/dune/np04/*"
+  echo Searching for matching files in $INDIRS
+  INNAMES="np04_raw_${RUNNAME}_1_dl1.root np04_raw_${RUNNAME}_0001_dl1.root"
+  INFILES=
+  for INDIR in $INDIRS; do
+    for INFILE in $INDIR/np04_raw_${RUNNAME}_*_dl?.root; do
+      if [ -r $INFILE ]; then
+        INFILES="$INFILES $INFILE"
+      fi
+    done
   done
-done
-if [ -z "$INFILES" ]; then
-  echo "Input data file(s) not found:"
-  for INNAME in $INNAMES; do
-    echo "  $INNAME"
+  if [ -z "$INFILES" ]; then
+    echo "Input data file(s) not found:"
+    for INNAME in $INNAMES; do
+      echo "  $INNAME"
+    done
+    exit 1
+  fi
+  echo "Input file(s):"
+  for INFILE in $INFILES; do
+    echo "  $INFILE"
   done
-  exit 1
+  INSPEC="-s $INFILES"
 fi
-echo "Input file(s):"
-for INFILE in $INFILES; do
-  echo "  $INFILE"
-done
 
 touch run.fcl
 for NAME in `echo $FCLPATH | sed 's#/# #g'`; do
@@ -104,10 +115,9 @@ FHICL_FILE_PATH=".:..:../../run:$FHICL_FILE_PATH"
 if ! fcldump $FCLFILE 5 >${FCLFILE}dump; then
   exit 3
 fi
-echo "lar -c $FCLFILE -s $INFILES -n $NEVT --nskip $NSKP --no-output" >run
+echo "lar -c $FCLFILE $INSPEC -n $NEVT --nskip $NSKP --no-output" >run
 chmod +x run
 if [ $IRUN != '0' ]; then
-  #lar -c $FCLFILE -s $INFILES -n $NEVT --nskip $NSKP --no-output 2>&1 | tee run.log
   ./run 2>&1 | tee run.log
   STAT=$?
   if [ $STAT -ne 0 ]; then
