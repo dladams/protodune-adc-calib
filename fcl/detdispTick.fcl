@@ -1,0 +1,7 @@
+#include "detdisp.fcl"
+
+tools.rawAdcDetectorPlotColl.Tick0: -200
+tools.rawAdcDetectorPlotColl.DriftSpeed: 0.05
+tools.rawAdcDetectorPlotColl.ShowAllTicks: true
+tools.rawAdcDetectorPlotColl.Title: "All-tick raw ADC collection view. Run %RUN%, event %EVENT%. Trigger %TRIG%."
+
