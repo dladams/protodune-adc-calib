@@ -1,15 +1,14 @@
 #include "run_dataprep.fcl"
 
-tools.pd_clkviewPedpwr: {
+tools.pd_timviewPedpwr: {
   tool_type: AdcEventViewer
   LogLevel: 2
   EventHists: ["rmPedPower:50:0:25"]
   EventGraphs: [
     "time:0:0:nfemb:0:21", 
+    "time:0:0:meanPed:0:0",
+    "time:0:0:meanPed:0:4100",
     "time:0:0:rmPedPower:0:0",
-    "time:0:100:rmPedPower:0:0",
-    "time:0:10:rmPedPower:0:0",
-    "time:0:1:rmPedPower:0:0",
     "time:0:0:rmPedPower:0:14"
   ]
   ChannelRanges: []
@@ -21,5 +20,5 @@ tools.pd_clkviewPedpwr: {
 services.RawDigitPrepService.AdcChannelToolNames: [
   "digitReader",
   "pd_adcPedestalFit",
-  "pd_clkviewPedpwr"
+  "pd_timviewPedpwr"
 ]

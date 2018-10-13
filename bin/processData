@@ -73,6 +73,8 @@ if [ -r $INFILELIST ]; then
   echo Taking input files from $INFILELIST
   INSPEC="-S $INFILELIST"
 else
+  echo Did not find file list $INFILELIST
+  echo Searching directly for files...
   INDIRS="$HOME/data/dune/np04/*"
   echo Searching for matching files in $INDIRS
   INNAMES="np04_raw_${RUNNAME}_1_dl1.root np04_raw_${RUNNAME}_0001_dl1.root"
