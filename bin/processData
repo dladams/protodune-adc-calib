@@ -24,6 +24,14 @@ makeFcl() {
     echo "physics.producers.dataprep.KeepChannelBegin: $NUM" >$FCLFILE
     echo "physics.producers.dataprep.KeepChannelEnd: $((NUM+1))" >>$FCLFILE
   fi
+  if [ ${FCLNAME:0:2} = wf -a ${#FCLNAME} -gt 2 ]; then
+    NUM1=${FCLNAME:2}
+    while [ ${NUM1:0:1} = 0 -a ${#NUM1} -gt 1 ]; do NUM1=${NUM1:1}; done
+    NUM2=$((NUM1+1000))
+    echo '#include "wf.fcl"' >$FCLFILE
+    echo "tools.adcPlotRaw.PlotSamMin: $NUM1" >>$FCLFILE
+    echo "tools.adcPlotRaw.PlotSamMax: $NUM2" >>$FCLFILE
+  fi
   if [ ! -r $FCLFILE ]; then
     echo makeFcl: Unable to create $FCLFILE
     return 1

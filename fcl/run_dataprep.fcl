@@ -17,7 +17,7 @@ services:
   LArPropertiesService:         @local::dunefd_properties
   LArFFT:                       @local::dunefd_larfft  
   DatabaseUtil:                 @local::dunefd_database
-  ChannelStatusService:         @local::dunefd_channel_status
+  ChannelStatusService:         @local::pdsp_channel_status
   TFileService: { 
    closeFileFast: true  # default
    fileName:  "RunRawDecoderTFile.root"

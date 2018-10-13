@@ -1,0 +1,5 @@
+#include "apa3z.fcl"
+
+tools.pdcht_Apa3z.TickRebin:  5
+tools.tickRanges.plotTicks.begin: 0
+tools.tickRanges.plotTicks.end:   0
