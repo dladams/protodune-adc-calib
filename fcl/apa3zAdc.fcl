@@ -1,0 +1,17 @@
+# apa3z.fcl
+#
+# David Adams
+# October 2018
+#
+# Make a channel-tick plot of the collection plane where the
+# beam enters protoDUNE.
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pd_adcPedestalFit",
+  "pdcht_Apa3z"
+]
+
+tools.pdcht_Apa3z.MaxSignal: 400
