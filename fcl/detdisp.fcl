@@ -3,8 +3,6 @@
 services.RawDigitPrepService.AdcChannelToolNames: [
   "digitReader",
   "pd_adcPedestalFit",
-  #"rawAdcDetectorPlotInd1",
-  #"rawAdcDetectorPlotInd2",
   "rawAdcDetectorPlotColl"
 ]
 

@@ -1,4 +1,5 @@
 #include "services_dune.fcl"
+#include "ProtoDUNETriggerFilter.fcl"
 
 # This is the default configuration file
 #include "RawDecoder.fcl"
@@ -36,20 +37,26 @@ services:
     service_provider: ToolBasedRawDigitPrepService
     LogLevel: 3
     DoWires: false
-    AdcChannelToolNames: [
-      "digitReader",
-      "pd_adcPedestalFit",
-      "pdapa_adcChannelPedestalPlotter",
-      "pdapa_adcChannelPedestalNoisePlotter"
-    ]
+    AdcChannelToolNames: []
   }
 }
 
-physics:
-{
-  producers:
-  {
+outputs: {
+  out1: {
+    compressionLevel: 1
+    module_type: RootOutput
+    fileName: "DataprepEventOutput.root"
+    SelectEvents: [freco]
+  }
+}
 
+physics: {
+
+  filters: {
+    trigfilter:  @local::pdsp_trigfilter_all
+  }
+
+  producers: {
     timingrawdecoder: @local::timing_raw_decoder   
     ssprawdecoder: @local::ssp_raw_decoder  
     tpcrawdecoder: @local::pdsp_tpc_raw_decoder
@@ -62,30 +69,19 @@ physics:
       IntermediateStates: []
       KeepChannelBegin:    0
       KeepChannelEnd:      0
-      #OnlineChannelMapTool: pd_onlineChannelMap
       OnlineChannelMapTool: pd_onlineChannelMapByFemb
     }
   }
 
   #Create path to run module
-  produce: [ timingrawdecoder, ssprawdecoder, tpcrawdecoder, dataprep ] 
-  output: [ ]
-  trigger_paths : [ produce ]
+  #nfreco: [ timingrawdecoder, ssprawdecoder, tpcrawdecoder, dataprep ] 
+  freco: [ timingrawdecoder, trigfilter, ssprawdecoder, tpcrawdecoder, dataprep ] 
+  output: [ out1 ]
+  #trigger_paths : [ produce ]
   end_paths: [ output ]
 }
 
 #physics.producers.timingrawdecoder.MakeEventTimeFile: true
-
-outputs:
-{
-  out1:
-  {
-    compressionLevel: 1
-    module_type: RootOutput
-    fileName: "RawDecoder.root"
-  }
-
-}
 
 source:
 {
@@ -93,6 +89,9 @@ source:
   fileNames: [ "/home/dladams/data/dune/np04/np04_coldbox_test/np04_raw_run000720_1_dl1.root" ]
   maxEvents : -1
 }
+
+physics.filters.trigfilter.LogLevel: 2
+physics.filters.trigfilter.LogLevel: 2
 
 process_name: processNp04Data
  

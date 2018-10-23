@@ -32,6 +32,11 @@ makeFcl() {
     echo "tools.adcPlotRaw.PlotSamMin: $NUM1" >>$FCLFILE
     echo "tools.adcPlotRaw.PlotSamMax: $NUM2" >>$FCLFILE
   fi
+  if [ ${FCLNAME:0:4} = trig ]; then
+    NUM=${FCLNAME:4}
+    while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
+    echo "physics.filters.trigfilter.TimingFlagSelectList: [$NUM]" >$FCLFILE
+  fi
   if [ ! -r $FCLFILE ]; then
     echo makeFcl: Unable to create $FCLFILE
     return 1
@@ -44,6 +49,7 @@ IRUN=1185
 FCLPATH=run
 NEVT=1
 NSKP=0
+OUTPUT=0
 #RUN=run001191
 if [ -n "$1" ]; then
   FCLPATH=$1
@@ -64,6 +70,9 @@ if [ -n "$2" ]; then
 else
   echo Usage: $0 FCL RUN [NEVT] [NSKIP]
   exit 0
+fi
+if [ -n "$5" ]; then
+  OUTPUT=1
 fi
 FRUN=$IRUN
 while [ ${#FRUN} -lt 6 ]; do FRUN=0$FRUN; done
@@ -125,7 +134,11 @@ FHICL_FILE_PATH=".:..:../../run:$FHICL_FILE_PATH"
 if ! fcldump $FCLFILE 5 >${FCLFILE}dump; then
   exit 3
 fi
-echo "lar -c $FCLFILE $INSPEC -n $NEVT --nskip $NSKP --no-output" >run
+if [ $OUTPUT -eq 1 ]; then
+  echo "lar -c $FCLFILE $INSPEC -n $NEVT --nskip $NSKP" >run
+else
+  echo "lar -c $FCLFILE $INSPEC -n $NEVT --nskip $NSKP --no-output" >run
+fi
 chmod +x run
 if [ $IRUN != '0' ]; then
   ./run 2>&1 | tee run.log

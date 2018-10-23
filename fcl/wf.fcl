@@ -14,4 +14,4 @@ services.RawDigitPrepService.AdcChannelToolNames: [
 ]
 
 #tools.adcPlotRaw.RootFileName: "wf.root"
-tools.adcPlotRaw.PlotFileName: "wf%0CHAN%.png"
+tools.adcPlotRaw.PlotFileName: "wf_run%0RUN%_evt%0EVENT%_chan%0CHAN%.png"
