@@ -1,5 +1,6 @@
 #include "services_dune.fcl"
 #include "ProtoDUNETriggerFilter.fcl"
+#include "BeamEvent.fcl"
 
 # This is the default configuration file
 #include "RawDecoder.fcl"
@@ -39,6 +40,7 @@ services:
     DoWires: false
     AdcChannelToolNames: []
   }
+  IFBeam: {}  # Needed for the beamevent producer
 }
 
 outputs: {
@@ -60,12 +62,15 @@ physics: {
     timingrawdecoder: @local::timing_raw_decoder   
     ssprawdecoder: @local::ssp_raw_decoder  
     tpcrawdecoder: @local::pdsp_tpc_raw_decoder
+    ctbrawdecoder: @local::ctb_raw_decoder
+    beamevent: @local::proto_beamevent
     dataprep: {
       module_type: DataPrepModule
       DigitLabel: "tpcrawdecoder:daq"
       LogLevel: 2
       DoAssns: false
       DoGroups: false
+      BeamEventLabel: "beamevent"
       IntermediateStates: []
       KeepChannelBegin:    0
       KeepChannelEnd:      0
@@ -75,7 +80,7 @@ physics: {
 
   #Create path to run module
   #nfreco: [ timingrawdecoder, ssprawdecoder, tpcrawdecoder, dataprep ] 
-  freco: [ timingrawdecoder, trigfilter, ssprawdecoder, tpcrawdecoder, dataprep ] 
+  freco: [ timingrawdecoder, trigfilter, ssprawdecoder, tpcrawdecoder, ctbrawdecoder, beamevent, dataprep ] 
   output: [ out1 ]
   #trigger_paths : [ produce ]
   end_paths: [ output ]

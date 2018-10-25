@@ -131,8 +131,14 @@ FCLFILE=run.fcl
 
 FW_SEARCH_PATH="..:$FW_SEARCH_PATH"
 FHICL_FILE_PATH=".:..:../../run:$FHICL_FILE_PATH"
-if ! fcldump $FCLFILE 5 >${FCLFILE}dump; then
-  exit 3
+if true; then
+  if ! fcldump $FCLFILE 5 >${FCLFILE}dump 2>fcldumperr.txt; then
+    echo Ignoring fcldump errors.
+  fi
+else
+  if ! fcldump $FCLFILE 5 >${FCLFILE}dump; then
+    exit 3
+  fi
 fi
 if [ $OUTPUT -eq 1 ]; then
   echo "lar -c $FCLFILE $INSPEC -n $NEVT --nskip $NSKP" >run

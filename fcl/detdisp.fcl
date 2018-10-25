@@ -6,4 +6,6 @@ services.RawDigitPrepService.AdcChannelToolNames: [
   "rawAdcDetectorPlotColl"
 ]
 
+#tools.rawAdcDetectorPlotColl.PlotTitle: "%UTCTIME2%"
+
 #tools.rawAdcDetectorPlotColl.SignalThreshold: 20
