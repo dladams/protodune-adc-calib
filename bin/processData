@@ -17,25 +17,34 @@ makeFcl() {
     NUM=${FCLNAME:4}
     while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
     echo "physics.producers.dataprep.KeepFembs: [$NUM]" >$FCLFILE
-  fi
-  if [ ${FCLNAME:0:4} = chan ]; then
+  elif [ ${FCLNAME:0:4} = chan ]; then
     NUM=${FCLNAME:4}
     while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
     echo "physics.producers.dataprep.KeepChannelBegin: $NUM" >$FCLFILE
     echo "physics.producers.dataprep.KeepChannelEnd: $((NUM+1))" >>$FCLFILE
-  fi
-  if [ ${FCLNAME:0:2} = wf -a ${#FCLNAME} -gt 2 ]; then
+  elif [ ${FCLNAME:0:2} = wf -a ${#FCLNAME} -gt 2 ]; then
     NUM1=${FCLNAME:2}
     while [ ${NUM1:0:1} = 0 -a ${#NUM1} -gt 1 ]; do NUM1=${NUM1:1}; done
     NUM2=$((NUM1+1000))
     echo '#include "wf.fcl"' >$FCLFILE
     echo "tools.adcPlotRaw.PlotSamMin: $NUM1" >>$FCLFILE
     echo "tools.adcPlotRaw.PlotSamMax: $NUM2" >>$FCLFILE
-  fi
-  if [ ${FCLNAME:0:4} = trig ]; then
+  elif [ ${FCLNAME:0:4} = trig ]; then
     NUM=${FCLNAME:4}
     while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
     echo "physics.filters.trigfilter.TimingFlagSelectList: [$NUM]" >$FCLFILE
+  elif [ ${FCLNAME:0:5} = event ]; then
+    RAN=${FCLNAME:5}  # I or I-J
+    NUM1=${RAN%%-*}
+    if [ $NUM1 = $RAN ]; then
+      NUM2=$((NUM1+1))
+    else
+      NUM2=${RAN##*-}
+    fi
+    while [ ${NUM1:0:1} = 0 -a ${#NUM1} -gt 1 ]; do NUM1=${NUM1:1}; done
+    while [ ${NUM2:0:1} = 0 -a ${#NUM2} -gt 1 ]; do NUM2=${NUM2:1}; done
+    echo "physics.filters.eventfilter.EventBegin: $NUM1" >$FCLFILE
+    echo "physics.filters.eventfilter.EventEnd: $NUM2" >>$FCLFILE
   fi
   if [ ! -r $FCLFILE ]; then
     echo makeFcl: Unable to create $FCLFILE

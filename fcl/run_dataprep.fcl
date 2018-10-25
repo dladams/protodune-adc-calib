@@ -56,6 +56,16 @@ physics: {
 
   filters: {
     trigfilter:  @local::pdsp_trigfilter_all
+    eventfilter: {
+      LogLevel: 2
+      module_type: DuneEventFilter
+      SelectEvents: []
+      RejectEvents: []
+      EventBegin: 0
+      EventEnd:   0
+      EventModFreq: 0
+      EventModVal:  0
+    }
   }
 
   producers: {
@@ -80,7 +90,7 @@ physics: {
 
   #Create path to run module
   #nfreco: [ timingrawdecoder, ssprawdecoder, tpcrawdecoder, dataprep ] 
-  freco: [ timingrawdecoder, trigfilter, ssprawdecoder, tpcrawdecoder, ctbrawdecoder, beamevent, dataprep ] 
+  freco: [ eventfilter, timingrawdecoder, trigfilter, ssprawdecoder, tpcrawdecoder, ctbrawdecoder, beamevent, dataprep ] 
   output: [ out1 ]
   #trigger_paths : [ produce ]
   end_paths: [ output ]
