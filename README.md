@@ -2,7 +2,12 @@
 
 ## Introduction
 
-This package holds some script for calibrating protDUNE ADCs.
+This package holds the script processData for running lar on data files.
+It also holds many fcl files.
+
+### Calibration
+
+To run protoDUNE calibration:
 
 First event data is processed to gnerate histograms and graphs, e.g.:
 ```

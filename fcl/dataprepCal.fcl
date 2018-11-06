@@ -1,0 +1,30 @@
+# dataprepCal.fcl
+#
+# David Adams
+# November 2018
+#
+# Run dataprep though calibration(no mitigation, deconvolution).
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+    "digitReader",                # Read RawDigit
+    "pd_adcPedestalFit",          # Find pedestal
+    "adcSampleFiller"             # Subtract pedestal, trivial calibration
+]
+
+# Modify channel-tick prepared tools for use before signal finding.
+tools.pdchtp_Zplanes.DataType: 1
+tools.pdchtp_Cplanes.DataType: 1
+tools.pdchtp_Iplanes.DataType: 1
+tools.pdchtp_Zplanes.HistTitle: "Calibrated ADC for %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdchtp_Cplanes.HistTitle: "Calibrated ADC for %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdchtp_Iplanes.HistTitle: "Calibrated ADC for %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+
+# Modify detector display tools for use before signal finding.
+tools.preparedAdcDetectorPlotColl.SignalThreshold: 20
+tools.preparedAdcDetectorPlotInd1.SignalThreshold: 20
+tools.preparedAdcDetectorPlotInd2.SignalThreshold: 20
+tools.preparedAdcDetectorPlotColl.Title: "Calibrated ADC collection view"
+tools.preparedAdcDetectorPlotInd1.Title: "Calibrated ADC induction view 1"
+tools.preparedAdcDetectorPlotInd1.Title: "Calibrated ADC induction view 2"

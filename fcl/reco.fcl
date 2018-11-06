@@ -7,8 +7,16 @@ services.RawDigitPrepService.AdcChannelToolNames: [
   @sequence::services.RawDigitPrepService.AdcChannelToolNames,
   rawAdcDetectorPlotColl,
   preparedAdcDetectorPlotColl,
-  pdcht_Apa3z,
-  pdchtp_Apa3z
+  preparedAdcDetectorPlotInd1,
+  preparedAdcDetectorPlotInd2,
+  #pdcht_Apa3z,
+  #pdchtp_Apa3z
+  pdcht_Iplanes,
+  pdcht_Zplanes,
+  pdcht_Cplanes,
+  pdchtp_Iplanes,
+  pdchtp_Zplanes,
+  pdchtp_Cplanes
 ]
 
 # Run decoding and filtering plus full reco.
@@ -42,3 +50,6 @@ physics.filters.eventfilter: {
 }
 
 tools.pdsp_timingMitigate.LogLevel: 1
+
+#tools.pdchtp_Zplanes.Palette: 1020
+#tools.pdchtp_Zplanes.LogLevel: 3
