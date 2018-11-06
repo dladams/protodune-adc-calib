@@ -1,2 +1,5 @@
 #include "run_dataprep.fcl"
 #include "protodune_dqm.fcl"
+
+tools.rawAdcDetectorPlotColl.SkipBadChannels: true
+tools.rawAdcDetectorPlotColl.Title: "Cleaned raw ADC collection view"
