@@ -8,9 +8,12 @@
 
 if [ "$1" = "-H" ]; then
   echo Usage: $0 FCL RUN [NEVT] [NSKIP]
+  echo
   echo Runs a lar job in a dedicated directory.
+  echo
   echo FCL is the base name for the top level fcl file or a sequence
   echo of such names separated with slashes.
+  echo
   echo In addition to any file on the current fcl path, these names
   echo may be any of the following:
   echo "  fembFFF - Module dataprep only processes FEMB number FFF"
@@ -28,6 +31,7 @@ if [ "$1" = "-H" ]; then
   echo "  roithreshTTT - Threshold for ROI finding is TTT"
   echo
   echo "Some of the primary fcl files provided here:"
+  echo "  dqm - Make standard dqm plots."
   echo "  dataprepCal - Run dataprep though trivial calibration."
   echo "  dataprepMit - Run dataprep though mitigation."
   echo "  adcDist - Create ADC distribution (i.e. code frequency) plots."
