@@ -41,4 +41,4 @@ physics.filters.eventfilter: {
   EventModVal:  0
 }
 
-tools.pdsp_timingMitigate.LogLevel: 2
+tools.pdsp_timingMitigate.LogLevel: 1

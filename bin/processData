@@ -108,8 +108,17 @@ cd $DIR
 INSPEC=
 INFILELIST=$HOME/data/dune/np04/np04_cryostat_commissioning/np04_run${FRUN}_files.txt
 if [ -r $INFILELIST ]; then
-  echo Taking input files from $INFILELIST
-  INSPEC="-S $INFILELIST"
+  if true; then
+    # Direct access to dcache
+    echo Taking input files from $INFILELIST
+    INSPEC="-S $INFILELIST"
+  else
+    # xrootd (need grid proxy)
+    for BASE in `cat $INFILELIST`; do
+      echo $BASE | sed 's#/pnfs/#xroot://fndca1.fnal.gov:1094/pnfs/fnal.gov/usr/#g' >>infiles.txt
+    done
+    INSPEC="-S infiles.txt"
+  fi
 else
   echo Did not find file list $INFILELIST
   echo Searching directly for files...
