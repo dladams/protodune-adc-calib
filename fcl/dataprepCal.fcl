@@ -14,9 +14,9 @@ services.RawDigitPrepService.AdcChannelToolNames: [
 ]
 
 # Modify channel-tick prepared tools for use before signal finding.
-tools.pdchtp_Zplanes.DataType: 1
-tools.pdchtp_Cplanes.DataType: 1
-tools.pdchtp_Iplanes.DataType: 1
+tools.pdchtp_Zplanes.DataType: 0
+tools.pdchtp_Cplanes.DataType: 0
+tools.pdchtp_Iplanes.DataType: 0
 tools.pdchtp_Zplanes.HistTitle: "Calibrated ADC for %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
 tools.pdchtp_Cplanes.HistTitle: "Calibrated ADC for %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
 tools.pdchtp_Iplanes.HistTitle: "Calibrated ADC for %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"

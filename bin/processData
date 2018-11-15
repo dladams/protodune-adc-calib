@@ -29,6 +29,7 @@ if [ "$1" = "-H" ]; then
   echo "  tickTTT - Tick range for channel-tick plots is (TTT, TTTT+1000]"
   echo "  tickTT1-TT2 - Tick range for channel-tick plots is (TT1, TT2]"
   echo "  roithreshTTT - Threshold for ROI finding is TTT"
+  echo "  tickphasePP - Tick phase offset is PP. Should be in range (0,24)"
   echo
   echo "Some of the primary fcl files provided here:"
   echo "  dqm - Make standard dqm plots."
@@ -80,6 +81,12 @@ makeFcl() {
     echo "tools.adcPlotRaw.PlotSamMax: $NUM2" >>$FCLFILE
     echo "tools.adcPlotPrepared.PlotSamMin: $NUM1" >>$FCLFILE
     echo "tools.adcPlotPrepared.PlotSamMax: $NUM2" >>$FCLFILE
+  elif [ ${FCLNAME:0:5} = wfran -a ${#FCLNAME} -gt 5 ]; then
+    MAX=${FCLNAME:5}
+    echo "tools.adcPlotRaw.PlotSigMin: -$MAX" >>$FCLFILE
+    echo "tools.adcPlotRaw.PlotSigMax:  $MAX" >>$FCLFILE
+    echo "tools.adcPlotPrepared.PlotSigMin: -$MAX" >>$FCLFILE
+    echo "tools.adcPlotPrepared.PlotSigMax:  $MAX" >>$FCLFILE
   elif [ ${FCLNAME:0:4} = trig ]; then
     NUM=${FCLNAME:4}
     while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
@@ -96,6 +103,11 @@ makeFcl() {
     while [ ${NUM2:0:1} = 0 -a ${#NUM2} -gt 1 ]; do NUM2=${NUM2:1}; done
     echo "physics.filters.eventfilter.EventBegin: $NUM1" >$FCLFILE
     echo "physics.filters.eventfilter.EventEnd: $NUM2" >>$FCLFILE
+  # Set tick offset phase.
+  elif [ ${FCLNAME:0:9} = tickphase ]; then
+    NUM=${FCLNAME:9}
+    while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
+    echo "tools.pd_tickOffset.TpcTickPhase: $NUM" >$FCLFILE
   # Set tick range for channel-tick plots, e.g. tick1000 or tick1000-1500
   elif [ ${FCLNAME:0:4} = tick ]; then
     RAN=${FCLNAME:4}  # I or I-J

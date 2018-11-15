@@ -30,4 +30,4 @@ tools.preparedAdcDetectorPlotInd1.SignalThreshold: 20
 tools.preparedAdcDetectorPlotInd2.SignalThreshold: 20
 tools.preparedAdcDetectorPlotColl.Title: "Mitigated ADC collection view"
 tools.preparedAdcDetectorPlotInd1.Title: "Mitigated ADC induction view 1"
-tools.preparedAdcDetectorPlotInd1.Title: "Mitigated ADC induction view 2"
+tools.preparedAdcDetectorPlotInd2.Title: "Mitigated ADC induction view 2"
