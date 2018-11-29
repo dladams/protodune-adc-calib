@@ -87,6 +87,7 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneServiceAccess/DuneServiceAccess.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/coldelecResponse.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/offsetLine.h+");
+  gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/gausTF1.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/Geometry/ChannelGeo.h+");
   //gROOT->ProcessLine(".L $DUNETPC_INC/dune/DataPrep/Utility/TickModTreeData.h+");
   gROOT->ProcessLine(".L $DUNE_RAW_DATA_INC/dune-raw-data/Services/ChannelMap/PdspChannelMapService.h+");

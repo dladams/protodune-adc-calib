@@ -1,0 +1,81 @@
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",                # Read RawDigit
+  "pd_adcPedestalFit",          # Find pedestal
+  "adcSampleFiller",            # Subtract pedestal, trivial calibration
+  #"pdsp_sticky_codes_ped",      # Flag sticky codes
+  #"pdsp_adcMitigate",           # Mitigate sticky codes
+  #"pdsp_timingMitigate",        # Mitigate FEMB302 timing
+  #"adcCorrectUndershoot",       # correct undershoot
+  "adcThresholdSignalFinder",   # Build ROIs
+  "adcRoiFitter"
+]
+
+# ROI threshold before decon.
+tools.adcThresholdSignalFinder.Threshold: 100
+tools.adcThresholdSignalFinder.FlagNegative: false
+
+# Configure ROI viewer.
+tools.adcRoiFitter: {
+  tool_type: AdcRoiViewer
+  SigThresh: 0.0
+  TickBorder: 0
+  LogLevel: 1
+  RoiHistOpt:  1
+  FitOpt:   1
+  PulserStepCharge: 21.4
+  PulserDacOffset: 0.0
+  PulserChargeUnit: "ke"
+  MaxRoiPlots: 0
+  RoiPlotPadX: 4
+  RoiPlotPadY: 4
+  SumPlotPadX: 4
+  SumPlotPadY: 4
+  RunDataTool: ""
+  TickOffsetTool: ""
+  SumHists: []
+  RoiRootFileName: ""
+  SumRootFileName: ""
+  ChanSumRootFileName: ""
+  ChannelRanges: [apa3z]
+  ChanSumHists: []
+}
+
+tools.adcRoiFitter.LogLevel: 1
+tools.adcRoiFitter.SumHists: [
+  {var:sigArea             name:"hsa_ch%0CHAN%"     title:"ROI signal area run %RUN% channel %CHAN%"                 nbin:500  xmin:0    xmax:5000  fit:gaus40     plot:"hsa_ch%0CHAN%.png"  pwid:1000},
+  {var:fitHeight           name:"hfh_ch%0CHAN%"     title:"ROI fit height run %RUN% channel %CHAN%"                  nbin:1000 xmin:0    xmax:1000  fit:gaus3      plot:"hfh_ch%0CHAN%.png"  pwid:100},
+  {var:fitWidth            name:"hfw_ch%0CHAN%"     title:"ROI fit width run %RUN% channel %CHAN%"                   nbin:100  xmin:4.0  xmax:5.0   fit:"gaus0.03" plot:"hfw_ch%0CHAN%.png"},
+  {var:fitPos              name:"hft_ch%0CHAN%"     title:"ROI fit tick run %RUN% channel %CHAN%"                    nbin:600  xmin:0.0  xmax:6000 },
+  {var:fitPosRem           name:"hftr_ch%0CHAN%"    title:"ROI fit tick remainder run %RUN% channel %CHAN%"          nbin:100  xmin:0    xmax:1.0  },
+  {var:fitToffPulser       name:"hftm_ch%0CHAN%"    title:"ROI offset fit tick wrt pulser run %RUN% channel %CHAN%"  nbin:50000 xmin:0   xmax:500   fit:"gaus0.04" plot:"hftm_ch%0CHAN%.png"  pwid:2},
+  {var:fitChiSquare        name:"hfcs_ch%0CHAN%"    title:"ROI fit #chi^{2} run %RUN% channel %CHAN%"                nbin:100  xmin:0.0  xmax:2000                 plot:"hfcs_ch%0CHAN%.png"},
+  {var:fitCSNormDof        name:"hfcsnd_ch%0CHAN%"  title:"ROI normalized fit #chi^{2}/DOF run %RUN% channel %CHAN%" nbin:50   xmin:0.0  xmax:5.0                  plot:"hfcsnd_ch%0CHAN%.png"}
+#  {var:fitHeight           name:"hfhw_ch%0CHAN%"    title:"ROI fit height run %RUN% channel %CHAN%"                  nbin:100  xmin:0    xmax:0     fit:gaus3      plot:"hfhw_ch%0CHAN%.png"},
+#  {var:fitWidth            name:"hfww_ch%0CHAN%"    title:"ROI fit width run %RUN% channel %CHAN%"                   nbin:100  xmin:0.0  xmax:0.0   fit:gaus},
+#  {var:event_fitToffPulser name:"hftwe_ch%0CHAN%"   title:"ROI offset fit tick wrt pulser run %RUN% channel %CHAN%"  nbin:500  xmin:0    xmax:500
+#                                                                                                                     nbiny:100 ymin:0    ymax:400         },
+#  {var:fitToffPulser       name:"hfetw_ev%0EVENT%_ch%0CHAN%"
+#                                                   title:"ROI offset fit tick wrt pulser event %EVENT% run %RUN% channel %CHAN%"  nbin:500 xmin:0    xmax:500           },
+#  {var:fitToffPulserMod10  name:"hftm_ch%0CHAN%"    title:"ROI offset fit tick wrt pulser run %RUN% channel %CHAN%"  nbin:100  xmin:0    xmax:10.0          },
+#  {var:timingPhase_fitToffPulserMod10
+#                           name:"hftmo_ch%0CHAN%"   title:"ROI offset fit tick wrt pulser run %RUN% channel %CHAN%"  nbin:200  xmin:0    xmax:10.0
+#                                                                                                                    nbiny:25  ymin:0    ymax:1             },
+]
+tools.adcRoiFitter.ChanSumHists: [
+  {name:"hcsArea_%CRNAME%"        title:"ROI area run %RUN% %CRLABEL%"                        valHist:"hsa_ch%0CHAN%"     valType:fitMean     errType:fitSigma plot:"%HNAME%.png" cr:list},
+  {name:"hcsAreaSigma_%CRNAME%"   title:"ROI area sigma run %RUN% %CRLABEL%"                  valHist:"hsa_ch%0CHAN%"     valType:fitSigma    errType:none     plot:"%HNAME%.png" cr:list},
+  {name:"hcsHeight_%CRNAME%"      title:"ROI fit height run %RUN% %CRLABEL%"                  valHist:"hfh_ch%0CHAN%"     valType:fitMean     errType:fitSigma plot:"%HNAME%.png" cr:list},
+  {name:"hcsHeightSigma_%CRNAME%" title:"ROI fit height sigma run %RUN% %CRLABEL%"            valHist:"hfh_ch%0CHAN%"     valType:fitSigma    errType:none     plot:"%HNAME%.png" cr:list},
+  {name:"hcsShaping_%CRNAME%"     title:"ROI fit shaping time run %RUN% %CRLABEL%"            valHist:"hfw_ch%0CHAN%"     valType:fitMean     errType:fitSigma plot:"%HNAME%.png" cr:list},
+  {name:"hcsChiSquare_%CRNAME%"   title:"ROI fit #chi^{2} run %RUN% %CRLABEL%"                valHist:"hfcs_ch%0CHAN%"    valType:mean        errType:none     plot:"%HNAME%.png" cr:list},
+  {name:"hcsCSNormDof_%CRNAME%"   title:"ROI fit Normalized #chi^{2}/DOF run %RUN% %CRLABEL%" valHist:"hfcsnd_ch%0CHAN%"  valType:mean        errType:none     plot:"%HNAME%.png" cr:list}
+]
+
+tools.adcRoiFitter.RoiRootFileName: "roiroi.root"
+tools.adcRoiFitter.SumRootFileName: "roisum.root"
+tools.adcRoiFitter.ChanSumRootFileName: "roicha.root"
+
+tools.adcRoiFitter.RunDataTool: protoduneRunDataTool
+tools.adcRoiFitter.TickOffsetTool: pd_tickOffset

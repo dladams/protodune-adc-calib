@@ -1,0 +1,44 @@
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",                # Read RawDigit
+  "pd_adcPedestalFit",          # Find pedestal
+  "adcSampleFiller",            # Subtract pedestal, trivial calibration
+  #"pdsp_sticky_codes_ped",      # Flag sticky codes
+  #"pdsp_adcMitigate",           # Mitigate sticky codes
+  #"pdsp_timingMitigate",        # Mitigate FEMB302 timing
+  #"adcCorrectUndershoot",       # correct undershoot
+  "adcThresholdSignalFinder",   # Build ROIs
+  "adcRoiFitter"
+]
+
+# ROI threshold before decon.
+tools.adcThresholdSignalFinder.Threshold: 100
+tools.adcThresholdSignalFinder.FlagNegative: false
+
+# Configure ROI viewer.
+tools.adcRoiFitter: {
+  tool_type: AdcRoiViewer
+  SigThresh: 0.0
+  TickBorder: 0
+  LogLevel: 1
+  RoiHistOpt:  1
+  FitOpt:   1
+  PulserStepCharge: 21.4
+  PulserDacOffset: 0.0
+  PulserChargeUnit: "ke"
+  MaxRoiPlots: 1000
+  RoiPlotPadX: 4
+  RoiPlotPadY: 4
+  SumPlotPadX: 4
+  SumPlotPadY: 4
+  RunDataTool: ""
+  TickOffsetTool: ""
+  SumHists: []
+  RoiRootFileName: ""
+  SumRootFileName: ""
+  ChanSumRootFileName: ""
+  ChannelRanges: [apa3z]
+  ChanSumHists: []
+}
+

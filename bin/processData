@@ -30,12 +30,16 @@ if [ "$1" = "-H" ]; then
   echo "  tickTT1-TT2 - Tick range for channel-tick plots is (TT1, TT2]"
   echo "  roithreshTTT - Threshold for ROI finding is TTT"
   echo "  tickphasePP - Tick phase offset is PP. Should be in range (0,24)"
+  echo "  tickmodPhaseFemb - Add plots of phase vs. peak to tickmod tool"
+  echo "  drawTickmodMax - Add plots of tickmod ADC near max to tickmod tool"
   echo
   echo "Some of the primary fcl files provided here:"
   echo "  dqm - Make standard dqm plots."
   echo "  dataprepCal - Run dataprep though trivial calibration."
   echo "  dataprepMit - Run dataprep though mitigation."
   echo "  adcDist - Create ADC distribution (i.e. code frequency) plots."
+  echo "  tickmod - Run the tickmod tool."
+  echo "  roifit - Run the ROI viewer fitting for pulser signals."
   echo
   echo "Some of the secondary fcl files provided here:"
   echo "  addChannelTickRaw - Add raw channel-tick plots to the end of dataprep"
