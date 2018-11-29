@@ -23,6 +23,7 @@ if [ "$1" = "-H" ]; then
   echo "  chanCCC - Module dataprep only processes channel CCC"
   echo "  wftickTTT - The channel range for waveforms drawn with tools"
   echo "              adcPlotRaw and adcPlotRaw is (TTT, TTT+1000]"
+  echo "  wfranSSS - The signal range for these tools is (-SSS, SSS)"
   echo "  trigT - Select events with trigger index TT."
   echo "  eventEEE - Process event EEE"
   echo "  eventEE1-EE2 - Process events in range (EE1, EE2]"
@@ -76,7 +77,7 @@ makeFcl() {
     while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
     echo "physics.producers.dataprep.KeepChannelBegin: $NUM" >$FCLFILE
     echo "physics.producers.dataprep.KeepChannelEnd: $((NUM+1))" >>$FCLFILE
-  # wftickTTT: Show waveforms from TTT to TTT+1000
+  # wftickTTT: Show waveform ticks from TTT to TTT+1000
   elif [ ${FCLNAME:0:6} = wftick -a ${#FCLNAME} -gt 6 ]; then
     NUM1=${FCLNAME:6}
     while [ ${NUM1:0:1} = 0 -a ${#NUM1} -gt 1 ]; do NUM1=${NUM1:1}; done
@@ -85,6 +86,7 @@ makeFcl() {
     echo "tools.adcPlotRaw.PlotSamMax: $NUM2" >>$FCLFILE
     echo "tools.adcPlotPrepared.PlotSamMin: $NUM1" >>$FCLFILE
     echo "tools.adcPlotPrepared.PlotSamMax: $NUM2" >>$FCLFILE
+  # wfranSSS: Show waveforms signals from -SSS to SSS
   elif [ ${FCLNAME:0:5} = wfran -a ${#FCLNAME} -gt 5 ]; then
     MAX=${FCLNAME:5}
     echo "tools.adcPlotRaw.PlotSigMin: -$MAX" >>$FCLFILE
