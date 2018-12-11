@@ -33,6 +33,8 @@ if [ "$1" = "-H" ]; then
   echo "  tickphasePP - Tick phase offset is PP. Should be in range (0,24)"
   echo "  tickmodPhaseFemb - Add plots of phase vs. peak to tickmod tool"
   echo "  drawTickmodMax - Add plots of tickmod ADC near max to tickmod tool"
+  echo "  nroiNNN - Draw max of NNN ROI's with AdcRoiViwer (e.g. roifit.fcl)"
+  echo "  roicrCCC - Use channel range CCC with AdcRoiViwer (e.g. roifit.fcl)"
   echo
   echo "Some of the primary fcl files provided here:"
   echo "  dqm - Make standard dqm plots."
@@ -132,6 +134,14 @@ makeFcl() {
     NUM=${FCLNAME:9}
     while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
     echo "tools.adcThresholdSignalFinder.Threshold: $NUM" >$FCLFILE
+  # # ROIs to draw with ROI fitter.
+  elif [ ${FCLNAME:0:4} = "nroi" ]; then
+    NROI=${FCLNAME:4}
+    echo "tools.adcRoiFitter.MaxRoiPlots: $NROI" >$FCLFILE
+  # Channel range for ROI fitter.
+  elif [ ${FCLNAME:0:5} = "roicr" ]; then
+    CR=${FCLNAME:5}
+    echo "tools.adcRoiFitter.ChannelRanges: [$CR]" >$FCLFILE
   fi
   if [ ! -r $FCLFILE ]; then
     echo makeFcl: Unable to create $FCLFILE

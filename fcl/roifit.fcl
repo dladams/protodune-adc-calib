@@ -4,8 +4,8 @@ services.RawDigitPrepService.AdcChannelToolNames: [
   "digitReader",                # Read RawDigit
   "pd_adcPedestalFit",          # Find pedestal
   "adcSampleFiller",            # Subtract pedestal, trivial calibration
-  #"pdsp_sticky_codes_ped",      # Flag sticky codes
-  #"pdsp_adcMitigate",           # Mitigate sticky codes
+  "pdsp_sticky_codes_ped",      # Flag sticky codes
+  "pdsp_adcMitigate",           # Mitigate sticky codes
   #"pdsp_timingMitigate",        # Mitigate FEMB302 timing
   #"adcCorrectUndershoot",       # correct undershoot
   "adcThresholdSignalFinder",   # Build ROIs
@@ -64,13 +64,13 @@ tools.adcRoiFitter.SumHists: [
 #                                                                                                                    nbiny:25  ymin:0    ymax:1             },
 ]
 tools.adcRoiFitter.ChanSumHists: [
-  {name:"hcsArea_%CRNAME%"        title:"ROI area run %RUN% %CRLABEL%"                        valHist:"hsa_ch%0CHAN%"     valType:fitMean     errType:fitSigma plot:"%HNAME%.png" cr:list},
-  {name:"hcsAreaSigma_%CRNAME%"   title:"ROI area sigma run %RUN% %CRLABEL%"                  valHist:"hsa_ch%0CHAN%"     valType:fitSigma    errType:none     plot:"%HNAME%.png" cr:list},
-  {name:"hcsHeight_%CRNAME%"      title:"ROI fit height run %RUN% %CRLABEL%"                  valHist:"hfh_ch%0CHAN%"     valType:fitMean     errType:fitSigma plot:"%HNAME%.png" cr:list},
-  {name:"hcsHeightSigma_%CRNAME%" title:"ROI fit height sigma run %RUN% %CRLABEL%"            valHist:"hfh_ch%0CHAN%"     valType:fitSigma    errType:none     plot:"%HNAME%.png" cr:list},
-  {name:"hcsShaping_%CRNAME%"     title:"ROI fit shaping time run %RUN% %CRLABEL%"            valHist:"hfw_ch%0CHAN%"     valType:fitMean     errType:fitSigma plot:"%HNAME%.png" cr:list},
-  {name:"hcsChiSquare_%CRNAME%"   title:"ROI fit #chi^{2} run %RUN% %CRLABEL%"                valHist:"hfcs_ch%0CHAN%"    valType:mean        errType:none     plot:"%HNAME%.png" cr:list},
-  {name:"hcsCSNormDof_%CRNAME%"   title:"ROI fit Normalized #chi^{2}/DOF run %RUN% %CRLABEL%" valHist:"hfcsnd_ch%0CHAN%"  valType:mean        errType:none     plot:"%HNAME%.png" cr:list}
+  {name:"hcsArea_%CRNAME%"        title:"ROI area run %RUN% %CRLABEL%"                        valHist:"hsa_ch%0CHAN%"     valType:fitMean     errType:fitSigma plot:"%HNAME%.png" pran:"0:5000" cr:list},
+  {name:"hcsAreaSigma_%CRNAME%"   title:"ROI area sigma run %RUN% %CRLABEL%"                  valHist:"hsa_ch%0CHAN%"     valType:fitSigma    errType:none     plot:"%HNAME%.png" pran:"0:100"  cr:list},
+  {name:"hcsHeight_%CRNAME%"      title:"ROI fit height run %RUN% %CRLABEL%"                  valHist:"hfh_ch%0CHAN%"     valType:fitMean     errType:fitSigma plot:"%HNAME%.png" pran:"0:1000" cr:list},
+  {name:"hcsHeightSigma_%CRNAME%" title:"ROI fit height sigma run %RUN% %CRLABEL%"            valHist:"hfh_ch%0CHAN%"     valType:fitSigma    errType:none     plot:"%HNAME%.png" pran:"0:10"   cr:list},
+  {name:"hcsShaping_%CRNAME%"     title:"ROI fit shaping time run %RUN% %CRLABEL%"            valHist:"hfw_ch%0CHAN%"     valType:fitMean     errType:fitSigma plot:"%HNAME%.png" pran:"3:5"    cr:list},
+  {name:"hcsChiSquare_%CRNAME%"   title:"ROI fit #chi^{2} run %RUN% %CRLABEL%"                valHist:"hfcs_ch%0CHAN%"    valType:mean        errType:none     plot:"%HNAME%.png" pran:"0:1000" cr:list},
+  {name:"hcsCSNormDof_%CRNAME%"   title:"ROI fit Normalized #chi^{2}/DOF run %RUN% %CRLABEL%" valHist:"hfcsnd_ch%0CHAN%"  valType:mean        errType:none     plot:"%HNAME%.png" pran:"0:3"    cr:list}
 ]
 
 tools.adcRoiFitter.RoiRootFileName: "roiroi.root"
