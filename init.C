@@ -83,7 +83,7 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/Tool/IndexRangeTool.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/Tool/IndexMapTool.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/Tool/AdcChannelTool.h+");
-  gROOT->ProcessLine(".L $DUNETPC_INC/dune/ArtSupport/ArtServiceHelper.h+");
+  //gROOT->ProcessLine(".L $DUNETPC_INC/dune/ArtSupport/ArtServiceHelper.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneServiceAccess/DuneServiceAccess.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/coldelecResponse.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/offsetLine.h+");
@@ -94,6 +94,7 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DataPrep/Utility/ParabolicInterpolator.h+");
   gROOT->ProcessLine(".L $DUNE_RAW_DATA_INC/dune-raw-data/Services/ChannelMap/PdspChannelMapService.h+");
   gROOT->ProcessLine(".L $LARCORE_INC/larcore/Geometry/Geometry.h+");
+  gROOT->ProcessLine(".L $LAREVT_INC/larevt/CalibrationDBI/Interface/ChannelStatusService.h+");
 
   // Build scripts to be used only from the Root command line.
   cout << "Loading local libraries." << endl;
