@@ -34,7 +34,7 @@ if [ "$1" = "-H" ]; then
   echo "  tickmodPhaseFemb - Add plots of phase vs. peak to tickmod tool"
   echo "  drawTickmodMax - Add plots of tickmod ADC near max to tickmod tool"
   echo "  nroiNNN - Draw max of NNN ROI's with AdcRoiViwer (e.g. roifit.fcl)"
-  echo "  roicrCCC - Use channel range CCC with AdcRoiViwer (e.g. roifit.fcl)"
+  echo "  roicrCCC - Use and plot channel range CCC with AdcRoiViwer (e.g. roifit.fcl)"
   echo
   echo "Some of the primary fcl files provided here:"
   echo "  dqm - Make standard dqm plots."
@@ -141,7 +141,8 @@ makeFcl() {
   # Channel range for ROI fitter.
   elif [ ${FCLNAME:0:5} = "roicr" ]; then
     CR=${FCLNAME:5}
-    echo "tools.adcRoiFitter.ChannelRanges: [$CR]" >$FCLFILE
+    echo "physics.producers.dataprep.ChannelRanges: [${CR}]" >$FCLFILE
+    echo "tools.adcRoiFitter.ChannelRanges: [$CR]" >>$FCLFILE
   fi
   if [ ! -r $FCLFILE ]; then
     echo makeFcl: Unable to create $FCLFILE
