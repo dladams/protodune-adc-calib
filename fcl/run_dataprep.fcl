@@ -19,6 +19,7 @@ services:
   LArPropertiesService:         @local::dunefd_properties
   LArFFT:                       @local::dunefd_larfft  
   DatabaseUtil:                 @local::dunefd_database
+  SignalShapingServiceDUNE:     @local::protodunesp_signalshapingservice
   ChannelStatusService:         @local::pdsp_channel_status
   TFileService: { 
    closeFileFast: true  # default

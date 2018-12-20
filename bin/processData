@@ -45,6 +45,7 @@ if [ "$1" = "-H" ]; then
   echo "  roifit - Run the ROI viewer fitting for pulser signals."
   echo
   echo "Some of the secondary fcl files provided here:"
+  echo "  beamtrig - ONly process events with beam triggers"
   echo "  addChannelTickRaw - Add raw channel-tick plots to the end of dataprep"
   echo "  addChannelTickPrep - Add prepared channel-tick plots to the end of dataprep"
   echo "  addDetdispPrep - Add prepared detector display to the end of dataprep."

@@ -95,6 +95,7 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   gROOT->ProcessLine(".L $DUNE_RAW_DATA_INC/dune-raw-data/Services/ChannelMap/PdspChannelMapService.h+");
   gROOT->ProcessLine(".L $LARCORE_INC/larcore/Geometry/Geometry.h+");
   gROOT->ProcessLine(".L $LAREVT_INC/larevt/CalibrationDBI/Interface/ChannelStatusService.h+");
+  gROOT->ProcessLine(".L $LARDATA_INC/lardata/Utilities/LArFFT.h+");
 
   // Build scripts to be used only from the Root command line.
   cout << "Loading local libraries." << endl;
