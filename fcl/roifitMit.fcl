@@ -1,0 +1,11 @@
+#include "roifit.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",                # Read RawDigit
+  "pd_adcPedestalFit",          # Find pedestal
+  "adcSampleFiller",            # Subtract pedestal, trivial calibration
+  "pdsp_sticky_codes_ped",      # Flag sticky codes
+  "pdsp_adcMitigate",           # Mitigate sticky codes
+  "adcThresholdSignalFinder",   # Build ROIs
+  "adcRoiFitter"
+]
