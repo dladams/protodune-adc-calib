@@ -44,8 +44,8 @@ tools.adcRoiFitter: {
 
 tools.adcRoiFitter.LogLevel: 1
 tools.adcRoiFitter.SumHists: [
-  {var:sigArea             name:"hsa_ch%0CHAN%"     title:"ROI signal area run %RUN% channel %CHAN%"                 nbin:1500  xmin:0   xmax:15000 fit:rgaus_30_4  plot:"hsa_ch%0CHAN%.png"  pwid:1000},
-  {var:fitHeight           name:"hfh_ch%0CHAN%"     title:"ROI fit height run %RUN% channel %CHAN%"                  nbin:3000 xmin:0    xmax:3000  fit:rgaus_4_4  plot:"hfh_ch%0CHAN%.png"  pwid:100},
+  {var:sigArea             name:"hsa_ch%0CHAN%"     title:"ROI signal area run %RUN% channel %CHAN%"                 nbin:2000  xmin:0   xmax:20000 fit:rgaus_30_4  plot:"hsa_ch%0CHAN%.png"  pwid:1000},
+  {var:fitHeight           name:"hfh_ch%0CHAN%"     title:"ROI fit height run %RUN% channel %CHAN%"                  nbin:3500 xmin:0    xmax:3500  fit:rgaus_4_4  plot:"hfh_ch%0CHAN%.png"  pwid:100},
   {var:fitWidth            name:"hfw_ch%0CHAN%"     title:"ROI fit width run %RUN% channel %CHAN%"                   nbin:75   xmin:3.5  xmax:5.0   fit:"rgaus_0.1_4"  plot:"hfw_ch%0CHAN%.png"},
   {var:fitPos              name:"hft_ch%0CHAN%"     title:"ROI fit tick run %RUN% channel %CHAN%"                    nbin:600  xmin:0.0  xmax:6000 },
   {var:fitPosRem           name:"hftr_ch%0CHAN%"    title:"ROI fit tick remainder run %RUN% channel %CHAN%"          nbin:100  xmin:0    xmax:1.0  },
