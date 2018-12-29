@@ -18,7 +18,7 @@ if [ "$1" = "-H" ]; then
   echo may be any of the following:
   echo "  fembFFF - Module dataprep only processes FEMB number FFF"
   echo "  dpcr_CR - Module dataprep only processes channel range CR"
-  echo "            May also be  sequnece of chanle ranges: CR1_CR2_CR3, etc."
+  echo "            May also be  sequence of channel ranges: CR1_CR2_CR3, etc."
   echo "  cdcr_CR - Module caldata only processes channel range CR"
   echo "  chanCCC - Module dataprep only processes channel CCC"
   echo "  wftickTTT - The channel range for waveforms drawn with tools"
@@ -30,6 +30,8 @@ if [ "$1" = "-H" ]; then
   echo "  tickTTT - Tick range for channel-tick plots is (TTT, TTTT+1000]"
   echo "  tickTT1-TT2 - Tick range for channel-tick plots is (TT1, TT2]"
   echo "  roithreshTTT - Threshold for ROI finding is TTT"
+  echo "  roibinsBBB_AAA - Bins before (BB) and after (AAA) for ROI finding."
+  echo "  roineg - Find negative ROIs."
   echo "  tickphasePP - Tick phase offset is PP. Should be in range (0,24)"
   echo "  tickmodPhaseFemb - Add plots of phase vs. peak to tickmod tool"
   echo "  drawTickmodMax - Add plots of tickmod ADC near max to tickmod tool"
@@ -135,6 +137,19 @@ makeFcl() {
     NUM=${FCLNAME:9}
     while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
     echo "tools.adcThresholdSignalFinder.Threshold: $NUM" >$FCLFILE
+  # ADC ROI bins before and after
+  elif [ ${FCLNAME:0:7} = roibins ]; then
+    NUMS=${FCLNAME:7}
+    NUMB=`echo $NUMS | sed 's/_.*//g'`
+    NUMA=`echo $NUMS | sed 's/.*_//g'`
+    while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
+    echo "tools.adcThresholdSignalFinder.BinsBefore: $NUMB" >$FCLFILE
+    echo "tools.adcThresholdSignalFinder.BinsAfter: $NUMA" >$FCLFILE
+  # Negative ROIs.
+  elif [ ${FCLNAME:0:6} = roineg ]; then
+    echo "tools.adcThresholdSignalFinder.FlagPositive: false" >$FCLFILE
+    echo "tools.adcThresholdSignalFinder.FlagNegative: true" >>$FCLFILE
+    NUMS=${FCLNAME:7}
   # # ROIs to draw with ROI fitter.
   elif [ ${FCLNAME:0:4} = "nroi" ]; then
     NROI=${FCLNAME:4}
