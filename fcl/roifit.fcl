@@ -30,6 +30,7 @@ tools.adcRoiFitter: {
   MaxRoiPlots: 0
   RoiPlotPadX: 4
   RoiPlotPadY: 4
+  SumNegate: false
   SumPlotPadX: 4
   SumPlotPadY: 4
   RunDataTool: ""
