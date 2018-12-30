@@ -38,6 +38,7 @@ if [ "$1" = "-H" ]; then
   echo
   echo "Some of the primary fcl files provided here:"
   echo "  dqm - Make standard dqm plots."
+  echo "  evtview - Make plots showing the number of FEMBs with data."
   echo "  dataprepCal - Run dataprep though trivial calibration."
   echo "  dataprepMit - Run dataprep though mitigation."
   echo "  adcDist - Create ADC distribution (i.e. code frequency) plots."
