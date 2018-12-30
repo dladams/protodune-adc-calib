@@ -1,0 +1,34 @@
+# dataprepCor.fcl
+#
+# David Adams
+# November 2018
+#
+# Run data prep though mitigation plus tail correction (no deconvolution).
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+    "digitReader",                # Read RawDigit
+    "pd_adcPedestalFit",          # Find pedestal
+    "adcSampleFiller",            # Subtract pedestal, trivial calibration
+    "pdsp_sticky_codes_ped",      # Flag sticky codes
+    "pdsp_adcMitigate",           # Mitigate sticky codes
+    "pdsp_timingMitigate",        # Mitigate FEMB302 timing
+    "adcCorrectUndershoot"        # correct undershoot
+]
+
+# Modify channel-tick prepared tools for use before signal finding.
+tools.pdchtp_Zplanes.DataType: 0
+tools.pdchtp_Cplanes.DataType: 0
+tools.pdchtp_Iplanes.DataType: 0
+tools.pdchtp_Zplanes.HistTitle: "Corrected ADC for %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdchtp_Cplanes.HistTitle: "Corrected ADC for %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdchtp_Iplanes.HistTitle: "Corrected ADC for %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+
+# Modify detector display tools for use before signal finding.
+tools.preparedAdcDetectorPlotColl.SignalThreshold: 20
+tools.preparedAdcDetectorPlotInd1.SignalThreshold: 20
+tools.preparedAdcDetectorPlotInd2.SignalThreshold: 20
+tools.preparedAdcDetectorPlotColl.Title: "Corrected ADC collection view"
+tools.preparedAdcDetectorPlotInd1.Title: "Corrected ADC induction view 1"
+tools.preparedAdcDetectorPlotInd2.Title: "Corrected ADC induction view 2"
