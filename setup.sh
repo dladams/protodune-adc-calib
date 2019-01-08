@@ -47,8 +47,10 @@ else
   if [ -z "$DUNETPC_VERSION" ]; then
     echo "Please set up dunetpc."
   else
+    CURDIR=`readlink -f .`
     if [ -z "$ACLICBASE" ]; then
-      ACLICDIR=$PKGDIR/.aclic
+      #ACLICDIR=$PKGDIR/.aclic
+      ACLICDIR=$CURDIR/.aclic
     else
       ACLICDIR=$ACLICBASE
     fi

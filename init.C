@@ -22,7 +22,10 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   }
 
   string buildDir = buildDirIn;
-  if ( buildDir.size() == 0 ) buildDir = pkgDir + "/.aclic/$DUNETPC_VERSION";
+  if ( buildDir.size() == 0 ) {
+    cout << myname << "Build directory not specified--using package directory." << endl;
+    buildDir = pkgDir + "/.aclic/$DUNETPC_VERSION";
+  }
   string::size_type ipos = buildDir.find("$DUNETPC_VERSION");
   if ( ipos != string::npos ) {
     const char* pch = gSystem->Getenv("DUNETPC_VERSION");
@@ -111,8 +114,9 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   vector<string> unames = {};
   string oldBuildDir = gSystem->GetBuildDir();
   gSystem->SetBuildDir(utilLibDir.c_str());
+  cout << "Building utilities." << endl;
   for ( string uname : unames ) {
-    string sname = "Util/" + uname + ".cxx";
+    string sname = pkgDir + "/Util/" + uname + ".cxx";
     string lname = "lib" + uname;   // Root adds the extension.
     gSystem->CompileMacro(sname.c_str(), "-ck", lname.c_str());
   }
@@ -131,6 +135,15 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
     gSystem->CompileMacro(sname.c_str(), "-ck", lname.c_str());
   }
   gSystem->SetBuildDir(oldBuildDir.c_str());
+
+  string sfile = "startup.C";
+  if ( gSystem->AccessPathName(sfile.c_str()) == 0 ){
+    cout << "Executing local startup: " << sfile << endl;
+    string sline = ".X " + sfile;
+    gROOT->ProcessLine(sline.c_str());
+  } else {
+    cout << "Local startup file not found: " << sfile << endl;
+  }
 
   cout << "Finished loading." << endl;
   return 0;

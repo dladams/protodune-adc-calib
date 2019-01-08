@@ -21,6 +21,8 @@ if [ "$1" = "-H" ]; then
   echo "            May also be  sequence of channel ranges: CR1_CR2_CR3, etc."
   echo "  cdcr_CR - Module caldata only processes channel range CR"
   echo "  chanCCC - Module dataprep only processes channel CCC"
+  echo "  fftsizeSSS - Set LArFFT size to SSS."
+  echo "  winsizeSSS - Set # ticks in detector props. Used by LArFFT if its size is 0."
   echo "  wftickTTT - The channel range for waveforms drawn with tools"
   echo "              adcPlotRaw and adcPlotRaw is (TTT, TTT+1000]"
   echo "  wfranSSS - The signal range for these tools is (-SSS, SSS)"
@@ -83,6 +85,14 @@ makeFcl() {
     while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
     echo "physics.producers.dataprep.KeepChannelBegin: $NUM" >$FCLFILE
     echo "physics.producers.dataprep.KeepChannelEnd: $((NUM+1))" >>$FCLFILE
+  # FFT size
+  elif [ ${FCLNAME:0:7} = fftsize ]; then
+    SIZE=${FCLNAME:7}
+    echo "services.LArFFT.FFTSize: $SIZE" >>$FCLFILE
+  # Detector window size.
+  elif [ ${FCLNAME:0:7} = winsize ]; then
+    SIZE=${FCLNAME:7}
+    echo "services.DetectorPropertiesService.ReadOutWindowSize: $SIZE" >>$FCLFILE
   # wftickTTT: Show waveform ticks from TTT to TTT+1000
   elif [ ${FCLNAME:0:6} = wftick -a ${#FCLNAME} -gt 6 ]; then
     NUM1=${FCLNAME:6}

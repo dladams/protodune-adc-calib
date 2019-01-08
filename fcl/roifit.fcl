@@ -55,18 +55,20 @@ tools.adcRoiFitter.SumHists: [
   {var:fitCSNormDof        name:"hfcsnd_ch%0CHAN%"  title:"ROI normalized fit #chi^{2}/DOF run %RUN% channel %CHAN%" nbin:50   xmin:0.0  xmax:5.0                  plot:"hfcsnd_ch%0CHAN%.png"}
 ]
 tools.adcRoiFitter.ChanSumHists: [
-  #{name:"hcsArea_%CRNAME%"        title:"ROI area run %RUN% %CRLABEL%"                        valHist:"hsa_ch%0CHAN%"     valType:fitMean     errType:fitSigma plot:"%HNAME%.png" pran:"0:5000" cr:list},
-  {name:"hcsArea_%CRNAME%"        title:"ROI area run %RUN% %CRLABEL%"                        valHist:"hsa_ch%0CHAN%"     valType:fitMean     errType:fitSigma plot:"%HNAME%.png" pran:"0:1800:pamp" cr:list},
-  {name:"hcsAreaSigma_%CRNAME%"   title:"ROI area sigma run %RUN% %CRLABEL%"                  valHist:"hsa_ch%0CHAN%"     valType:fitSigma    errType:none     plot:"%HNAME%.png" pran:"0:100"  cr:list},
-  {name:"hcsHeight_%CRNAME%"      title:"ROI fit height run %RUN% %CRLABEL%"                  valHist:"hfh_ch%0CHAN%"     valType:fitMean     errType:fitSigma plot:"%HNAME%.png" pran:"0:300:pamp" cr:list},
-  {name:"hcsHeightSigma_%CRNAME%" title:"ROI fit height sigma run %RUN% %CRLABEL%"            valHist:"hfh_ch%0CHAN%"     valType:fitSigma    errType:none     plot:"%HNAME%.png" pran:"0:10"   cr:list},
-  {name:"hcsShaping_%CRNAME%"     title:"ROI fit shaping time run %RUN% %CRLABEL%"            valHist:"hfw_ch%0CHAN%"     valType:fitMean     errType:fitSigma plot:"%HNAME%.png" pran:"3:5"    cr:list},
-  {name:"hcsChiSquare_%CRNAME%"   title:"ROI fit #chi^{2} run %RUN% %CRLABEL%"                valHist:"hfcs_ch%0CHAN%"    valType:mean        errType:none     plot:"%HNAME%.png" pran:"0:1000" cr:list},
-  {name:"hcsCSNormDof_%CRNAME%"   title:"ROI fit Normalized #chi^{2}/DOF run %RUN% %CRLABEL%" valHist:"hfcsnd_ch%0CHAN%"  valType:mean        errType:none     plot:"%HNAME%.png" pran:"0:3"    cr:list}
+  #{name:"hcsArea_%CRNAME%"         title:"ROI area run %RUN% %CRLABEL%"                        valHist:"hsa_ch%0CHAN%"     valType:fitMean     errType:fitSigma plot:"%HNAME%.png" pran:"0:5000" cr:list},
+  {name:"hcsCount_%CRNAME%"        title:"ROI count %RUN% %CRLABEL%"                           valHist:"hsa_ch%0CHAN%"     valType:count       errType:none     plot:"%HNAME%.png" pran:"0:1000" cr:list},
+  {name:"hcsFitCount_%CRNAME%"     title:"ROI count %RUN% %CRLABEL%"                           valHist:"hfh_ch%0CHAN%"     valType:count       errType:none     plot:"%HNAME%.png" pran:"0:1000" cr:list},
+  {name:"hcsArea_%CRNAME%"         title:"ROI area run %RUN% %CRLABEL%"                        valHist:"hsa_ch%0CHAN%"     valType:fitMean     errType:fitSigma plot:"%HNAME%.png" pran:"0:1800:pamp" cr:list},
+  {name:"hcsAreaSigma_%CRNAME%"    title:"ROI area sigma run %RUN% %CRLABEL%"                  valHist:"hsa_ch%0CHAN%"     valType:fitSigma    errType:none     plot:"%HNAME%.png" pran:"0:100"  cr:list},
+  {name:"hcsHeight_%CRNAME%"       title:"ROI fit height run %RUN% %CRLABEL%"                  valHist:"hfh_ch%0CHAN%"     valType:fitMean     errType:fitSigma plot:"%HNAME%.png" pran:"0:300:pamp" cr:list},
+  {name:"hcsHeightSigma_%CRNAME%"  title:"ROI fit height sigma run %RUN% %CRLABEL%"            valHist:"hfh_ch%0CHAN%"     valType:fitSigma    errType:none     plot:"%HNAME%.png" pran:"0:10"   cr:list},
+  {name:"hcsShaping_%CRNAME%"      title:"ROI fit shaping time run %RUN% %CRLABEL%"            valHist:"hfw_ch%0CHAN%"     valType:fitMean     errType:fitSigma plot:"%HNAME%.png" pran:"3:5"    cr:list},
+  {name:"hcsChiSquare_%CRNAME%"    title:"ROI fit #chi^{2} run %RUN% %CRLABEL%"                valHist:"hfcs_ch%0CHAN%"    valType:mean        errType:rms      plot:"%HNAME%.png" pran:"0:1000" cr:list},
+  {name:"hcsCSNormDof_%CRNAME%"    title:"ROI fit Normalized #chi^{2}/DOF run %RUN% %CRLABEL%" valHist:"hfcsnd_ch%0CHAN%"  valType:mean        errType:rms      plot:"%HNAME%.png" pran:"0:3"    cr:list}
 ]
 
-tools.adcRoiFitter.RoiRootFileName: "roiroi.root"
-tools.adcRoiFitter.SumRootFileName: "roisum.root"
+tools.adcRoiFitter.RoiRootFileName: ""  # Use roifitSaveRois.fcl to save these
+tools.adcRoiFitter.SumRootFileName: ""  # Use roifitSaveSums.fcl to save these
 tools.adcRoiFitter.ChanSumRootFileName: "roicha.root"
 
 tools.adcRoiFitter.RunDataTool: protoduneRunDataTool
