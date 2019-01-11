@@ -111,14 +111,16 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   // are installed at buildDir/lib and so visible to clients.
   // The source for utility UNAME is taken from Util/UNAME.cxx and
   // the library is libUNAME.so 
-  vector<string> unames = {};
+  vector<string> unames = {"AdcCalibData", "AdcCalibGraphs"};
   string oldBuildDir = gSystem->GetBuildDir();
   gSystem->SetBuildDir(utilLibDir.c_str());
   cout << "Building utilities." << endl;
   for ( string uname : unames ) {
     string sname = pkgDir + "/Util/" + uname + ".cxx";
-    string lname = "lib" + uname;   // Root adds the extension.
-    gSystem->CompileMacro(sname.c_str(), "-ck", lname.c_str());
+    //string lname = "lib" + uname;   // Root adds the extension.
+    //gSystem->CompileMacro(sname.c_str(), "-ck", lname.c_str());
+    string line = ".L " + sname + "+";
+    gROOT->ProcessLine(line.c_str());
   }
   gSystem->SetBuildDir(oldBuildDir.c_str());
  
