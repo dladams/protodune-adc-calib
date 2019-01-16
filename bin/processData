@@ -161,7 +161,11 @@ makeFcl() {
     echo "tools.adcThresholdSignalFinder.FlagPositive: false" >$FCLFILE
     echo "tools.adcThresholdSignalFinder.FlagNegative: true" >>$FCLFILE
     echo "tools.adcRoiFitter.SumNegate: true" >>$FCLFILE
-    NUMS=${FCLNAME:7}
+    NUM=${FCLNAME:6}
+    if [ -n "$NUM" ]; then
+      while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
+      echo "tools.adcThresholdSignalFinder.Threshold: $NUM" >>$FCLFILE
+    fi
   # # ROIs to draw with ROI fitter.
   elif [ ${FCLNAME:0:4} = "nroi" ]; then
     NROI=${FCLNAME:4}
