@@ -156,6 +156,16 @@ makeFcl() {
     while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
     echo "tools.adcThresholdSignalFinder.BinsBefore: $NUMB" >$FCLFILE
     echo "tools.adcThresholdSignalFinder.BinsAfter: $NUMA" >$FCLFILE
+  # Positive ROIs.
+  elif [ ${FCLNAME:0:6} = roipos ]; then
+    echo "tools.adcThresholdSignalFinder.FlagPositive: true" >$FCLFILE
+    echo "tools.adcThresholdSignalFinder.FlagNegative: false" >>$FCLFILE
+    echo "tools.adcRoiFitter.SumNegate: false" >>$FCLFILE
+    NUM=${FCLNAME:6}
+    if [ -n "$NUM" ]; then
+      while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
+      echo "tools.adcThresholdSignalFinder.Threshold: $NUM" >>$FCLFILE
+    fi
   # Negative ROIs.
   elif [ ${FCLNAME:0:6} = roineg ]; then
     echo "tools.adcThresholdSignalFinder.FlagPositive: false" >$FCLFILE

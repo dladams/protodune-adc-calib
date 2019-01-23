@@ -10,25 +10,27 @@ using std::setw;
 
 //**********************************************************************
 
-AdcCalibData* AdcCalibData::create(Name name) {
-  if ( objects().find(name) != objects().end() ) return nullptr;
-  AdcCalibData* pobj = new AdcCalibData(name);
-  objects()[name].reset(pobj);
+AdcCalibData* AdcCalibData::create(Name dstName, Name crName) {
+  Spec spc(dstName, crName);
+  if ( objects().find(spc) != objects().end() ) return nullptr;
+  AdcCalibData* pobj = new AdcCalibData(dstName, crName);
+  objects()[spc].reset(pobj);
   return pobj;
 }
 
 //**********************************************************************
 
-const AdcCalibData* AdcCalibData::get(Name name) {
-  ObjectMap::const_iterator iobj = objects().find(name);
+const AdcCalibData* AdcCalibData::get(Name dstName, Name crName) {
+  Spec spc(dstName, crName);
+  ObjectMap::const_iterator iobj = objects().find(spc);
   if ( iobj == objects().end() ) return nullptr;
   return iobj->second.get();
 }
 
 //**********************************************************************
 
-AdcCalibData::AdcCalibData(Name name)
-: m_name(name) { }
+AdcCalibData::AdcCalibData(Name dstName, Name crName)
+: m_dstName(dstName), m_crName(crName) { }
 
 //**********************************************************************
 
@@ -44,7 +46,7 @@ int AdcCalibData::add(int pulser, Index run, Name fileName) {
 //**********************************************************************
 
 void AdcCalibData::print() const {
-  cout << "AdcCalibData " << name() << endl;
+  cout << "AdcCalibData " << dstName() << " " << crName() << endl;
   for ( const Entry& ent : data() ) {
     cout << setw(6) << ent.pulser
          << setw(8) << ent.run

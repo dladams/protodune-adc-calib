@@ -25,7 +25,20 @@ public:
   using Index = unsigned int;
   using Name = std::string;
   using ObjectPtr = std::unique_ptr<AdcCalibData>;
-  using ObjectMap = std::map<Name, ObjectPtr>;
+
+  class Spec {
+  public:
+    Name dstName;
+    Name crName;
+    Spec(Name dstNameIn, Name crNameIn) : dstName(dstNameIn), crName(crNameIn) { }
+    bool operator<(const Spec& rhs) const {
+      if ( dstName < rhs.dstName ) return true;
+      if ( rhs.dstName < dstName ) return false;
+      return crName < rhs.crName;
+    }
+  };
+
+  using ObjectMap = std::map<Spec, ObjectPtr>;
 
   class Entry {
   public:
@@ -39,20 +52,21 @@ public:
   // Create an empty object, insert it in the global map
   // and return it.
   // Fails (returns null) if an object with the name already exists.
-  static AdcCalibData* create(Name name);
+  static AdcCalibData* create(Name dstName, Name crName);
 
   // Return a named object from the global map.
   // Returns null if no object has the name.
-  static const AdcCalibData* get(Name name);
+  static const AdcCalibData* get(Name dstName, Name crName);
 
   // Ctor.
-  AdcCalibData(Name name);
+  AdcCalibData(Name dstName, Name crName);
 
   // Add an entry.
   int add(int pulser, Index run, Name fileName);
 
   // Getters.
-  Name name() const { return m_name; }
+  Name dstName() const { return m_dstName; }
+  Name crName() const { return m_crName; }
   const EntryVector& data() const { return m_ents; }
 
   // Show the data.
@@ -60,7 +74,8 @@ public:
 
 private:
 
-  Name m_name;
+  Name m_dstName;
+  Name m_crName;
   EntryVector m_ents;
 
   static ObjectMap& objects();
