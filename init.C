@@ -90,6 +90,7 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneServiceAccess/DuneServiceAccess.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/coldelecResponse.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/cePulser.h+");
+  gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/cePulserToAdc.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/offsetLine.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/gausTF1.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/Geometry/ChannelGeo.h+");

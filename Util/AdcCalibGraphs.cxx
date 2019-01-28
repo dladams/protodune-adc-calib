@@ -35,9 +35,11 @@ AdcCalibGraphs::AdcCalibGraphs(
   m_allowMissingRuns(false),
   m_errorScaling(1),
   m_xgmin(0.0), m_xgmax(0.0),
-  m_chargeUnit("Q_{step}") {
-  m_fits["Height"] = {offsetLineFullTF1(0, 900, 0,  1, -4, 12, "HeightFit")};
-  m_fits["Area"] =   {offsetLineFullTF1(0, 300, 0,  1, -4, 12, "AreaFit")};
+  m_chargeUnit("Q_{step}"),
+  m_graphChannelBegin(0),
+  m_graphChannelEnd(0) {
+  m_fits["Height"] = {offsetLineFullTF1(0, 140, 0,  1, -4, 12, "HeightFit")};
+  m_fits["Area"] =   {offsetLineFullTF1(0, 900, 0,  1, -4, 12, "AreaFit")};
   m_fits["Shaping"] = {offsetLinePedTF1(0, 0, 4,  0, 12, "shapingFitPlus"),
                        offsetLinePedTF1(0, 0, 4, -4,  0, "shapingFitMinus")};
   m_fits["ChiSquare"] = {offsetLineFullTF1(0, 900, 0,  1, -4, 12, "ChiSquareFit")};
@@ -147,6 +149,19 @@ void AdcCalibGraphs::fixAreaNegScale(double val) {
   ostringstream sssuf;
   sssuf << " fixN" << val;
   m_labels["Area"] += sssuf.str();
+}
+
+//**********************************************************************
+
+int AdcCalibGraphs::setFitFunction(string varName, TF1* pfit, Index ifun) {
+  const string myname = "AdcCalibGraphs::setFitFunction: ";
+  NameVector::const_iterator ivna = find(m_varNames.begin(), m_varNames.end(), varName);
+  if ( ivna == m_varNames.end() ) {
+    cout << myname << "Unknown variable: " << varName << endl;
+    return 1;
+  }
+  m_fits[varName][ifun] = pfit;
+  return 0;
 }
 
 //**********************************************************************
@@ -323,6 +338,13 @@ Index AdcCalibGraphs::makeGraphs(Index icha1, Index ncha) {
       m_gras[varName][icha] = pg;
     }
   }
+  if ( graphChannelEnd() <= graphChannelBegin() ) {
+    m_graphChannelBegin = icha1;
+    m_graphChannelEnd = icha2;
+  } else {
+    if ( icha1 < graphChannelBegin() ) m_graphChannelBegin = icha1;
+    if ( icha2 < graphChannelEnd() ) m_graphChannelEnd = icha2;
+  }
   return 0;
 }
 
@@ -388,7 +410,15 @@ Index AdcCalibGraphs::resGraphs(Index icha1, Index ncha) {
              << " does not have a fit." << endl;
         continue;
       }
-      double slope = pfit->GetParameter("Slope");
+      string slpName = "Slope";
+      int iparSlope = pfit->GetParameter(slpName.c_str());
+      double slope = 0.0;
+      if ( iparSlope < 0 ) {
+        cout << myname << "WARNING: Unable to find fit parameter " << slpName
+             << " for variable " << varName << endl;
+      } else {
+        slope = pfit->GetParameter(iparSlope);
+      }
       double calfac = slope == 0.0 ? 0.0 : qpulser/slope;
       int imrk = pgfit->GetMarkerStyle();
       GraphPtr pggres(new TGraphErrors);
@@ -479,7 +509,8 @@ PadPtr AdcCalibGraphs::pad(Name graName, Index icha, Index nx, Index ny) {
     ostringstream sslab;
     sslab.setf(std::ios_base::fixed);
     float chisq = 0.0;
-    Name fitName = varName + "Fit";
+    bool isPulserFit = pgraFit->GetFunction("adcpulser") != nullptr;
+    Name fitName = isPulserFit ? "adcpulser" : varName + "Fit";
     if ( varName == "Shaping" ) {
       labs.push_back("Minus");
       TF1* pfit = pgraFit->GetFunction("shapingFitMinus");
@@ -502,30 +533,53 @@ PadPtr AdcCalibGraphs::pad(Name graName, Index icha, Index nx, Index ny) {
       sslab.str("");
       sslab << "Chi-square: " << chisq;
       labs2.push_back(sslab.str());
+      int ndof = pfit->GetNDF();
+      if ( ndof > 0 ) {
+        sslab.str("");
+        sslab << "CS/DoF: " << chisq/ndof;
+        labs2.push_back(sslab.str());
+      }
     } else {
+      NameVector parNamesOld = {"Slope", "Offset", "Pedestal", "NegScale"};
+      FloatVector parPrecsOld = {2, 3, 1, 3};
+      NameVector parNamesPul = {"AdcScale", "Pedestal", "NegScale", "R0", "R1", "R2", "R3", "R4", "R5", "R6", "QVscale"};
+      FloatVector parPrecsPul(20, 4);
+      parPrecsPul[0] = 1;
+      parPrecsPul[1] = 2;
+      parPrecsPul[2] = 3;
+      NameVector parNames = isPulserFit ? parNamesPul : parNamesOld;
       TF1* pfit = pgraFit->GetFunction(fitName.c_str());
-      NameVector parNames = {"Slope", "Offset", "Pedestal", "NegScale"};
-      FloatVector parPrecs = {2, 3, 1, 3};
-      for ( Index ipar=0; ipar<parNames.size(); ++ipar ) {
-        Name parName = parNames[ipar];
-        float prec = parPrecs[ipar];
-        int kpar = pfit->GetParNumber(parName.c_str());
-        if ( kpar < 0 ) continue;
-        float val = pfit->GetParameter(kpar);
-        float err = pfit->GetParError(kpar);
+      FloatVector parPrecs = isPulserFit ? parPrecsPul : parPrecsOld;
+      if ( pfit == nullptr ) {
+        cout << myname << "Fit " << fitName << " not found for graph " << graName << endl;
+      } else {
+        for ( Index ipar=0; ipar<parNames.size(); ++ipar ) {
+          Name parName = parNames[ipar];
+          float prec = parPrecs[ipar];
+          int kpar = pfit->GetParNumber(parName.c_str());
+          if ( kpar < 0 ) continue;
+          float val = pfit->GetParameter(kpar);
+          float err = pfit->GetParError(kpar);
+          sslab.precision(prec);
+          sslab.str("");
+          sslab << parName << ": " << val;
+          if ( err > 0.0 ) sslab << " #pm " << err;
+          labs.push_back(sslab.str());
+        }
+        chisq = pfit->GetChisquare();
+        int ndig = log10(chisq/2.0);
+        int prec = ndig < 3 ? 3 - ndig : 0;
         sslab.precision(prec);
         sslab.str("");
-        sslab << parName << ": " << val;
-        if ( err > 0.0 ) sslab << " #pm " << err;
+        sslab << "Chi-square: " << chisq;
         labs.push_back(sslab.str());
+        int ndof = pfit->GetNDF();
+        if ( ndof > 0 ) {
+          sslab.str("");
+          sslab << "CS/DoF: " << chisq/ndof;
+          labs.push_back(sslab.str());
+        }
       }
-      chisq = pfit->GetChisquare();
-      int ndig = log10(chisq/2.0);
-      int prec = ndig < 3 ? 3 - ndig : 0;
-      sslab.precision(prec);
-      sslab.str("");
-      sslab << "Chi-square: " << chisq;
-      labs.push_back(sslab.str());
     }
   }
   if ( icha == 2169 ) labs.push_back("Bad channel.");
@@ -578,11 +632,24 @@ PadPtr AdcCalibGraphs::pad(Name graName, Index icha, Index nx, Index ny) {
   }
   // 1% lines.
   if ( graName.substr(1) == "resHeight" || graName.substr(1) == "resArea" ) {
-    Name funName = varName + "Fit";
+    bool isPulserFit = pgraFit->GetFunction("adcpulser") != nullptr;
+    Name funName = isPulserFit ? "adcpulser" : varName + "Fit";
     TF1* pfun = graph(varName, icha)->GetFunction(funName.c_str());
-    double slop = 0.01*pfun->GetParameter("Slope");
-    ppad->addSlopedLine(slop, 0.0, 2);
-    ppad->addSlopedLine(-slop, 0.0, 2);
+    double slop = 0.0;
+    if ( pfun == nullptr ) {
+      cout << myname << "Fit " << funName << " not found for graph " << graName << endl;
+    } else if ( isPulserFit ) {
+      double x = 10.0;
+      double y1 = pfun->Eval(0.0);
+      double y2 = pfun->Eval(x);
+      slop = 0.01*(y2 - y1)/x;
+    } else {
+      slop = 0.01*pfun->GetParameter("Slope");
+    }
+    if ( slop > 1.e-6 ) {
+      ppad->addSlopedLine(slop, 0.0, 2);
+      ppad->addSlopedLine(-slop, 0.0, 2);
+    }
   }
   ppad->setLabel(label(graName));
   return ppad;

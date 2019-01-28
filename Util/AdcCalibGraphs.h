@@ -61,6 +61,9 @@ public:
   void fixAreaPedestal(double pedeArea =0.0);
   void fixAreaNegScale(double nscaArea =1.0);
   
+  // Set the ifun'th fit function for variable varName. Null for no fit.
+  int setFitFunction(string varName, TF1* pfit, Index ifun =0);
+
   // Get/set the charge unit: Q_{step} (default), fC, e, ke
   Name chargeUnit() const { return m_chargeUnit; }
   void setChargeUnit(Name val) { m_chargeUnit = val; }
@@ -71,6 +74,11 @@ public:
   // Returns 0 for success.
   Index makeGraphs(Index icha1, Index ncha =1);
 
+  // Return the pre-inclusive range of created graphs.
+  Index graphChannelBegin() const { return m_graphChannelBegin; }
+  Index graphChannelEnd() const { return m_graphChannelEnd; }
+  Index graphChannelSize() const { return graphChannelEnd() - graphChannelBegin(); }
+  
   // Fit the graphs for ncha channels starting at icha1.
   // Returns 0 for success.
   Index fitGraphs(Index icha1, Index ncha, double xmin, double xmax, Name fopt ="QS");
@@ -139,6 +147,8 @@ private:
   float m_xgmin;
   float m_xgmax;
   Name m_chargeUnit;
+  Index m_graphChannelBegin;
+  Index m_graphChannelEnd;
 
 };
 
