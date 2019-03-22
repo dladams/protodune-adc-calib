@@ -10,8 +10,11 @@
 services.RawDigitPrepService.AdcChannelToolNames: [
   "digitReader",
   "pd_adcPedestalFit",
-  "adcPlotRaw"
+  "adcSampleFiller",
+  "adcPlotWaveform"
 ]
 
 #tools.adcPlotRaw.RootFileName: "wf.root"
-tools.adcPlotRaw.PlotFileName: "wf_run%0RUN%_evt%0EVENT%_chan%0CHAN%.png"
+tools.adcPlotWaveform: @local::tools.adcPlotPrepared
+tools.adcPlotWaveform.PlotFileName: "wf_run%0RUN%_evt%0EVENT%_chan%0CHAN%.png"
+tools.adcPlotWaveform.RootFileName: "wf_run%0RUN%_evt%0EVENT%.root"

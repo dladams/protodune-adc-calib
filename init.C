@@ -81,11 +81,13 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/ArtSupport/DuneToolManager.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/ArtSupport/ArtServiceHelper.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/TPadManipulator.h+");
+  gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/LineColors.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/RootPalette.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/AdcChannelData.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/Tool/IndexRangeTool.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/Tool/IndexMapTool.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/Tool/AdcChannelTool.h+");
+  gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/Tool/FloatArrayTool.h+");
   //gROOT->ProcessLine(".L $DUNETPC_INC/dune/ArtSupport/ArtServiceHelper.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneServiceAccess/DuneServiceAccess.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/coldelecResponse.h+");
@@ -113,7 +115,7 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   // are installed at buildDir/lib and so visible to clients.
   // The source for utility UNAME is taken from Util/UNAME.cxx and
   // the library is libUNAME.so 
-  vector<string> unames = {"AdcCalibData", "AdcCalibGraphs"};
+  vector<string> unames = {"ProcSet", "RoiChansumGraphs",  "AdcCalibData", "AdcCalibGraphs"};
   string oldBuildDir = gSystem->GetBuildDir();
   gSystem->SetBuildDir(utilLibDir.c_str());
   cout << "Building utilities." << endl;

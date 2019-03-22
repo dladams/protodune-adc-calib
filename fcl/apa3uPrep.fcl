@@ -1,0 +1,26 @@
+# apa3zPrep.fcl
+#
+# David Adams
+# October 2018
+#
+# Make a channel-tick plot of the collection plane where the
+# beam enters protoDUNE.
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pd_adcPedestalFit",
+  "adcSampleFiller",
+  "pdsp_sticky_codes_ped",
+  "pdsp_adcMitigate",
+  "pdsp_timingMitigate",
+  "pdcht_Apa3u"
+]
+
+tools.pdcht_Apa3u.DataType: 0
+tools.pdcht_Apa3u.HistName: "hadcmit_%CRNAME%_run%0RUN%_evt%0EVENT%"
+tools.pdcht_Apa3u.HistTitle: "Mitigated ADC for run %RUN% event %EVENT% %CRLABEL% (%CRLABEL2%: %CRLABEL1%) Trigger %TRIG%"
+tools.pdcht_Apa3u.HistTitle: "Mitigated ADC for run %RUN% event %EVENT% %CRLABEL% (%CRLABEL2%: %CRLABEL1%) %TRIGNAMECAP% trigger"
+
+#tools.rawAdcDetectorPlotColl.SignalThreshold: 20

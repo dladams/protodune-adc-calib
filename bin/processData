@@ -39,6 +39,9 @@ if [ "$1" = "-H" ]; then
   echo "  drawTickmodMax - Add plots of tickmod ADC near max to tickmod tool"
   echo "  nroiNNN - Draw max of NNN ROI's with AdcRoiViwer (e.g. roifit.fcl)"
   echo "  roicrCCC - Use and plot channel range CCC with AdcRoiViwer (e.g. roifit.fcl)"
+  echo "  roitrcVVV - Use FEMB302 tick rate correction 0.VVVVVVV (e.g. 999293). VVV=one means 1.0"
+  echo "  tmitRRR-OOO - Set FEMB302 timing mitigation rate factor to RRR and offset to OOO"
+  echo "  pdchtmaxMMM - Set upper signal limit for pdcht (channel vs. tick) plots"
   echo
   echo "Some of the primary fcl files provided here:"
   echo "  dqm - Make standard dqm plots."
@@ -67,8 +70,12 @@ makeFcl() {
     echo makeFcl: File already exists: $FCLFILE
     return 2
   fi
+  # Copy from submit directory.
+  if [ -r $SUBDIR/$FCLNAME.fcl ]; then
+    echo makeFcl: Copying $FCLNAME.fcl from submission directry.
+    cp $SUBDIR/$FCLNAME.fcl .
   # Run dataprep fo a single FEMB identified by number.
-  if [ ${FCLNAME:0:4} = femb ]; then
+  elif [ ${FCLNAME:0:4} = femb ]; then
     NUM=${FCLNAME:4}
     while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
     echo "physics.producers.dataprep.KeepFembs: [$NUM]" >$FCLFILE
@@ -130,6 +137,7 @@ makeFcl() {
     NUM=${FCLNAME:9}
     while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
     echo "tools.pd_tickOffset.TpcTickPhase: $NUM" >$FCLFILE
+    echo "tools.pd_tickOffsetCorr.TpcTickPhase: $NUM" >$FCLFILE
   # Set tick range for channel-tick plots, e.g. tick1000 or tick1000-1500
   elif [ ${FCLNAME:0:4} = tick ]; then
     RAN=${FCLNAME:4}  # I or I-J
@@ -153,7 +161,8 @@ makeFcl() {
     NUMS=${FCLNAME:7}
     NUMB=`echo $NUMS | sed 's/_.*//g'`
     NUMA=`echo $NUMS | sed 's/.*_//g'`
-    while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
+    while [ ${NUMB:0:1} = 0 -a ${#NUMB} -gt 1 ]; do NUMB=${NUMB:1}; done
+    while [ ${NUMA:0:1} = 0 -a ${#NUMA} -gt 1 ]; do NUMA=${NUMA:1}; done
     echo "tools.adcThresholdSignalFinder.BinsBefore: $NUMB" >$FCLFILE
     echo "tools.adcThresholdSignalFinder.BinsAfter: $NUMA" >$FCLFILE
   # Positive ROIs.
@@ -161,6 +170,8 @@ makeFcl() {
     echo "tools.adcThresholdSignalFinder.FlagPositive: true" >$FCLFILE
     echo "tools.adcThresholdSignalFinder.FlagNegative: false" >>$FCLFILE
     echo "tools.adcRoiFitter.SumNegate: false" >>$FCLFILE
+    echo "tools.adcRoiFitter.SumNegate: false" >>$FCLFILE
+    echo "tools.adcRoiFitter.PlotLabels: [\"Q>0\"]" >>$FCLFILE
     NUM=${FCLNAME:6}
     if [ -n "$NUM" ]; then
       while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
@@ -171,6 +182,7 @@ makeFcl() {
     echo "tools.adcThresholdSignalFinder.FlagPositive: false" >$FCLFILE
     echo "tools.adcThresholdSignalFinder.FlagNegative: true" >>$FCLFILE
     echo "tools.adcRoiFitter.SumNegate: true" >>$FCLFILE
+    echo "tools.adcRoiFitter.PlotLabels: [\"Q<0\"]" >>$FCLFILE
     NUM=${FCLNAME:6}
     if [ -n "$NUM" ]; then
       while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
@@ -185,6 +197,38 @@ makeFcl() {
     CR=${FCLNAME:5}
     echo "physics.producers.dataprep.ChannelRanges: [${CR}]" >$FCLFILE
     echo "tools.adcRoiFitter.ChannelRanges: [$CR]" >>$FCLFILE
+  elif [ ${FCLNAME:0:6} = "roitrc" ]; then
+    VVV=${FCLNAME:6}
+    if [ $VVV = one ]; then
+      COR=1.0
+    else
+      COR=0.$VVV
+    fi
+    echo "tools.pd_tickOffsetCorr.FembScaleValues: [${COR}]" >$FCLFILE
+  elif [ ${FCLNAME:0:4} = "tmit" ]; then
+    VALS=${FCLNAME:4}  # RRR-OOO
+    NUM1=${VALS%%-*}
+    NUM2=${VALS##*-}
+    echo "tools.pdsp_timingMitigate.SamplingRatio: $NUM1" >$FCLFILE
+    echo "tools.pdsp_timingMitigate.SamplingOffset: $NUM2" >>$FCLFILE
+  elif [ ${FCLNAME:0:9} = "pdchtzmax" ]; then
+    NUM=${FCLNAME:9}
+    while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
+    echo "tools.pdcht_Apa3z.MaxSignal: $NUM"     >$FCLFILE
+    echo "tools.pdcht_Apas.MaxSignal: $NUM"     >>$FCLFILE
+    echo "tools.pdcht_Zplanes.MaxSignal: $NUM"  >>$FCLFILE
+    echo "tools.pdchtp_Apa3z.MaxSignal: $NUM"   >>$FCLFILE
+    echo "tools.pdchtp_Apas.MaxSignal: $NUM"    >>$FCLFILE
+    echo "tools.pdchtp_Zplanes.MaxSignal: $NUM" >>$FCLFILE
+  elif [ ${FCLNAME:0:9} = "pdchtimax" ]; then
+    NUM=${FCLNAME:9}
+    while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
+    echo "tools.pdcht_Apa3u.MaxSignal: $NUM"     >$FCLFILE
+    echo "tools.pdcht_Apa3v.MaxSignal: $NUM"    >>$FCLFILE
+    echo "tools.pdcht_Iplanes.MaxSignal: $NUM"  >>$FCLFILE
+    echo "tools.pdchtp_Apa3u.MaxSignal: $NUM"   >>$FCLFILE
+    echo "tools.pdchtp_Apa3v.MaxSignal: $NUM"   >>$FCLFILE
+    echo "tools.pdchtp_Iplanes.MaxSignal: $NUM" >>$FCLFILE
   fi
   if [ ! -r $FCLFILE ]; then
     echo makeFcl: Unable to create $FCLFILE
@@ -197,17 +241,23 @@ RUNS="1194 1195 1193 1197 1192 1198 1203"
 IRUN=1185
 FCLPATH=run
 NEVT=1
-NSKP=0
+NSKP=0   # # events to skip
+SSKP=    # # events to skip padded with zeroes
 OUTPUT=0
+CLEAN=
 #RUN=run001191
 if [ -n "$1" ]; then
   FCLPATH=$1
 fi
 if [ -n "$3" ]; then
   NEVT=$3
+  if [ $3 = clean ]; then CLEAN=true; fi
 fi
 if [ -n "$4" ]; then
   NSKP=$4
+  SSKP=$4
+  while [ ${#SSKP} -lt 6 ]; do SSKP=0$SSKP; done
+  SSKP=skip$SSKP
 fi
 if [ -n "$2" ]; then
   if [ $2 == all ]; then
@@ -223,34 +273,65 @@ else
 fi
 if [ -n "$5" ]; then
   OUTPUT=1
+  if [ $5 = clean ]; then CLEAN=true; fi
 fi
 FRUN=$IRUN
+RUNSUF=
+RUNPAT=
+if echo $FRUN | grep _ 1>/dev/null; then
+  FRUN=`echo $IRUN | sed 's/_.*//g'`
+  RUNSUF=`echo $IRUN | sed 's/.*_/_/g'`
+fi
 while [ ${#FRUN} -lt 6 ]; do FRUN=0$FRUN; done
 RUNNAME0=$FRUN
-RUNNAME=run$FRUN
+RUNPAT=run${FRUN}${RUNSUF}
+RUNNAME=${RUNPAT}${SSKP}
 
 DIR=`echo ${FCLPATH}/$RUNNAME | sed 's#:#/#g'`
+if [ -n "$CLEAN" ]; then
+  echo Removing $DIR
+  rm -rf $DIR
+  exit 0
+fi
 echo Run directory: $DIR
-rm -rf $DIR
+if [ -r $DIR ]; then
+  echo Run directory already exists. Remove with
+  echo 'rm -rf '$DIR
+  exit 1
+fi
 mkdir -p $DIR
+SUBDIR=`pwd`
 cd $DIR
 
 INSPEC=
-INFILELIST=$HOME/data/dune/np04/np04_cryostat_commissioning/np04_run${FRUN}_files.txt
-if [ -r $INFILELIST ]; then
+RAWINFILELIST=$HOME/data/dune/np04/np04_cryostat_commissioning/np04_run${FRUN}_files.txt
+INFILELIST=infiles.txt
+if [ -r $RAWINFILELIST ]; then
   if true; then
     # Direct access to dcache
-    echo Taking input files from $INFILELIST
-    INSPEC="-S $INFILELIST"
+    echo Taking input files from $RAWINFILELIST
+    cp $RAWINFILELIST $INFILELIST
   else
     # xrootd (need grid proxy)
-    for BASE in `cat $INFILELIST`; do
-      echo $BASE | sed 's#/pnfs/#xroot://fndca1.fnal.gov:1094/pnfs/fnal.gov/usr/#g' >>infiles.txt
+    for BASE in `cat $RAWINFILELIST`; do
+      echo $BASE | sed 's#/pnfs/#xroot://fndca1.fnal.gov:1094/pnfs/fnal.gov/usr/#g' >>$INFILELIST
     done
-    INSPEC="-S infiles.txt"
   fi
+  if [ -n "$RUNSUF" ]; then
+    echo Selecting input files with pattern $RUNPAT
+    mv $INFILELIST $INFILELIST.tmp
+    if grep $RUNPAT $INFILELIST.tmp > $INFILELIST; then
+      NFILE=`wc -l $INFILELIST`
+      NFILERAW=`wc -l $RAWINFILELIST`
+      echo Selected $NFILE of $NFILERAW files
+    else
+      echo No files selected
+      exit 2
+    fi
+  fi
+  INSPEC="-S $INFILELIST"
 else
-  echo Did not find file list $INFILELIST
+  echo Did not find file list $RAWINFILELIST
   echo Searching directly for files...
   INDIRS="$HOME/data/dune/np04/*"
   echo Searching for matching files in $INDIRS
@@ -287,10 +368,17 @@ for NAME in `echo $FCLPATH | sed 's#/# #g'`; do
   fi
   echo "#include \"$NAME.fcl\"" >>run.fcl
 done
+# If the sumbit dir includes local.fcl, append
+# it to the configuration.
+SUBFCL=$SUBDIR/local.fcl
+if [ -r $SUBFCL ]; then
+  cp $SUBFCL .
+  echo "#include \"local.fcl\"" >>run.fcl
+fi
 FCLFILE=run.fcl
 
 FW_SEARCH_PATH="..:$FW_SEARCH_PATH"
-FHICL_FILE_PATH=".:..:../../run:$FHICL_FILE_PATH"
+FHICL_FILE_PATH=".:$SUBDIR:$FHICL_FILE_PATH"
 if true; then
   if ! fcldump $FCLFILE 5 >${FCLFILE}dump 2>fcldumperr.txt; then
     echo Ignoring fcldump errors.

@@ -1,5 +1,4 @@
-# pdeplots.fcl
-#
+# pedplots.fcl
 #
 # David Adams
 # August 2018
@@ -12,6 +11,9 @@ services.RawDigitPrepService.AdcChannelToolNames: [
   "digitReader",
   "pd_adcPedestalFit",
   "pdtps_adcChannelPedestalPlotter",
+  "pdtps_adcChannelPedestalInpPlotter",
+  "pdtps_adcChannelPedestalUscPlotter",
+  "pdtps_adcChannelPedestalDiffPlotter",
   "pdtps_adcChannelPedestalNoisePlotter",
   "pdtps_adcChannelPedestalPeakBinExcessPlotter"
 ]

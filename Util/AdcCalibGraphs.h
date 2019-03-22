@@ -10,6 +10,9 @@
 #include "TGraphErrors.h"
 
 class TF1;
+namespace lariov {
+  class ChannelStatusProvider;
+}
 
 class AdcCalibGraphs {
 
@@ -26,6 +29,7 @@ public:
   using GraphMap = std::map<Index, GraphPtr>;
   using GraphNameMap = std::map<Name, GraphPtr>;
   using GraphMapMap = std::map<Name, GraphMap>;
+  using GraphMapMapMap = std::map<Name, GraphMapMap>;
   using PadMap = std::map<Index, PadPtr>;
   using PadMapMap = std::map<Name, PadMap>;
   using PadNameMap = std::map<Name, PadPtr>;
@@ -51,6 +55,9 @@ public:
   void setErrorScaling(int val =true) { m_errorScaling = val; }
   int getErrorScaling() { return m_errorScaling; }
 
+  // Include gain and cal residuals when calculating full residuals.
+  void doGainResiduals(bool opt =true) { m_doGainResiduals = opt; }
+
   // Fix fit parameters for Height and Area.
   void fixHeightSlope(double slopHeight);
   void fixHeightOffset(double offsHeight =0.0);
@@ -68,11 +75,19 @@ public:
   Name chargeUnit() const { return m_chargeUnit; }
   void setChargeUnit(Name val) { m_chargeUnit = val; }
 
-  // Create graphs for ncha channels starting at icha1
+  // Create primary dataset graphs for ncha channels starting at icha1
   // for channels that do not already have graphs.
-  // vnam = Height, Area, Shaping, ChiSquare, CSDofNorm
   // Returns 0 for success.
   Index makeGraphs(Index icha1, Index ncha =1);
+
+  // Create extra dataset graphs for dataset dstName ncha channels starting at icha1
+  // for channels that do not already have graphs.
+  // Returns 0 for success.
+  Index makeExtraGraphs(Name dstName, Index icha1, Index ncha, int icol =2, int imrk =0);
+
+  // Create graphs for dataset dstName in grasOut for ncha channels starting at icha1.
+  Index makeGraphsInternal(Name dstName, Index icha1, Index ncha,
+                           GraphMapMap& grasOut, int icol, int imrk);
 
   // Return the pre-inclusive range of created graphs.
   Index graphChannelBegin() const { return m_graphChannelBegin; }
@@ -98,8 +113,13 @@ public:
   PadPtr multiChannelPad(Name gnam, Index icha, Index ncha, Index npadx, Index npady,
                          Index nx=1400, Index ny=1000);
 
+  // Make multi-channel pads for all graphed channels.
+  void makeMultiChannelPads(Name gnam, Index npadx, Index npady, Index nx=1400, Index ny=1000);
+
   // Return the existing graph for a channel.
-  GraphPtr graph(Name gnam, Index icha);
+  // If dstName is blank, then graph for the primary dataset is returned.
+  // Otherwise the graph for extra dataset dstName.
+  GraphPtr graph(Name gnam, Index icha, Name dstName ="");
 
   // Print all the multichannel pads.
   int printMultiChannelPads() const;
@@ -109,11 +129,17 @@ public:
   //   varName: Pulser fit variable: Height, Area, Shaping, ...
   //   parName: Name of the parameter from the fit of the variable.
   //   fitName: Name of the fit function. For blank "Fit" is appended to the variable name.
-  GraphPtr channelSummaryGraph(Name varName, Name parName, Name fitName ="");
+  //   If pgraName is not null, the graph name is returned.
+  GraphPtr channelSummaryGraph(Name varName, Name parName, Name fitName ="", Name* pgraName =nullptr);
   PadPtr channelSummaryPad(Name varName, Name parName, Name fitName ="",
                            double ymin =0.0, double ymax=0.0, Index wx=1400, Index wy=500);
   PadPtr drawChannelSummaryPad(Name varName, Name parName, Name fitName ="",
                                double ymin =0.0, double ymax=0.0, Index wx=1400, Index wy=500);
+
+  // Return graph with ratio of summary values.
+  //   ratName: AHS - Area/Height/Shaping
+  // These can also be fetched with the channelSummary methods using varName="Ratio" and parName=ratName.
+  GraphPtr channelRatioGraph(Name ratName);
 
   // Return the variable name for plot variable name, e.g. gresHeight --> Height.
   Name variableName(Name graName) const;
@@ -122,9 +148,10 @@ public:
   Name label(Name varName) const;
 
   // Write the gains and shaping times in fcl format.
-  // If name is blank, it is constructed from the label.
-  // Use setChargeUnit to set the charge unit.
-  int writeFcl(Name filName= "");
+  // calName = AreaGain, HeightGain or Shaping
+  // If the file name is blank, it is constructed from the label.
+  // Use setChargeUnit to set the charge unit for gain calibrations.
+  int writeFcl(Name calName, Name filName= "");
 
 private:
 
@@ -136,19 +163,25 @@ private:
   NameVector m_fitNames;
   NameVector m_resNames;
   GraphMapMap m_gras;
+  NameVector m_extraDsts;
+  GraphMapMapMap m_extraGras;
   PadMapMap m_pads;
   PadNameMap m_multiPads;
   FunVectorMap m_fits;
   GraphNameMap m_chsgras;
+  GraphNameMap m_chsgrasBad;
+  GraphNameMap m_chsgrasNoisy;
   PadNameMap m_chspads;
   bool m_allowMissingRuns;
   int m_errorScaling;
+  bool m_doGainResiduals;
   NameMap m_labels;
   float m_xgmin;
   float m_xgmax;
   Name m_chargeUnit;
   Index m_graphChannelBegin;
   Index m_graphChannelEnd;
+  const lariov::ChannelStatusProvider* m_pChannelStatusProvider;
 
 };
 
