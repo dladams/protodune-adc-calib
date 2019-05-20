@@ -1,0 +1,28 @@
+# pedmetricsSumZ.fcl
+#
+# David Adams
+# February 2019
+#
+# Make summary plots of pedestal metrics.
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pd_adcPedestalFit",
+  "pdwzs_adcChannelPedestalPlotter",
+  "pdwzs_adcChannelPedestalDiffPlotter"
+  #"pdwzs_adcChannelPedestalRawRmsPlotter",
+  #"pdwzs_adcChannelPedestalNoisePlotter"
+]
+
+tools.pd_adcPedestalFit.PlotSplitX: 4
+tools.pd_adcPedestalFit.PlotSizeX: 1400
+tools.pd_adcPedestalFit.PlotSizeY: 1000
+
+tools.pdwzs_adcChannelPedestalPlotter.MetricMin:  800
+tools.pdwzs_adcChannelPedestalPlotter.MetricMax: 1200
+tools.pdwzs_adcChannelPedestalDiffPlotter.MetricMin: -10
+tools.pdwzs_adcChannelPedestalDiffPlotter.MetricMax:  10
+
+tools.pdwzs_adcChannelPedestalPlotter.RootFileName: "pedmets.root"

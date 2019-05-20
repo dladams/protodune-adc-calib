@@ -1,0 +1,4 @@
+#physics.producers.dataprep.KeepChannelBegin:  1600
+#physics.producers.dataprep.KeepChannelEnd:    1604
+#tools.pd_tickmodViewer.LogLevel: 3
+tools.adcThresholdSignalFinder.LogLevel: 4

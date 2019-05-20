@@ -1,0 +1,61 @@
+# pedMetricSummary.fcl
+#
+# David Adams
+# March 2019
+#
+# Make summary (i.e. multi-event) plots of pedestal distribution.
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pd_adcPedestalFit",
+  "pdtps_adcChannelPedestalPlotter",
+  "pdtps_adcChannelPedestalVaryPlotter",
+  "pdtps_adcChannelPedestalRangePlotter",
+  "pdtps_adcChannelPedestalCountPlotter",
+  "pdtps_adcChannelPedestalNoisePlotter",
+  "pdtps_adcChannelPedestalRawRmsPlotter"
+]
+
+tools.pdtps_adcChannelPedestalPlotter.MetricSummaryView: "mean:dmean"
+tools.pdtps_adcChannelPedestalPlotter.HistName: "hchpd%CRNAME%_ped_%0RUN%"
+tools.pdtps_adcChannelPedestalPlotter.HistTitle: "ADC pedestals for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelPedestalPlotter.PlotFileName: "chmet_ped_%CRNAME%_run%0RUN%.png"
+tools.pdtps_adcChannelPedestalPlotter.RootFileName: "pedmets.root"
+
+tools.pdtps_adcChannelPedestalVaryPlotter: @local::tools.pdtps_adcChannelPedestalPlotter
+tools.pdtps_adcChannelPedestalVaryPlotter.MetricSummaryView: "rms"
+tools.pdtps_adcChannelPedestalVaryPlotter.MetricMax: 6
+tools.pdtps_adcChannelPedestalVaryPlotter.MetricLabel: "Pedestal variation [ADC count]"
+tools.pdtps_adcChannelPedestalVaryPlotter.HistName: "hchpd%CRNAME%_pedvary_%0RUN%"
+tools.pdtps_adcChannelPedestalVaryPlotter.HistTitle: "ADC pedestal variation for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelPedestalVaryPlotter.PlotFileName: "chmet_pedvary_%CRNAME%_run%0RUN%.png"
+
+tools.pdtps_adcChannelPedestalRangePlotter: @local::tools.pdtps_adcChannelPedestalVaryPlotter
+tools.pdtps_adcChannelPedestalRangePlotter.MetricSummaryView: "range"
+tools.pdtps_adcChannelPedestalRangePlotter.MetricMax: 28
+tools.pdtps_adcChannelPedestalRangePlotter.MetricLabel: "Pedestal range [ADC count]"
+tools.pdtps_adcChannelPedestalRangePlotter.HistName: "hchpd%CRNAME%_pedrange_%0RUN%"
+tools.pdtps_adcChannelPedestalRangePlotter.HistTitle: "ADC pedestal range for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelPedestalRangePlotter.PlotFileName: "chmet_pedrange_%CRNAME%_run%0RUN%.png"
+
+tools.pdtps_adcChannelPedestalCountPlotter: @local::tools.pdtps_adcChannelPedestalVaryPlotter
+tools.pdtps_adcChannelPedestalCountPlotter.MetricSummaryView: "count"
+tools.pdtps_adcChannelPedestalCountPlotter.MetricMax: 60
+tools.pdtps_adcChannelPedestalCountPlotter.MetricLabel: "Pedestal event count"
+tools.pdtps_adcChannelPedestalCountPlotter.HistName: "hchpd%CRNAME%_pedcount_%0RUN%"
+tools.pdtps_adcChannelPedestalCountPlotter.HistTitle: "ADC pedestal event count for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelPedestalCountPlotter.PlotFileName: "chmet_pedcount_%CRNAME%_run%0RUN%.png"
+
+tools.pdtps_adcChannelPedestalNoisePlotter.MetricSummaryView: "mean:dmean"
+tools.pdtps_adcChannelPedestalNoisePlotter.HistName: "hchpd%CRNAME%_pednoise_%0RUN%"
+tools.pdtps_adcChannelPedestalNoisePlotter.HistTitle: "ADC pedestal noises for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelPedestalNoisePlotter.PlotFileName: "chmet_pednoise_%CRNAME%_run%0RUN%.png"
+tools.pdtps_adcChannelPedestalNoisePlotter.RootFileName: "pedmets.root"
+
+tools.pdtps_adcChannelPedestalRawRmsPlotter.MetricSummaryView: "mean:dmean"
+tools.pdtps_adcChannelPedestalRawRmsPlotter.HistName: "hchpd%CRNAME%_pedrawrms_%0RUN%"
+tools.pdtps_adcChannelPedestalRawRmsPlotter.HistTitle: "ADC pedestal raw RMS for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelPedestalRawRmsPlotter.PlotFileName: "chmet_pedrawrms_%CRNAME%_run%0RUN%.png"
+tools.pdtps_adcChannelPedestalRawRmsPlotter.RootFileName: "pedmets.root"

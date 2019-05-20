@@ -1,0 +1,27 @@
+# dataprepCor.fcl
+#
+# David Adams
+# November 2018
+#
+# Run data prep though mitigation plus tail correction (no deconvolution).
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+    "digitReader",                # Read RawDigit
+    "pd_adcPedestalFit",          # Find pedestal
+    "adcSampleCalibration",       # Subtract pedestal, calibrate
+    "pdsp_sticky_codes_ped",      # Flag sticky codes
+    "pdsp_adcMitigate",           # Mitigate sticky codes
+    "pdsp_timingMitigate",        # Mitigate FEMB302 timing
+    "adcTailRemovalKe"            # correct undershoot
+]
+
+# Modify channel-tick prepared tools for use before signal finding.
+tmp.title: "%CRLABEL% (%CRLABEL2%: %CRLABEL1%) with tail removal"
+tools.pdchtp_Zplanes.DataType: 0
+tools.pdchtp_Cplanes.DataType: 0
+tools.pdchtp_Iplanes.DataType: 0
+tools.pdchtp_Zplanes.HistTitle: @local::tmp.title
+tools.pdchtp_Cplanes.HistTitle: @local::tmp.title
+tools.pdchtp_Iplanes.HistTitle: @local::tmp.title

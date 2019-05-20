@@ -1,0 +1,16 @@
+# wf.fcl
+#
+# David Adams
+# September 2018
+#
+# Produce waveform plots.
+
+#include "wf.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pd_adcPedestalFit",
+  "adcSampleFiller",
+  "adcCorrectUndershoot",
+  "adcPlotWaveform"
+]

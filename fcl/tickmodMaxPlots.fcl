@@ -1,0 +1,10 @@
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pd_adcPedestalFit",
+  #"pdtps_adcChannelApaFembPlotter",
+  "pd_tickmodViewer"
+]
+
+tools.pd_tickmodViewer.MaxPlotFileName: "adctmMax_run%RUN%_ch%0CHAN%.png"

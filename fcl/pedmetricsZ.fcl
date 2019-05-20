@@ -1,0 +1,28 @@
+# pedmetricsZ.fcl
+#
+# David Adams
+# Februarty 2019
+#
+# Make plots of pedestal distribution for each event and channel.
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pd_adcPedestalFit",
+  "pdwz_adcChannelPedestalPlotter",
+  "pdwz_adcChannelPedestalDiffPlotter",
+  "pdwz_adcChannelPedestalRawRmsPlotter",
+  "pdwz_adcChannelPedestalNoisePlotter"
+]
+
+tools.pd_adcPedestalFit.PlotSplitX: 4
+tools.pd_adcPedestalFit.PlotSizeX: 1400
+tools.pd_adcPedestalFit.PlotSizeY: 1000
+
+tools.pdwz_adcChannelPedestalPlotter.MetricMin:  800
+tools.pdwz_adcChannelPedestalPlotter.MetricMax: 1200
+tools.pdwz_adcChannelPedestalDiffPlotter.MetricMin: -10
+tools.pdwz_adcChannelPedestalDiffPlotter.MetricMax:  10
+
+tools.pdtps_adcChannelPedestalPlotter.RootFileName: "pedmets.root"

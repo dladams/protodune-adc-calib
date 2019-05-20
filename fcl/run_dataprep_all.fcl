@@ -1,0 +1,3 @@
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: @local::protodune_dataprep_tools_calib_noiserem

@@ -1,0 +1,79 @@
+#!/bin/sh
+
+# wcopyRoifit
+#
+# David Adams
+# January 2019
+#
+# Copy files from a roifit processing area to a
+# web directory.
+
+SRCDIR=$1
+DSTDIR=$2
+DBG=$3
+
+copyToDir() {
+  MSG=
+  if [ -z "$1" ]; then MSG="Invalid arg 1"
+  elif [ ! -r "$1" ]; then  MSG="Unable to read $1"
+  elif [ -z "$2" ]; then  MSG="Invalid arg 2"
+  fi
+  if [ -n "$MSG" ]; then
+    echo copyToDir: $MSG
+    return
+  fi
+  if [ ! -r $2 ]; then
+    echo Creating $COPDIR
+    if [ -z "$DBG" ]; then mkdir -p $2; fi
+  fi
+  echo Copying $1 to $2
+  if [ -z "$DBG" ]; then cp $1 $2; fi
+}
+
+if [ "$!" = "-h" -o -z "$2" ]; then
+  echo Usage: $0 SRCDIR DSTDIR
+fi
+
+if [ ! -r $SRCDIR ]; then
+  echo Source dir not found: $SRCDIR
+fi
+
+INDDIRS=
+OLDWWWDIR=
+WWWDIRS=
+for SRCFIL in `ls $SRCDIR/*`; do
+  SRCNAM=`basename $SRCFIL`
+  SRCEXT=`echo $SRCNAM | sed 's/.*\.//g'`
+  if [ "$SRCEXT" = root ]; then
+    echo Skipping $SRCNAM
+  elif [ "$SRCEXT" = png ]; then
+    COPIED=
+    WWWDIR=
+    if [ ${SRCNAM:0:3} = hcs ]; then
+      WWWDIR=$DSTDIR/chansums
+    else
+      SRCPRE=`echo $SRCNAM | sed 's/_.*//g'`
+      if [ -n "$SRCPRE" ]; then
+        WWWDIR=$DSTDIR/$SRCPRE
+      fi
+    fi
+    if [ -n "$WWWDIR" ]; then
+      if [ $WWWDIR != "${WWWDIROLD}" ]; then
+        WWWDIRS="$WWWDIRS $WWWDIR"
+        WWWDIROLD=$WWWDIR
+      fi
+      copyToDir $SRCFIL $WWWDIR
+    else
+      echo Skipping invalid png file: $SRCFILE
+    fi
+  else
+    copyToDir $SRCFIL $DSTDIR
+  fi
+done
+
+WWWDIRS="$WWWDIRS $DSTDIR $DSTDIR/.."
+for WWWDIR in $WWWDIRS; do
+  echo Making index for $WWWDIR
+  makeIndex $WWWDIR xx
+done
+

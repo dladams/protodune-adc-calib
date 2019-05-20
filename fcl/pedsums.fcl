@@ -1,0 +1,20 @@
+# pedsums.fcl
+#
+#include "pedplots.fcl"
+
+tools.pdtps_adcChannelPedestalPlotter.HistName: "hchpd%CRNAME%_ped_%0RUN%"
+tools.pdtps_adcChannelPedestalPlotter.HistTitle: "ADC pedestals for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelPedestalPlotter.PlotFileName: "chmet_ped_%CRNAME%_run%0RUN%.png"
+
+tools.pdtps_adcChannelPedestalDiffPlotter.HistName: "hchpd%CRNAME%_peddiff_%0RUN%"
+tools.pdtps_adcChannelPedestalDiffPlotter.HistTitle: "ADC pedestal diffs for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelPedestalDiffPlotter.PlotFileName: "chmet_peddiff_%CRNAME%_run%0RUN%.png"
+
+tools.pdtps_adcChannelPedestalNoisePlotter.HistName: "hchpd%CRNAME%_pednoise_%0RUN%"
+tools.pdtps_adcChannelPedestalNoisePlotter.HistTitle: "ADC pedestal noise for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelPedestalNoisePlotter.PlotFileName: "chmet_pednoise_%CRNAME%_run%0RUN%.png"
+
+tools.pdtps_adcChannelPedestalPeakBinExcessPlotter.HistName: "hchpd%CRNAME%_pedpeakexc_%0RUN%"
+tools.pdtps_adcChannelPedestalPeakBinExcessPlotter.HistTitle: "ADC pedestal peak bin excess for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelPedestalPeakBinExcessPlotter.PlotFileName: "chmet_pedpeakexc_%CRNAME%_run%0RUN%.png"
+

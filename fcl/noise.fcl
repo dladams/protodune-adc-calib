@@ -1,0 +1,15 @@
+# noise.fcl
+#
+# David Adams
+# March 2019
+#
+# Multi-event noise plots for protoDUNE.
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pd_adcPedestalFit",
+  "pdmtps_adcChannelPedestalNoisePlotter"
+]
+

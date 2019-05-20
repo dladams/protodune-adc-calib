@@ -1,0 +1,21 @@
+# evdispPlanes.fcl
+#
+# David Adams
+# May 2019
+#
+# Make a channel-tick plot of the protoDUNE planes.
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pd_adcPedestalFit",
+  #"pdtps_adcChannelPedestalNoisePlotter",
+  "pdcht_Zplanes",
+  "pdcht_Cplanes",
+  "pdcht_Iplanes",
+  "pd_evtviewNfemb"
+]
+
+tools.tickRanges.plotTicks.begin: 0
+tools.tickRanges.plotTicks.end:   0

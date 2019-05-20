@@ -1,0 +1,14 @@
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pd_adcPedestalFit",
+  #"rawAdcDetectorPlotInd1",
+  #"rawAdcDetectorPlotInd2",
+  "rawAdcDetectorPlotColl"
+]
+
+#tools.rawAdcDetectorPlotColl.SignalThreshold: 20
+tools.rawAdcDetectorPlotColl.DriftSpeed:  0.06  # cm/tick
+tools.rawAdcDetectorPlotColl.XMin:  750
+tools.rawAdcDetectorPlotColl.XMax: -750

@@ -7,7 +7,7 @@
 # Script to process event data and create calibration histograms.
 
 if [ "$1" = "-H" ]; then
-  echo Usage: $0 FCL RUN [NEVT] [NSKIP]
+  echo Usage: $0 FCL RUNPAT [NEVT] [NSKIP]
   echo
   echo Runs a lar job in a dedicated directory.
   echo
@@ -41,7 +41,12 @@ if [ "$1" = "-H" ]; then
   echo "  roicrCCC - Use and plot channel range CCC with AdcRoiViwer (e.g. roifit.fcl)"
   echo "  roitrcVVV - Use FEMB302 tick rate correction 0.VVVVVVV (e.g. 999293). VVV=one means 1.0"
   echo "  tmitRRR-OOO - Set FEMB302 timing mitigation rate factor to RRR and offset to OOO"
-  echo "  pdchtmaxMMM - Set upper signal limit for pdcht (channel vs. tick) plots"
+  echo "  pdchtzmaxMMM - Set upper signal limit for pdcht (channel vs. tick) plots"
+  echo "  pdchtrebinRR - Set rebin to RR for protDUNE cht (channel vs. tick) plots"
+  echo "  pdchtsizexSS - Set horizontal plot size to SS pixels for protDUNE cht (channel vs. tick) plots"
+  echo "  usctdecTTTT - Set USC TDecayConst to 0.TTTT"
+  echo "  uscfsubFFFF - Set USC FSubConst to 0.FFFF"
+  echo "  exptdecTTTT - Set ExpTailRemover decay tiome to TTTT ticks"
   echo
   echo "Some of the primary fcl files provided here:"
   echo "  dqm - Make standard dqm plots."
@@ -60,6 +65,10 @@ if [ "$1" = "-H" ]; then
   echo "  alltick - Set tick range to all ticks for channel-tick and detector displays."
   echo "  wfRaw100 - Draw raw waveforms for signal rrange (-50, 50)."
   echo "  wfMit100 - Draw raw and mitigated waveforms for signal rrange (-50, 50)."
+  echo
+  echo "RUNPAT is RUN or RUN_PAT"
+  echo "where RUN is a run number and PAT is a pattern required in the file name,"
+  echo "typically _SSSS to select time slice SSSS = 0001, 0002, ..."
   exit 0
 fi
 
@@ -229,6 +238,45 @@ makeFcl() {
     echo "tools.pdchtp_Apa3u.MaxSignal: $NUM"   >>$FCLFILE
     echo "tools.pdchtp_Apa3v.MaxSignal: $NUM"   >>$FCLFILE
     echo "tools.pdchtp_Iplanes.MaxSignal: $NUM" >>$FCLFILE
+  elif [ ${FCLNAME:0:10} = "pdchtrebin" ]; then
+    NUM=${FCLNAME:10}
+    while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
+    echo "tools.pdcht_Apa3z.TickRebin: $NUM"     >$FCLFILE
+    echo "tools.pdcht_Apas.TickRebin: $NUM"     >>$FCLFILE
+    echo "tools.pdcht_Zplanes.TickRebin: $NUM"  >>$FCLFILE
+    echo "tools.pdcht_Cplanes.TickRebin: $NUM"  >>$FCLFILE
+    echo "tools.pdcht_Iplanes.TickRebin: $NUM"  >>$FCLFILE
+    echo "tools.pdchtp_Apa3z.TickRebin: $NUM"   >>$FCLFILE
+    echo "tools.pdchtp_Apas.TickRebin: $NUM"    >>$FCLFILE
+    echo "tools.pdchtp_Zplanes.TickRebin: $NUM" >>$FCLFILE
+    echo "tools.pdchtp_Cplanes.TickRebin: $NUM" >>$FCLFILE
+    echo "tools.pdchtp_Iplanes.TickRebin: $NUM" >>$FCLFILE
+  elif [ ${FCLNAME:0:10} = "pdchtsizex" ]; then
+    NUM=${FCLNAME:10}
+    while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
+    echo "tools.pdcht_Apa3z.PlotSizeX: $NUM"     >$FCLFILE
+    echo "tools.pdcht_Apas.PlotSizeX: $NUM"     >>$FCLFILE
+    echo "tools.pdcht_Zplanes.PlotSizeX: $NUM"  >>$FCLFILE
+    echo "tools.pdcht_Cplanes.PlotSizeX: $NUM"  >>$FCLFILE
+    echo "tools.pdcht_Iplanes.PlotSizeX: $NUM"  >>$FCLFILE
+    echo "tools.pdchtp_Apa3z.PlotSizeX: $NUM"   >>$FCLFILE
+    echo "tools.pdchtp_Apas.PlotSizeX: $NUM"    >>$FCLFILE
+    echo "tools.pdchtp_Zplanes.PlotSizeX: $NUM" >>$FCLFILE
+    echo "tools.pdchtp_Cplanes.PlotSizeX: $NUM" >>$FCLFILE
+    echo "tools.pdchtp_Iplanes.PlotSizeX: $NUM" >>$FCLFILE
+  elif [ ${FCLNAME:0:7} = "usctdec" ]; then
+    VAL=0.${FCLNAME:7}
+    echo "tools.adcCorrectUndershootAdc.TDecayConst:  [ $VAL, $VAL, $VAL ]" >$FCLFILE
+    echo "tools.adcCorrectUndershootKe.TDecayConst:   [ $VAL, $VAL, $VAL ]" >>$FCLFILE
+    echo "tools.adcCorrectUndershoot.TDecayConst:     [ $VAL, $VAL, $VAL ]" >>$FCLFILE
+  elif [ ${FCLNAME:0:7} = "uscfsub" ]; then
+    VAL=0.${FCLNAME:7}
+    echo "tools.adcCorrectUndershootAdc.FSubConst:  [ $VAL, $VAL, $VAL ]" >$FCLFILE
+    echo "tools.adcCorrectUndershootKe.FSubConst:   [ $VAL, $VAL, $VAL ]" >>$FCLFILE
+    echo "tools.adcCorrectUndershoot.FSubConst:     [ $VAL, $VAL, $VAL ]" >>$FCLFILE
+  elif [ ${FCLNAME:0:7} = "exptdec" ]; then
+    VAL=${FCLNAME:7}
+    echo "tools.adcTailRemovalKe.DecayTime: $VAL" >$FCLFILE
   fi
   if [ ! -r $FCLFILE ]; then
     echo makeFcl: Unable to create $FCLFILE
@@ -241,6 +289,7 @@ RUNS="1194 1195 1193 1197 1192 1198 1203"
 IRUN=1185
 FCLPATH=run
 NEVT=1
+SEVT=    # # events to proc padded with zeroes
 NSKP=0   # # events to skip
 SSKP=    # # events to skip padded with zeroes
 OUTPUT=0
@@ -252,6 +301,9 @@ fi
 if [ -n "$3" ]; then
   NEVT=$3
   if [ $3 = clean ]; then CLEAN=true; fi
+  SEVT=$NEVT
+  while [ ${#SEVT} -lt 6 ]; do SEVT=0$SEVT; done
+  SEVT=proc$SEVT
 fi
 if [ -n "$4" ]; then
   NSKP=$4
@@ -285,7 +337,7 @@ fi
 while [ ${#FRUN} -lt 6 ]; do FRUN=0$FRUN; done
 RUNNAME0=$FRUN
 RUNPAT=run${FRUN}${RUNSUF}
-RUNNAME=${RUNPAT}${SSKP}
+RUNNAME=${RUNPAT}${SEVT}${SSKP}
 
 DIR=`echo ${FCLPATH}/$RUNNAME | sed 's#:#/#g'`
 if [ -n "$CLEAN" ]; then
@@ -368,13 +420,21 @@ for NAME in `echo $FCLPATH | sed 's#/# #g'`; do
   fi
   echo "#include \"$NAME.fcl\"" >>run.fcl
 done
-# If the sumbit dir includes local.fcl, append
-# it to the configuration.
-SUBFCL=$SUBDIR/local.fcl
-if [ -r $SUBFCL ]; then
-  cp $SUBFCL .
-  echo "#include \"local.fcl\"" >>run.fcl
-fi
+# If the submit dir includes local.fcl or dbg.fcl, append
+# copy it to the run area. In the case of local.fcl, add
+# it to configuration.
+for FFILE in local dbg; do
+  SUBFCL=$SUBDIR/$FFILE.fcl
+  if [ -r $SUBFCL ]; then
+    echo Copying $SUBFCL
+    cp $SUBFCL .
+    if [ $FFILE = local ]; then
+      echo "#include \"local.fcl\"" >>run.fcl
+    fi
+  else
+    echo Not found: $SUBFCL
+  fi
+done
 FCLFILE=run.fcl
 
 FW_SEARCH_PATH="..:$FW_SEARCH_PATH"

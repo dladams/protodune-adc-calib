@@ -10,11 +10,11 @@
 services.RawDigitPrepService.AdcChannelToolNames: [
     "digitReader",                # Read RawDigit
     "pd_adcPedestalFit",          # Find pedestal
-    "adcSampleFiller",            # Subtract pedestal, trivial calibration
+    "adcSampleCalibration",       # Subtract pedestal, calibrate
     "pdsp_sticky_codes_ped",      # Flag sticky codes
     "pdsp_adcMitigate",           # Mitigate sticky codes
     "pdsp_timingMitigate",        # Mitigate FEMB302 timing
-    "adcCorrectUndershoot"        # correct undershoot
+    "adcCorrectUndershootKe"      # correct undershoot
 ]
 
 # Modify channel-tick prepared tools for use before signal finding.
@@ -32,3 +32,9 @@ tools.preparedAdcDetectorPlotInd2.SignalThreshold: 20
 tools.preparedAdcDetectorPlotColl.Title: "Corrected ADC collection view"
 tools.preparedAdcDetectorPlotInd1.Title: "Corrected ADC induction view 1"
 tools.preparedAdcDetectorPlotInd2.Title: "Corrected ADC induction view 2"
+
+tools.preparedAdcDetectorPlotColl.TickRebin: 5
+tools.preparedAdcDetectorPlotInd1.TickRebin: 5
+tools.preparedAdcDetectorPlotInd2.TickRebin: 5
+tools.tickRanges.plotTicks: @local::tools.tickRanges.allTicks
+

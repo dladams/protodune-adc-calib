@@ -1,0 +1,31 @@
+# pedmetDist.fcl
+#
+#
+# David Adams
+# March 2019
+#
+# Make plots of pedestal distributions for each event and channel.
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pd_adcPedestalFit",
+  "pdmet_adcChannelPedestalPlotter",
+  "pdmet_adcChannelPedestalNoisePlotter"
+]
+
+tools.pdmet_adcChannelPedestalPlotter.ChannelRanges: []
+tools.pdmet_adcChannelPedestalPlotter.HistTitle: "ADC pedestals for run %RUN% event %EVENT%"
+tools.pdmet_adcChannelPedestalPlotter.RootFileName: "pedmets.root"
+
+tools.pdmet_adcChannelPedestalNoisePlotter.ChannelRanges: []
+tools.pdmet_adcChannelPedestalNoisePlotter.HistTitle: "ADC pedestal noise for run %RUN% event %EVENT%"
+tools.pdmet_adcChannelPedestalNoisePlotter.MetricMax: 20
+tools.pdmet_adcChannelPedestalNoisePlotter.RootFileName: "pedmets.root"
+
+tools.pd_adcPedestalFit.PlotSplitX: 4
+tools.pd_adcPedestalFit.PlotSizeX: 1400
+tools.pd_adcPedestalFit.PlotSizeY: 1000
+
+#tools.pdtps_adcChannelPedestalPlotter.RootFileName: "pedmets.root"

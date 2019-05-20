@@ -1,0 +1,16 @@
+# roiperfMit.fcl
+#
+#include "roiperf.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",                # Read RawDigit
+  "pd_adcPedestalFit",          # Find pedestal
+  "adcSampleCalibration",       # Subtract pedestal, charge calibration
+  #"adcSampleFiller",            # Subtract pedestal, trivial calibration
+  "pdsp_sticky_codes_ped",      # Flag sticky codes
+  "pdsp_adcMitigate",           # Mitigate sticky codes
+  #"pdsp_timingMitigate",        # Mitigate FEMB302 timing
+  #"adcCorrectUndershoot",       # correct undershoot
+  "adcThresholdSignalFinder",   # Build ROIs
+  "adcRoiFitter"
+]

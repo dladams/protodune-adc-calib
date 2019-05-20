@@ -1,0 +1,14 @@
+#!/bin/sh
+
+SRCDIR=$1
+DSTDIR=$2
+for DIR in `ls -d  $SRCDIR/*`; do
+  echo
+  echo $DIR
+  RUNDIR=`basename $DIR`
+  if [ ${RUNDIR:0:3} != run ]; then
+    Skipping unexpected source dir: $DIR
+    continue
+  fi
+  wcopyRoifit $DIR $DSTDIR/$RUNDIR
+done

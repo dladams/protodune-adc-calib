@@ -1,0 +1,26 @@
+# pedplots.fcl
+#
+# David Adams
+# August 2018
+#
+# Make plots of pedestal distribution for each event and channel.
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pd_adcPedestalFit",    # Drop this? Need for induction.
+  "adcSampleFiller",
+  "adcCorrectUndershoot",
+  "pdtps_adcChannelPedestalPlotter",
+  "pdtps_adcChannelPedestalInpPlotter",
+  "pdtps_adcChannelPedestalUscPlotter",
+  "pdtps_adcChannelPedestalDiffPlotter",
+  "pdtps_adcChannelPedestalNoisePlotter",
+  "pdtps_adcChannelPedestalPeakBinExcessPlotter"
+]
+
+tools.adcPedestalFit.PlotFileName: "peds_run%0RUN%_evt%0EVENT%_ch%0CHAN%.png"
+tools.adcPedestalFit.PlotSplitX: 4
+tools.adcPedestalFit.PlotSizeX: 1400
+tools.adcPedestalFit.PlotSizeY: 1000

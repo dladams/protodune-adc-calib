@@ -1,4 +1,4 @@
-# dftplots.fcl
+# dftplotslog.fcl
 #
 # David Adams
 # August 2018
@@ -11,11 +11,12 @@ services.RawDigitPrepService.AdcChannelToolNames: [
   "digitReader",
   "pd_adcPedestalFit",
   "adcSampleFiller",
+  "pdsp_setSampleLength",
   "adcFFT",
   "adcPlotDftTickPowerLog"
 ]
 
-tools.pd_adcPedestalFit.PlotFileName: "peds_run%0RUN%_evt%0EVENT%_ch%0CHAN%.png"
-tools.pd_adcPedestalFit.PlotSplitX: 4
-tools.pd_adcPedestalFit.PlotSizeX: 1400
-tools.pd_adcPedestalFit.PlotSizeY: 1000
+#tools.pd_adcPedestalFit.PlotFileName: "peds_run%0RUN%_evt%0EVENT%_ch%0CHAN%.png"
+#tools.pd_adcPedestalFit.PlotSplitX: 4
+#tools.pd_adcPedestalFit.PlotSizeX: 1400
+#tools.pd_adcPedestalFit.PlotSizeY: 1000

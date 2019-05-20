@@ -1,0 +1,2 @@
+physics.producers.dataprep.KeepChannelBegin: 10240
+physics.producers.dataprep.KeepChannelEnd:   12800

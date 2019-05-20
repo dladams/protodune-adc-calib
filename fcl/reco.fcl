@@ -2,9 +2,7 @@
 #include "BeamEvent.fcl"
 #include "protoDUNE_reco_data.fcl"
 
-# Add detector plots to dataprep.
-services.RawDigitPrepService.AdcChannelToolNames: [
-  @sequence::services.RawDigitPrepService.AdcChannelToolNames,
+pdsp_detplots: [
   rawAdcDetectorPlotColl,
   preparedAdcDetectorPlotColl,
   preparedAdcDetectorPlotInd1,
@@ -17,6 +15,12 @@ services.RawDigitPrepService.AdcChannelToolNames: [
   pdchtp_Iplanes,
   pdchtp_Zplanes,
   pdchtp_Cplanes
+]
+
+# Add detector plots to dataprep.
+services.RawDigitPrepService.AdcChannelToolNames: [
+  @sequence::services.RawDigitPrepService.AdcChannelToolNames,
+  @sequence::pdsp_detplots
 ]
 
 # Run decoding and filtering plus full reco.

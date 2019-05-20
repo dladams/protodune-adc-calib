@@ -1,0 +1,4 @@
+# Patch to process uncompressed data
+# From Tom 11-sep-2018
+
+physics.producers.tpcrawdecoder.RCESmallFragSize: 20000000

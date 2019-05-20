@@ -3,7 +3,7 @@
 # David Adams
 # November 2018
 #
-# Run data prep though mitigation plus tail correction (no deconvolution).
+# Run data prep though mitigation plus tail correction plus deconvolution.
 
 #include "run_dataprep.fcl"
 

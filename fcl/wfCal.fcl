@@ -1,0 +1,19 @@
+# wfCal.fcl
+#
+# David Adams
+# April 2018
+#
+# Produce prepared waveform plots.
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  @sequence::protodune_dataprep_tools_calib,
+  adcPlotPrepared
+]
+
+tools.adcPlotPrepared.PlotSigOpt: fixed
+tools.adcPlotPrepared.PlotSigMin: -5.0
+tools.adcPlotPrepared.PlotSigMax:  5.0
+tools.adcPlotPrepared.PlotFileName: "wfprep_run%0RUN%_evt%0EVENT%_chan%0CHAN%.png"
+
+#tools.adcPlotRaw.RootFileName: "wf.root"
