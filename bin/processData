@@ -24,13 +24,13 @@ if [ "$1" = "-H" ]; then
   echo "  fftsizeSSS - Set LArFFT size to SSS."
   echo "  winsizeSSS - Set # ticks in detector props. Used by LArFFT if its size is 0."
   echo "  wftickTTT - The channel range for waveforms drawn with tools"
-  echo "              adcPlotRaw and adcPlotRaw is (TTT, TTT+1000]"
+  echo "              adcPlotRaw and adcPlotRaw is [TTT, TTT+1000)"
   echo "  wfranSSS - The signal range for these tools is (-SSS, SSS)"
   echo "  trigT - Select events with trigger index TT."
   echo "  eventEEE - Process event EEE"
-  echo "  eventEE1-EE2 - Process events in range (EE1, EE2]"
-  echo "  tickTTT - Tick range for channel-tick plots is (TTT, TTTT+1000]"
-  echo "  tickTT1-TT2 - Tick range for channel-tick plots is (TT1, TT2]"
+  echo "  eventEE1-EE2 - Process events in range [EE1, EE2)"
+  echo "  tickTTT - Tick range for channel-tick plots is [TTT, TTTT+1000)"
+  echo "  tickTT1-TT2 - Tick range for channel-tick plots is [TT1, TT2)"
   echo "  roithreshTTT - Threshold for ROI finding is TTT"
   echo "  roibinsBBB_AAA - Bins before (BB) and after (AAA) for ROI finding."
   echo "  roineg - Find negative ROIs an set flag in ROI fitter."
@@ -67,8 +67,9 @@ if [ "$1" = "-H" ]; then
   echo "  wfMit100 - Draw raw and mitigated waveforms for signal rrange (-50, 50)."
   echo
   echo "RUNPAT is RUN or RUN_PAT"
-  echo "where RUN is a run number and PAT is a pattern required in the file name,"
-  echo "typically _SSSS to select time slice SSSS = 0001, 0002, ..."
+  echo "where RUN is a run number and PAT is a pattern as follows."
+  echo "If PAT = evtsEE-FF, then events [EE,FF) are processed."
+  echo "Otherwise _PAT is required in the file names, e.g. _SSSS to select time name slice SSSS = 0001, 0002, ..."
   exit 0
 fi
 
@@ -330,14 +331,45 @@ fi
 FRUN=$IRUN
 RUNSUF=
 RUNPAT=
-if echo $FRUN | grep _ 1>/dev/null; then
-  FRUN=`echo $IRUN | sed 's/_.*//g'`
-  RUNSUF=`echo $IRUN | sed 's/.*_/_/g'`
+RAWINFILELIST=
+EXTRAFCL=                  # Fcl dervied fron run specifier
+# Input run specifier in form RRRRevtsEE-FF uses event slice input file list and
+# restricts processing to events in range [EE, FF).
+if echo $IRUN | grep evts 1>/dev/null; then
+  FRUN=`echo $IRUN | sed 's/evts.*//'`
+  echo Using event range file list.
+  while [ ${#FRUN} -lt 6 ]; do FRUN=0$FRUN; done
+  EVTS=`echo $IRUN | sed 's/.*evts//'`
+  FEV1=${EVTS%%-*}
+  FEV2=${EVTS##*-}
+  while [ ${#FEV1} -lt 6 ]; do FEV1=0$FEV1; done
+  while [ ${#FEV2} -lt 6 ]; do FEV2=0$FEV2; done
+  RAWINFILELIST=$HOME/data/dune/np04/run_slices/files/run${FRUN}/np04_run${FRUN}_evts${FEV1}-${FEV2}_files.txt
+  if [ ! -r $RAWINFILELIST ]; then
+    echo Not found: $RAWINFILELIST
+    echo Create with "duneEventFileList RUN EVT1 EVT2"
+    exit 3
+  fi
+  EXTRAFCL=event${FEV1}-${FEV2}
+  FRUN=${FRUN}evts${EVTS}
+# Input run specifier in form RRRR_PP means only include file that have _PP in their names.
+elif echo $IRUN | grep _ 1>/dev/null; then
+  FRUN=`echo $IRUN | sed 's/_.*//'`
+  while [ ${#FRUN} -lt 6 ]; do FRUN=0$FRUN; done
+  RUNPAT=`echo $IRUN | sed 's/.*_/_/'`
+  echo Using file pattern $RUNPAT
+  FRUN=${FRUN}evts${EVTS}
+# Input run specifier is just the run number.
+elif [ $FRUN -eq $FRUN ]; then
+  echo Using unadorned run number $FRUN
+  while [ ${#FRUN} -lt 6 ]; do FRUN=0$FRUN; done
+# Any thing else is taken to a be file name pattern indicator.
+else
+  echo Using data fil pattern $FRUN
 fi
-while [ ${#FRUN} -lt 6 ]; do FRUN=0$FRUN; done
 RUNNAME0=$FRUN
-RUNPAT=run${FRUN}${RUNSUF}
-RUNNAME=${RUNPAT}${SEVT}${SSKP}
+RUNNAME=run${FRUN}${SEVT}${SSKP}
+echo runname: $RUNNAME
 
 DIR=`echo ${FCLPATH}/$RUNNAME | sed 's#:#/#g'`
 if [ -n "$CLEAN" ]; then
@@ -356,9 +388,14 @@ SUBDIR=`pwd`
 cd $DIR
 
 INSPEC=
-RAWINFILELIST=$HOME/data/dune/np04/np04_cryostat_commissioning/np04_run${FRUN}_files.txt
+if [ -z "$RAWINFILELIST" ]; then
+  RAWINFILELIST=$HOME/data/dune/np04/np04_cryostat_commissioning/np04_run${FRUN}_files.txt
+  if [ ! -r "$RAWINFILELIST" ]; then
+    echo File list not found: $RAWINFILELIST
+  fi
+fi
 INFILELIST=infiles.txt
-if [ -r $RAWINFILELIST ]; then
+if [ -r "$RAWINFILELIST" ]; then
   if true; then
     # Direct access to dcache
     echo Taking input files from $RAWINFILELIST
@@ -369,7 +406,7 @@ if [ -r $RAWINFILELIST ]; then
       echo $BASE | sed 's#/pnfs/#xroot://fndca1.fnal.gov:1094/pnfs/fnal.gov/usr/#g' >>$INFILELIST
     done
   fi
-  if [ -n "$RUNSUF" ]; then
+  if [ -n "$RUNPAT" ]; then
     echo Selecting input files with pattern $RUNPAT
     mv $INFILELIST $INFILELIST.tmp
     if grep $RUNPAT $INFILELIST.tmp > $INFILELIST; then
@@ -383,7 +420,7 @@ if [ -r $RAWINFILELIST ]; then
   fi
   INSPEC="-S $INFILELIST"
 else
-  echo Did not find file list $RAWINFILELIST
+  echo Did not find file lists $RAWINFILELIST
   echo Searching directly for files...
   INDIRS="$HOME/data/dune/np04/*"
   echo Searching for matching files in $INDIRS
@@ -411,7 +448,7 @@ else
 fi
 
 touch run.fcl
-for NAME in `echo $FCLPATH | sed 's#/# #g'`; do
+for NAME in `echo $FCLPATH | sed 's#/# #g'` $EXTRAFCL; do
   if ! fcldump $NAME.fcl 2>&1 1>/dev/null; then 
     if ! makeFcl $NAME; then
       echo FCL not found: $NAME.fcl
