@@ -289,7 +289,7 @@ makeFcl() {
 RUNS="1194 1195 1193 1197 1192 1198 1203"
 IRUN=1185
 FCLPATH=run
-NEVT=1
+NEVT=0
 SEVT=    # # events to proc padded with zeroes
 NSKP=0   # # events to skip
 SSKP=    # # events to skip padded with zeroes
@@ -302,6 +302,8 @@ fi
 if [ -n "$3" ]; then
   NEVT=$3
   if [ $3 = clean ]; then CLEAN=true; fi
+fi
+if [ $NEVT -gt 0 ]; then
   SEVT=$NEVT
   while [ ${#SEVT} -lt 6 ]; do SEVT=0$SEVT; done
   SEVT=proc$SEVT
@@ -485,10 +487,14 @@ else
     exit 3
   fi
 fi
+OPTNEVT=
+if [ "$NEVT" -gt 0 ]; then
+  OPTNEVT="-n $NEVT"
+fi
 if [ $OUTPUT -eq 1 ]; then
-  echo "lar -c $FCLFILE $INSPEC -n $NEVT --nskip $NSKP" >run
+  echo "lar -c $FCLFILE $INSPEC $OPTNEVT --nskip $NSKP" >run
 else
-  echo "lar -c $FCLFILE $INSPEC -n $NEVT --nskip $NSKP --no-output" >run
+  echo "lar -c $FCLFILE $INSPEC $OPTNEVT --nskip $NSKP --no-output" >run
 fi
 chmod +x run
 if [ $IRUN != '0' ]; then
@@ -501,5 +507,5 @@ if [ $IRUN != '0' ]; then
   fi
 fi
 echo Run directory: $DIR
-echo ARGS: '-c' $FCLFILE '-s' $INFILES '-n' $NEVT '--nskip' $NSKP
+echo ARGS: '-c' $FCLFILE '-s' $INFILES $OPTNEVT '--nskip' $NSKP
 echo Command: `cat run`
