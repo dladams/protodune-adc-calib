@@ -66,6 +66,7 @@ physics: {
       EventEnd:   0
       EventModFreq: 0
       EventModVal:  0
+      JobIndexRangeTool: jobRanges
     }
   }
 
