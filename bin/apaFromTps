@@ -1,0 +1,18 @@
+#!/bin/bash
+
+TPS=$1
+if [ -z "$TPS" ]; then exit 1; fi
+
+if [ $TPS = "-h" ]; then
+  echo Usage: $0: TPS
+  exit 0
+fi
+
+if [ $TPS -eq 0 ]; then echo 3; exit 0; fi
+if [ $TPS -eq 1 ]; then echo 5; exit 0; fi
+if [ $TPS -eq 2 ]; then echo 2; exit 0; fi
+if [ $TPS -eq 3 ]; then echo 6; exit 0; fi
+if [ $TPS -eq 4 ]; then echo 1; exit 0; fi
+if [ $TPS -eq 5 ]; then echo 4; exit 0; fi
+
+exit 2

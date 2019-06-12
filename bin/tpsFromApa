@@ -1,0 +1,18 @@
+#!/bin/bash
+
+APA=$1
+if [ -z "$APA" ]; then exit 1; fi
+
+if [ $APA = "-h" ]; then
+  echo Usage: $0: APA
+  exit 0
+fi
+
+if [ $APA -eq 1 ]; then echo 4; exit 0; fi
+if [ $APA -eq 2 ]; then echo 2; exit 0; fi
+if [ $APA -eq 3 ]; then echo 0; exit 0; fi
+if [ $APA -eq 4 ]; then echo 5; exit 0; fi
+if [ $APA -eq 5 ]; then echo 1; exit 0; fi
+if [ $APA -eq 6 ]; then echo 3; exit 0; fi
+
+exit 2
