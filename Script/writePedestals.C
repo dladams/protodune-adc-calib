@@ -5,7 +5,7 @@ int writePedestals(string infil, string hnam, string outfil, string label) {
     cout << myname << "Unable to open " << infil << endl;
     return 1;
   }
-  TH1* ph = dynamic_cast<TH1*>(pfil->Get(hnam.c_str());
+  TH1* ph = dynamic_cast<TH1*>(pfil->Get(hnam.c_str()));
   if ( ph == nullptr )  {
     cout << myname << "Histogram not found: " << hnam << endl;
     pfil->ls();
@@ -22,8 +22,16 @@ int writePedestals(string infil, string hnam, string outfil, string label) {
   fout << "Label: \"" << label << "\"\n";
   fout << "Unit: \"ADC count\"\n";
   fout << "Offset: " << offset << "\n";
-  fout << "Values: [\n";
-  fout << "]\n";
+  fout << "Values: [";
+  int count = 0;
+  fout.precision(2);
+  for ( int ibin=0; ibin<nbin; ++ibin ) {
+    if ( ibin ) fout << ",";
+    if ( ibin%10 == 0 ) fout << "\n  ";
+    fout << setw(8) << fixed << ph->GetBinContent(ibin+1);
+  }
+  fout << "\n]\n";
   
   cout << myname << "Output file is " << outfil << endl;
+  return 0;
 }

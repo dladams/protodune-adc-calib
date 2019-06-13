@@ -1,0 +1,12 @@
+# run_eventfilter.fcl
+#
+# David Adams
+# June 2019
+#
+# Runs only event filter.
+#
+# Useful for counting events and making sure files are staged.
+
+#include "run_dataprep.fcl"
+
+physics.freco: [ eventfilter ]
