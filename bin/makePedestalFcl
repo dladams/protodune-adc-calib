@@ -1,0 +1,23 @@
+#!/bin/bash
+
+NAME=$1
+INFILE=$INDIR/$NAME
+LAB=pedestals
+APA=1
+TPS=`tpsFromApa $APA`
+OFF=$(( 2560*$TPS ))
+SRCFIL=pedmetPedSum/dpcr_apa$APA/$RUNEVT/pedmets_tps$TPS.root
+LABEL=Pedestals_${RUNEVT}_APA${APA}
+
+if [ ! -r $SRCFIL ]; then
+  echo ROOT file not found: $SRCFIL
+  exit 0
+fi
+
+echo tool_type: FclFloatArray
+echo LogLevel: 1
+echo DefaultValue: 0
+echo Label: \"$LAB\"
+echo Unit: ADC count
+echo Offset: $OFF
+echo Values: [ ]

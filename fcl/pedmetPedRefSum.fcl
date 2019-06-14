@@ -1,0 +1,21 @@
+# pedmetPedRefSum.fcl
+#
+#
+# David Adams
+# August 2018
+#
+# Make plots of pedestal distribution for each event and channel.
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pd_adcPedestalFit",
+  "pdtps_adcChannelPedestalDiffPlotter"
+]
+
+tools.pdtps_adcChannelPedestalDiffPlotter.PedestalReference: "pedestals_run006118evts00000_01000"
+tools.pdtps_adcChannelPedestalDiffPlotter.MetricLabel: "#DeltaPedestal mean [ADC count]"
+tools.pdtps_adcChannelPedestalDiffPlotter.HistName: "hchpd%CRNAME%_peddiff_%0RUN%"
+tools.pdtps_adcChannelPedestalDiffPlotter.HistTitle: "ADC pedestal difference for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelPedestalDiffPlotter.PlotFileName: "chmet_peddiff_%CRNAME%_run%0RUN%.png"
