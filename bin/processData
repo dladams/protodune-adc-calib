@@ -501,6 +501,7 @@ else
 fi
 chmod +x run
 if [ $IRUN != '0' ]; then
+  ulimit -c unlimited
   ./run 2>&1 | tee run.log
   STAT=$?
   if [ $STAT -ne 0 ]; then
