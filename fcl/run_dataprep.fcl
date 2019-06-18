@@ -67,6 +67,8 @@ physics: {
       EventModFreq: 0
       EventModVal:  0
       JobIndexRangeTool: jobRanges
+      SkipEventTool: ""
+      #SkipEventTool: "pdsp_unpack_crash_events"
     }
   }
 
