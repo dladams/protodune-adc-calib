@@ -22,6 +22,6 @@ tools.pdtps_adcChannelPedestalNoisePlotter.HistName: "hchpdnoise%CRNAME%_ped_%0R
 tools.pdtps_adcChannelPedestalNoisePlotter.HistTitle: "ADC pedestal noise for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
 tools.pdtps_adcChannelPedestalNoisePlotter.PlotFileName: "chmet_pednoise_%CRNAME%_run%0RUN%.png"
 
-tools.pdtps_adcChannelPedestalNoisePlotter.FitRmsMin: 0.5
+tools.pd_adcPedestalFit.FitRmsMin: 0.5
 
 tools.pdtps_adcChannelPedestalNoisePlotter.RootFileName: "pedmets_%CRNAME%.root"
