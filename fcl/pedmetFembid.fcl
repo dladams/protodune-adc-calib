@@ -1,0 +1,14 @@
+# pemetFembid.fcl
+#
+# David Adams
+# July 2019
+#
+# Make plots of FEMB ID vs. channel.
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pdtps_adcChannelApaFembPlotter"
+]
+

@@ -4,7 +4,9 @@
 # David Adams
 # August 2018
 #
-# Make plots of pedestal distribution for each event and channel.
+# Make plots of pedestal mean and RMS for each channel.
+#
+# Used in June 2019 pedestal/noise studies.
 
 #include "run_dataprep.fcl"
 

@@ -93,6 +93,8 @@ makeFcl() {
   elif [ ${FCLNAME:0:5} = dpcr_ ]; then    # data prep channel ranges
     CRS=`echo ${FCLNAME:5} | sed 's/_/, /g'`
     echo "physics.producers.dataprep.ChannelRanges: [${CRS}]" >$FCLFILE
+    echo "tools.adcRoiViewer.ChannelRanges: [${CRS}]" >>$FCLFILE
+    echo "tools.adcRoiFitter.ChannelRanges: [${CRS}]" >>$FCLFILE
   # Run caldata for a single channel range indentified by name.
   elif [ ${FCLNAME:0:5} = cdcr_ ]; then    # data prep channel ranges
     CRS=`echo ${FCLNAME:5} | sed 's/_/, /g'`
@@ -205,6 +207,7 @@ makeFcl() {
   elif [ ${FCLNAME:0:4} = "nroi" ]; then
     NROI=${FCLNAME:4}
     echo "tools.adcRoiFitter.MaxRoiPlots: $NROI" >$FCLFILE
+    echo "tools.adcRoiViewer.MaxRoiPlots: $NROI" >>$FCLFILE
   # Channel range for ROI fitter.
   elif [ ${FCLNAME:0:5} = "roicr" ]; then
     CR=${FCLNAME:5}

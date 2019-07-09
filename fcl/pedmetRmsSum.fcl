@@ -1,0 +1,21 @@
+# pedmetNoiseSum.fcl
+#
+# David Adams
+# June 2019
+#
+# Make summary plots of pedestal noise vs. channel.
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  #"pd_adcPedestalFit",    # Replace digit pedestal with fit pedestal
+  "pdtps_adcChannelPedestalRawRmsPlotter"
+]
+
+tools.pdtps_adcChannelPedestalRawRmsPlotter.HistName: "hchpedrms%CRNAME%_ped_%0RUN%"
+tools.pdtps_adcChannelPedestalRawRmsPlotter.HistTitle: "ADC sample RMS for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelPedestalRawRmsPlotter.PlotFileName: "chmet_pedrms_%CRNAME%_run%0RUN%.png"
+tools.pdtps_adcChannelPedestalRawRmsPlotter.MetricMax: 30.0
+
+tools.pdtps_adcChannelPedestalRawRmsPlotter.RootFileName: "pedmets_%CRNAME%.root"

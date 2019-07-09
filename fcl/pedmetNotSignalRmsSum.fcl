@@ -1,0 +1,38 @@
+# pedmetNotSignalRmsSum.fcl
+#
+# David Adams
+# June 2019
+#
+# Make summary plots of signal fraction and not-signal sample RMS vs. channel.
+#
+# Should give the same results as pedmetNoiseSum.fcl
+
+#include "run_dataprep.fcl"
+#include "pedmetSignalFinder.fcl"
+#include "adcRoiViewer.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pd_adcPedestalFit",
+  "adcSampleFiller",            # Subtract pedestal, trivial calibration
+  "pedmetSignalFinderAdc",      # Find signal
+  "adcRoiViewer",
+  "pdtps_adcChannelSignalFractionPlotter",
+  "pdtps_adcChannelNotSignalRmsPlotter"
+]
+
+tools.pdtps_adcChannelSignalFractionPlotter: @local::tools.pdtps_adcChannelPedestalNoisePlotter
+tools.pdtps_adcChannelSignalFractionPlotter.Metric: "sigFrac"
+tools.pdtps_adcChannelSignalFractionPlotter.MetricMax: 0.25
+tools.pdtps_adcChannelSignalFractionPlotter.MetricLabel: "Signal fraction"
+tools.pdtps_adcChannelSignalFractionPlotter.HistName: "hchsigfrac%CRNAME%_ped_%0RUN%"
+tools.pdtps_adcChannelSignalFractionPlotter.HistTitle: "ADC signal fraction for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelSignalFractionPlotter.PlotFileName: "chmet_sigfrac_%CRNAME%_run%0RUN%.png"
+tools.pdtps_adcChannelSignalFractionPlotter.RootFileName: "pedmets_%CRNAME%.root"
+
+tools.pdtps_adcChannelNotSignalRmsPlotter: @local::tools.pdtps_adcChannelPedestalNoisePlotter
+tools.pdtps_adcChannelNotSignalRmsPlotter.Metric: "nsgRms"
+tools.pdtps_adcChannelNotSignalRmsPlotter.HistName: "hchnsgrms%CRNAME%_ped_%0RUN%"
+tools.pdtps_adcChannelNotSignalRmsPlotter.HistTitle: "ADC not-signal RMS for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelNotSignalRmsPlotter.PlotFileName: "chmet_nsgrms_%CRNAME%_run%0RUN%.png"
+tools.pdtps_adcChannelNotSignalRmsPlotter.RootFileName: "pedmets_%CRNAME%.root"

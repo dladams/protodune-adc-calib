@@ -1,0 +1,25 @@
+# pedmetSampleRmsSum.fcl
+#
+# David Adams
+# June 2019
+#
+# Make summary plots of signal sample RMS vs. channel.
+#
+# Should give the same results as pedmetNoiseSum.fcl
+
+#include "run_dataprep.fcl"
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  "digitReader",
+  "pd_adcPedestalFit",
+  "adcSampleFiller",            # Subtract pedestal, trivial calibration
+  "adcTailSignalFinderAdc",     # Find signal
+  "pdtps_adcChannelPedestalNoisePlotter"
+]
+
+tools.pdtps_adcChannelPedestalNoisePlotter.Metric: "sigRms"
+tools.pdtps_adcChannelPedestalNoisePlotter.MetricMax: 100
+tools.pdtps_adcChannelPedestalNoisePlotter.HistName: "hchsigrms%CRNAME%_ped_%0RUN%"
+tools.pdtps_adcChannelPedestalNoisePlotter.HistTitle: "ADC signal RMS for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelPedestalNoisePlotter.PlotFileName: "chmet_sigrms_%CRNAME%_run%0RUN%.png"
+tools.pdtps_adcChannelPedestalNoisePlotter.RootFileName: "pedmets_%CRNAME%.root"

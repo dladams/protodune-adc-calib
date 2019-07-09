@@ -1,0 +1,18 @@
+# pedmetSignalFinder.fcl
+#
+# David Adams
+# July 2019
+#
+# Signal finder for use in noise studies using
+# AdcChannelMetric.
+
+tools.pedmetSignalFinderAdc: {
+  tool_type: AdcThresholdSignalFinder
+  LogLevel: 1
+  Threshold: 30.0
+  BinsBefore: 10
+  BinsAfter: 20
+  FlagPositive: true
+  FlagNegative: true
+}
+
