@@ -1,0 +1,12 @@
+# addAdcRoiViewer.fcl
+#
+# David Adams
+# July 2019
+#
+# Add adcRoiViewer to the end of dataprep.
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  @sequence::services.RawDigitPrepService.AdcChannelToolNames,
+  "adcRoiViewer"
+]
+

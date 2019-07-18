@@ -93,8 +93,17 @@ makeFcl() {
   elif [ ${FCLNAME:0:5} = dpcr_ ]; then    # data prep channel ranges
     CRS=`echo ${FCLNAME:5} | sed 's/_/, /g'`
     echo "physics.producers.dataprep.ChannelRanges: [${CRS}]" >$FCLFILE
-    echo "tools.adcRoiViewer.ChannelRanges: [${CRS}]" >>$FCLFILE
-    echo "tools.adcRoiFitter.ChannelRanges: [${CRS}]" >>$FCLFILE
+    for TOOL in adcRoiViewer adcRoiFitter; do
+      echo "tools.$TOOL.ChannelRanges: [${CRS}]" >>$FCLFILE
+      if [ ${FCLNAME:5:3} = "apa" -o ${FCLNAME:5:3} = "tps" ]; then
+        echo "tools.$TOOL.ChannelLineModulus: 2560" >>$FCLFILE
+        echo "tools.$TOOL.ChannelLinePattern: [" >>$FCLFILE
+        echo "    0,   40,   80,  120,  160,  200,  240,  280,  320,  360,  400,  440,  480,  520,  560,  600,  640,  680,  720,  760," >>$FCLFILE
+        echo "  800,  840,  880,  920,  960, 1000, 1040, 1080, 1120, 1160, 1200, 1240, 1280, 1320, 1360, 1400, 1440, 1480, 1520, 1560," >>$FCLFILE
+        echo " 1600, 1648, 1696, 1744, 1792, 1840, 1888, 1936, 1984, 2032," >>$FCLFILE
+        echo " 2080, 2128, 2176, 2224, 2272, 2320, 2368, 2416, 2464, 2512]" >>$FCLFILE
+      fi
+    done
   # Run caldata for a single channel range indentified by name.
   elif [ ${FCLNAME:0:5} = cdcr_ ]; then    # data prep channel ranges
     CRS=`echo ${FCLNAME:5} | sed 's/_/, /g'`
@@ -134,19 +143,21 @@ makeFcl() {
     echo "physics.filters.trigfilter.TimingFlagSelectList: [$NUM]" >$FCLFILE
   elif [ ${FCLNAME:0:5} = event ]; then
     RAN=${FCLNAME:5}  # I or I-J
-    NUM1=${RAN%%-*}
-    if [ $NUM1 = $RAN ]; then
+    FNUM1=${RAN%%-*}
+    NUM1=$FNUM1
+    while [ ${NUM1:0:1} = 0 -a ${#NUM1} -gt 1 ]; do NUM1=${NUM1:1}; done
+    if [ $FNUM1 = $RAN ]; then
       NUM2=$((NUM1+1))
     else
       NUM2=${RAN##*-}
     fi
-    while [ ${NUM1:0:1} = 0 -a ${#NUM1} -gt 1 ]; do NUM1=${NUM1:1}; done
     while [ ${NUM2:0:1} = 0 -a ${#NUM2} -gt 1 ]; do NUM2=${NUM2:1}; done
     touch $FCLFILE
     #echo "physics.filters.eventfilter.EventBegin: $NUM1" >>$FCLFILE
     #echo "physics.filters.eventfilter.EventEnd: $NUM2" >>$FCLFILE
     echo "tools.jobRanges.events.begin: $NUM1" >>$FCLFILE
     echo "tools.jobRanges.events.end:   $NUM2" >>$FCLFILE
+    touch events.fcl      # So input file string won't override
   # Set tick offset phase.
   elif [ ${FCLNAME:0:9} = tickphase ]; then
     NUM=${FCLNAME:9}
@@ -455,8 +466,21 @@ else
   INSPEC="-s $INFILES"
 fi
 
-touch run.fcl
-for NAME in `echo $FCLPATH | sed 's#/# #g'` $EXTRAFCL; do
+# Insert EXTRAFCL 2nd in the fcl list so it can be overwritten.
+FIRST=true
+for NAME in `echo $FCLPATH | sed 's#/# #g'`; do
+  # Process the primary fcl.
+  if [ -n "$FIRST" ]; then
+    FIRST=
+    if ! fcldump $NAME.fcl 2>&1 1>/dev/null; then 
+      echo Primary FCL not found: $NAME.fcl
+      exit 2
+    fi
+    echo "#include \"$NAME.fcl\"" >run.fcl
+    # If there is extra fcl, add it here so it can be overwritten.
+    if [ -z "$EXTRAFCL" ]; then continue; fi
+    NAME=$EXTRAFCL
+  fi
   if ! fcldump $NAME.fcl 2>&1 1>/dev/null; then 
     if ! makeFcl $NAME; then
       echo FCL not found: $NAME.fcl

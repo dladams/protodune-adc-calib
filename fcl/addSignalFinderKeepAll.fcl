@@ -1,0 +1,12 @@
+# addSignalFinderKeepAll.fcl
+#
+# David Adams
+# July 2019
+#
+# Add keep-all signal finder to end of dataprep.
+
+services.RawDigitPrepService.AdcChannelToolNames: [
+  @sequence::services.RawDigitPrepService.AdcChannelToolNames,
+  "adcKeepAllSignalFinder"
+]
+

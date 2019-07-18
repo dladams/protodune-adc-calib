@@ -23,6 +23,8 @@ tools.adcRoiViewer: {
   SumNegate: false
   SumPlotPadX: 4
   SumPlotPadY: 4
+  ChannelLineModulus: 2560
+  ChannelLinePattern: [800, 1600, 2080]
   RunDataTool: ""
   TickOffsetTool: ""
   SumHists: []
