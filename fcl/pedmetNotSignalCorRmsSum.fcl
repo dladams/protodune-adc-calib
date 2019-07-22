@@ -1,4 +1,4 @@
-# pedmetNotSignalRmsSum.fcl
+# pedmetNotSignalCorSum.fcl
 #
 # David Adams
 # June 2019
@@ -19,7 +19,8 @@ services.RawDigitPrepService.AdcChannelToolNames: [
   "adcTailRemovalAdc",          # Remove tails
   "pedmetSignalFinderAdc",      # Find signal
   "pdtps_adcChannelSignalFractionPlotter",
-  "pdtps_adcChannelNotSignalMitRmsPlotter"
+  "pdtps_adcChannelNotSignalCorRmsPlotter",
+  "pdtps_adcChannelNotSignalCorRms50Plotter"
 ]
 
 tools.pdtps_adcChannelSignalFractionPlotter: @local::tools.pdtps_adcChannelPedestalNoisePlotter
@@ -31,9 +32,21 @@ tools.pdtps_adcChannelSignalFractionPlotter.HistTitle: "Tail-corrected signal fr
 tools.pdtps_adcChannelSignalFractionPlotter.PlotFileName: "chmet_sigfraccor_%CRNAME%_run%0RUN%.png"
 tools.pdtps_adcChannelSignalFractionPlotter.RootFileName: "pedmets_%CRNAME%.root"
 
-tools.pdtps_adcChannelNotSignalMitRmsPlotter: @local::tools.pdtps_adcChannelPedestalNoisePlotter
-tools.pdtps_adcChannelNotSignalMitRmsPlotter.Metric: "nsgRms"
-tools.pdtps_adcChannelNotSignalMitRmsPlotter.HistName: "hchnsgcorrms%CRNAME%_ped_%0RUN%"
-tools.pdtps_adcChannelNotSignalMitRmsPlotter.HistTitle: "Tail-corrected not-signal RMS for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
-tools.pdtps_adcChannelNotSignalMitRmsPlotter.PlotFileName: "chmet_nsgcorrms_%CRNAME%_run%0RUN%.png"
-tools.pdtps_adcChannelNotSignalMitRmsPlotter.RootFileName: "pedmets_%CRNAME%.root"
+tools.pdtps_adcChannelNotSignalCorRmsPlotter: @local::tools.pdtps_adcChannelPedestalNoisePlotter
+tools.pdtps_adcChannelNotSignalCorRmsPlotter.Metric: "nsgRms"
+tools.pdtps_adcChannelNotSignalCorRmsPlotter.MetricLabel: "Sample RMS [ADC count]"
+tools.pdtps_adcChannelNotSignalCorRmsPlotter.MetricSummaryView: "rms:drms"
+tools.pdtps_adcChannelNotSignalCorRmsPlotter.HistName: "hchnsgcorrms%CRNAME%_ped_%0RUN%"
+tools.pdtps_adcChannelNotSignalCorRmsPlotter.HistTitle: "Tail-corrected not-signal RMS for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelNotSignalCorRmsPlotter.PlotFileName: "chmet_nsgcorrms_%CRNAME%_run%0RUN%.png"
+tools.pdtps_adcChannelNotSignalCorRmsPlotter.RootFileName: "pedmets_%CRNAME%.root"
+
+tools.pdtps_adcChannelNotSignalCorRms50Plotter: @local::tools.pdtps_adcChannelPedestalNoisePlotter
+tools.pdtps_adcChannelNotSignalCorRms50Plotter.Metric: "nsgRms50"
+tools.pdtps_adcChannelNotSignalCorRms50Plotter.MetricLabel: "50-sample RMS [ADC count]"
+tools.pdtps_adcChannelNotSignalCorRms50Plotter.MetricMax: 200
+tools.pdtps_adcChannelNotSignalCorRms50Plotter.MetricSummaryView: "rms:drms"
+tools.pdtps_adcChannelNotSignalCorRms50Plotter.HistName: "hchnsgcorrms50%CRNAME%_ped_%0RUN%"
+tools.pdtps_adcChannelNotSignalCorRms50Plotter.HistTitle: "Tail-corrected not-signal 50-sample RMS for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelNotSignalCorRms50Plotter.PlotFileName: "chmet_nsgcorrms50_%CRNAME%_run%0RUN%.png"
+tools.pdtps_adcChannelNotSignalCorRms50Plotter.RootFileName: "pedmets_%CRNAME%.root"
