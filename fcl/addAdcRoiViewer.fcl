@@ -5,6 +5,8 @@
 #
 # Add adcRoiViewer to the end of dataprep.
 
+#include "adcRoiViewer.fcl"
+
 services.RawDigitPrepService.AdcChannelToolNames: [
   @sequence::services.RawDigitPrepService.AdcChannelToolNames,
   "adcRoiViewer"

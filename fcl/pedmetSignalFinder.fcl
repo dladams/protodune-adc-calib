@@ -16,6 +16,9 @@ tools.pedmetThresholdSignalFinderAdc: {
   FlagNegative: true
 }
 
+tools.pedmetThresholdSignalFinderKe: @local::tools.pedmetThresholdSignalFinderAdc
+tools.pedmetThresholdSignalFinderKe.Threshold: 0.70
+  
 tools.pedmetNoiseSignalFinderAdc: {
   tool_type: AdcNoiseSignalFinder
   LogLevel: 1
@@ -30,4 +33,7 @@ tools.pedmetNoiseSignalFinderAdc: {
   FlagNegative: true
 }
 
+tools.pedmetNoiseSignalFinderKe: @local::tools.pedmetNoiseSignalFinderAdc
+tools.pedmetNoiseSignalFinderKe.ThresholdMin: 0.50
+  
 tools.pedmetSignalFinderAdc: @local::tools.pedmetThresholdSignalFinderAdc

@@ -469,11 +469,16 @@ fi
 # Insert EXTRAFCL 2nd in the fcl list so it can be overwritten.
 FIRST=true
 for NAME in `echo $FCLPATH | sed 's#/# #g'`; do
+  if [ -r $SUBDIR/$NAME.fcl ]; then
+    echo Copying $NAME.fcl from submission directory.
+    cp $SUBDIR/$NAME.fcl .
+  fi
   # Process the primary fcl.
   if [ -n "$FIRST" ]; then
     FIRST=
     if ! fcldump $NAME.fcl 2>&1 1>/dev/null; then 
       echo Primary FCL not found: $NAME.fcl
+      fclpath
       exit 2
     fi
     echo "#include \"$NAME.fcl\"" >run.fcl
