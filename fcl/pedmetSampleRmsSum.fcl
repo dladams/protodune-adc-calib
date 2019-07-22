@@ -11,16 +11,23 @@ services.RawDigitPrepService.AdcChannelToolNames: [
   "digitReader",
   "pd_adcPedestalFit",
   "adcSampleFiller",            # Subtract pedestal, trivial calibration
-  "pdtps_adcChannelPedestalNoisePlotter"
+  "pdtps_adcChannelSampleRmsPlotter",
+  "pdtps_adcChannelSampleRms50Plotter"
 ]
 
-#tools.pd_adcPedestalFit.PlotSplitX: 4
-#tools.pd_adcPedestalFit.PlotSizeX: 1400
-#tools.pd_adcPedestalFit.PlotSizeY: 1000
+tools.pdtps_adcChannelSampleRmsPlotter: @local::tools.pdtps_adcChannelPedestalNoisePlotter
+tools.pdtps_adcChannelSampleRmsPlotter.Metric: "samRms"
+tools.pdtps_adcChannelSampleRmsPlotter.MetricLabel: "ADC sample RMS [ADC count]"
+tools.pdtps_adcChannelSampleRmsPlotter.HistName: "hchsamrms%CRNAME%_ped_%0RUN%"
+tools.pdtps_adcChannelSampleRmsPlotter.HistTitle: "ADC sample RMS for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelSampleRmsPlotter.PlotFileName: "chmet_samrms_%CRNAME%_run%0RUN%.png"
+tools.pdtps_adcChannelSampleRmsPlotter.RootFileName: "pedmets_%CRNAME%.root"
 
-#tools.pdtps_adcChannelPedestalNoisePlotter.MetricLabel: "Pedestal mean [ADC count]"
-tools.pdtps_adcChannelPedestalNoisePlotter.Metric: "samRms"
-tools.pdtps_adcChannelPedestalNoisePlotter.HistName: "hchsamrms%CRNAME%_ped_%0RUN%"
-tools.pdtps_adcChannelPedestalNoisePlotter.HistTitle: "ADC sample RMS for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
-tools.pdtps_adcChannelPedestalNoisePlotter.PlotFileName: "chmet_samrms_%CRNAME%_run%0RUN%.png"
-tools.pdtps_adcChannelPedestalNoisePlotter.RootFileName: "pedmets_%CRNAME%.root"
+tools.pdtps_adcChannelSampleRms50Plotter: @local::tools.pdtps_adcChannelPedestalNoisePlotter
+tools.pdtps_adcChannelSampleRms50Plotter.Metric: "samRms50"
+tools.pdtps_adcChannelSampleRmsPlotter.MetricLabel: "ADC 50-sample RMS [ADC count]"
+tools.pdtps_adcChannelSampleRms50Plotter.MetricMax: 300    # TEMPORARY!!
+tools.pdtps_adcChannelSampleRms50Plotter.HistName: "hchsamrms50%CRNAME%_ped_%0RUN%"
+tools.pdtps_adcChannelSampleRms50Plotter.HistTitle: "ADC 50-sample RMS for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
+tools.pdtps_adcChannelSampleRms50Plotter.PlotFileName: "chmet_samrms50_%CRNAME%_run%0RUN%.png"
+tools.pdtps_adcChannelSampleRms50Plotter.RootFileName: "pedmets_%CRNAME%.root"

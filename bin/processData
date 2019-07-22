@@ -377,7 +377,9 @@ elif echo $IRUN | grep _ 1>/dev/null; then
   while [ ${#FRUN} -lt 6 ]; do FRUN=0$FRUN; done
   RUNPAT=`echo $IRUN | sed 's/.*_/_/'`
   echo Using file pattern $RUNPAT
-  FRUN=${FRUN}evts${EVTS}
+  if [ -n "$EVTS" ]; then
+    FRUN=${FRUN}evts${EVTS}
+  fi
 # Input run specifier is just the run number.
 elif [ $FRUN -eq $FRUN ]; then
   echo Using unadorned run number $FRUN
