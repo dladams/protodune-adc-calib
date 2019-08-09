@@ -294,7 +294,8 @@ makeFcl() {
     echo "tools.adcCorrectUndershoot.FSubConst:     [ $VAL, $VAL, $VAL ]" >>$FCLFILE
   elif [ ${FCLNAME:0:7} = "exptdec" ]; then
     VAL=${FCLNAME:7}
-    echo "tools.adcTailRemovalKe.DecayTime: $VAL" >$FCLFILE
+    echo "tools.adcTailRemovalAdc.DecayTime: $VAL" >$FCLFILE
+    echo "tools.adcTailRemovalKe.DecayTime: $VAL" >>$FCLFILE
   fi
   if [ ! -r $FCLFILE ]; then
     echo makeFcl: Unable to create $FCLFILE
