@@ -39,7 +39,7 @@ tools.pdtps_adcChannelSignalFractionPlotter.RootFileName: "pedmets_%CRNAME%.root
 
 tools.pdtps_adcChannelNotSignalCniRmsPlotter: @local::tools.pdtps_adcChannelPedestalNoisePlotter
 tools.pdtps_adcChannelNotSignalCniRmsPlotter.Metric: "nsgRms"
-tools.pdtps_adcChannelNotSignalCniRmsPlotter.MetricLabel: "50-sample RMS [ADC count]"
+tools.pdtps_adcChannelNotSignalCniRmsPlotter.MetricLabel: "Sample RMS [ADC count]"
 tools.pdtps_adcChannelNotSignalCniRmsPlotter.HistName: "hchnsgcnirms%CRNAME%_ped_%0RUN%"
 tools.pdtps_adcChannelNotSignalCniRmsPlotter.HistTitle: "CNI not-signal sample RMS for run %RUN% %CRLABEL% (%CRLABEL2%: %CRLABEL1%)"
 tools.pdtps_adcChannelNotSignalCniRmsPlotter.PlotFileName: "chmet_nsgcnirms_%CRNAME%_run%0RUN%.png"

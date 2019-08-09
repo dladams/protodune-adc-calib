@@ -22,7 +22,7 @@ tools.pedmetThresholdSignalFinderKe.Threshold: 0.70
 tools.pedmetNoiseSignalFinderAdc: {
   tool_type: AdcNoiseSignalFinder
   LogLevel: 1
-  SigFracMax: 0.20
+  SigFracMax: 0.80
   ThresholdMin: 20.0
   ThresholdRatio: 5.0
   ThresholdRatioTol: 0.1
