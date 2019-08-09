@@ -303,8 +303,6 @@ makeFcl() {
   echo makeFcl: Created $FCLFILE
 }
 
-RUNS="1194 1195 1193 1197 1192 1198 1203"
-IRUN=1185
 FCLPATH=run
 NEVT=0
 SEVT=    # # events to proc padded with zeroes
@@ -332,11 +330,6 @@ if [ -n "$4" ]; then
   SSKP=skip$SSKP
 fi
 if [ -n "$2" ]; then
-  if [ $2 == all ]; then
-    for RUN in $RUNS; do
-      $0 $FCLPATH $RUN $NEVT $NSKIP
-    done
-  fi
   IRUN=$2
 else
   echo Usage: $0 FCL RUN [NEVT] [NSKIP]
@@ -354,7 +347,10 @@ RAWINFILELIST=
 EXTRAFCL=                  # Fcl dervied fron run specifier
 # Input run specifier in form RRRRevtsEE-FF uses event slice input file list and
 # restricts processing to events in range [EE, FF).
-if echo $IRUN | grep evts 1>/dev/null; then
+if ls -ls $HOME/data/dune/datasets/$FRUN.txt 1>/dev/null; then
+  RAWINFILELIST=$HOME/data/dune/datasets/$FRUN.txt
+  echo FOUND input file list: $RAWINFILELIST
+elif echo $IRUN | grep evts 1>/dev/null; then
   FRUN=`echo $IRUN | sed 's/evts.*//'`
   echo Using event range file list.
   while [ ${#FRUN} -lt 6 ]; do FRUN=0$FRUN; done
