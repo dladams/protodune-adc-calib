@@ -37,10 +37,10 @@ tools.adcRoiViewer: {
 }
 
 tools.adcRoiViewer.SumHists: [
-  {var:procEvent           name:"hse_ch%0CHAN%"     title:"Event number %LAB0% run %RUN% channel %CHAN%"      nbin:100   xmin:0   xmax:20000 plot:""}, # hse_ch%0CHAN%.png" },
-  {var:sigArea             name:"hsa_ch%0CHAN%"     title:"ROI signal area %LAB0% run %RUN% channel %CHAN%"   nbin:125   xmin:0   xmax:500   plot:""}, # hsa_ch%0CHAN%.png" },
-  {var:sigWidth            name:"hsw_ch%0CHAN%"     title:"ROI signal width %LAB0% run %RUN% channel %CHAN%"  nbin:200   xmin:0   xmax:200   plot:""}, # hsw_ch%0CHAN%.png" },
-  {var:timeDay             name:"hst_ch%0CHAN%"     title:"ROI time %LAB0% run %RUN% channel %CHAN%"          nbin:200   xmin:0   xmax:1000  plot:""}  # hst_ch%0CHAN%.png" }
+  {var:procEvent           name:"hse_ch%0CHAN%"     title:"Event number %LAB0% run %RUN% channel %CHAN%"      nbin:100   xmin:0    xmax:20000 plot:""}, # hse_ch%0CHAN%.png" },
+  {var:sigArea             name:"hsa_ch%0CHAN%"     title:"ROI signal area %LAB0% run %RUN% channel %CHAN%"   nbin:150   xmin:-100 xmax:500   plot:""}, # hsa_ch%0CHAN%.png" },
+  {var:sigWidth            name:"hsw_ch%0CHAN%"     title:"ROI signal width %LAB0% run %RUN% channel %CHAN%"  nbin:200   xmin:0    xmax:200   plot:""}, # hsw_ch%0CHAN%.png" },
+  {var:timeDay             name:"hst_ch%0CHAN%"     title:"ROI time %LAB0% run %RUN% channel %CHAN%"          nbin:200   xmin:0    xmax:1000  plot:""}  # hst_ch%0CHAN%.png" }
 ]
 
 tools.adcRoiViewer.ChanSumHists: [
