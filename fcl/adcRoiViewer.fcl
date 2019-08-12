@@ -37,14 +37,14 @@ tools.adcRoiViewer: {
 }
 
 tools.adcRoiViewer.SumHists: [
-  {var:procEvent           name:"hse_ch%0CHAN%"     title:"Event number %LAB0% run %RUN% channel %CHAN%"      nbin:100   xmin:0    xmax:20000 plot:""}, # hse_ch%0CHAN%.png" },
-  {var:sigArea             name:"hsa_ch%0CHAN%"     title:"ROI signal area %LAB0% run %RUN% channel %CHAN%"   nbin:150   xmin:-100 xmax:500   plot:""}, # hsa_ch%0CHAN%.png" },
-  {var:sigWidth            name:"hsw_ch%0CHAN%"     title:"ROI signal width %LAB0% run %RUN% channel %CHAN%"  nbin:200   xmin:0    xmax:200   plot:""}, # hsw_ch%0CHAN%.png" },
-  {var:timeDay             name:"hst_ch%0CHAN%"     title:"ROI time %LAB0% run %RUN% channel %CHAN%"          nbin:200   xmin:0    xmax:1000  plot:""}  # hst_ch%0CHAN%.png" }
+  {var:procEvent           name:"hse_ch%0CHAN%"     title:"Event number %LAB0% run %RUN% channel %CHAN%"      nbin:300   xmin:0    xmax:300000 plot:""}, # hse_ch%0CHAN%.png" },
+  {var:sigArea             name:"hsa_ch%0CHAN%"     title:"ROI signal area %LAB0% run %RUN% channel %CHAN%"   nbin:150   xmin:-100 xmax:500    plot:""}, # hsa_ch%0CHAN%.png" },
+  {var:sigWidth            name:"hsw_ch%0CHAN%"     title:"ROI signal width %LAB0% run %RUN% channel %CHAN%"  nbin:200   xmin:0    xmax:200    plot:""}, # hsw_ch%0CHAN%.png" },
+  {var:timeDay             name:"hst_ch%0CHAN%"     title:"ROI time %LAB0% run %RUN% channel %CHAN%"          nbin:200   xmin:0    xmax:1000   plot:""}  # hst_ch%0CHAN%.png" }
 ]
 
 tools.adcRoiViewer.ChanSumHists: [
-  {name:"hcsNevt_%CRNAME%"       title:"Event count run %RUN% %CRLABEL%"             valHist:"hse_ch%0CHAN%"  valType:count    errType:none        nbins:0    plot:"%HNAME%.png" pran:"0:1.02:nevt" cr:list},
+  {name:"hcsNevt_%CRNAME%"       title:"Event count run %RUN% %CRLABEL%"             valHist:"hse_ch%0CHAN%"  valType:entries  errType:none        nbins:0    plot:"%HNAME%.png" pran:"0:1.02:nevt" cr:list},
   {name:"hcsCount_%CRNAME%"      title:"ROI %LAB0% count run %RUN% %CRLABEL%"        valHist:"hsa_ch%0CHAN%"  valType:count    errType:none        nbins:0    plot:"%HNAME%.png" pran:"0:6:nevt"    cr:list},
   {name:"hcsTime_%CRNAME%"       title:"ROI %LAB0% count run %RUN% %CRLABEL%"        valHist:"hst_ch%0CHAN%"  valType:mean     errType:rms         nbins:0    plot:"%HNAME%.png" pran:"0:400"       cr:list},
   {name:"hcsArea_%CRNAME%"       title:"ROI %LAB0% area run %RUN% %CRLABEL%"         valHist:"hsa_ch%0CHAN%"  valType:mean     errType:meanError   nbins:0    plot:"%HNAME%.png" pran:"0:150"       cr:list},
