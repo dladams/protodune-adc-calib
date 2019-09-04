@@ -1,8 +1,7 @@
 #include "services_dune.fcl"
 #include "ProtoDUNETriggerFilter.fcl"
 #include "BeamEvent.fcl"
-
-# This is the default configuration file
+#include "dataprep_dune.fcl"
 #include "RawDecoder.fcl"
 
 # This must come after all prologs.
@@ -20,6 +19,7 @@ services:
   LArFFT:                       @local::dunefd_larfft  
   DatabaseUtil:                 @local::dunefd_database
   SignalShapingServiceDUNE:     @local::protodunesp_signalshapingservice
+  ChannelGroupService:          @local::changroup_apa_keepall
   ChannelStatusService:         @local::pdsp_channel_status
   TFileService: { 
    closeFileFast: true  # default
@@ -79,7 +79,10 @@ physics: {
     beamevent: @local::proto_beamevent
     dataprep: {
       module_type: DataPrepModule
+      DecoderTool: "pdsp_decoder"
       DigitLabel: "tpcrawdecoder:daq"
+      TimeStampName: dataprep
+      OutputDigitName: ""
       LogLevel: 2
       DoAssns: false
       DoGroups: false
@@ -94,7 +97,8 @@ physics: {
 
   #Create path to run module
   #nfreco: [ timingrawdecoder, ssprawdecoder, tpcrawdecoder, dataprep ] 
-  freco: [ eventfilter, timingrawdecoder, trigfilter, ssprawdecoder, tpcrawdecoder, ctbrawdecoder, beamevent, dataprep ] 
+  #freco: [ eventfilter, timingrawdecoder, trigfilter, ssprawdecoder, tpcrawdecoder, ctbrawdecoder, beamevent, dataprep ] 
+  freco: [ eventfilter, timingrawdecoder, trigfilter, ssprawdecoder, ctbrawdecoder, beamevent, dataprep ] 
   output: [ out1 ]
   #trigger_paths : [ produce ]
   end_paths: [ output ]
