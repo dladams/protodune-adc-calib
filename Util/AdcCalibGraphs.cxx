@@ -680,7 +680,7 @@ PadPtr AdcCalibGraphs::pad(Name graName, Index icha, Index nx, Index ny) {
     GraphPtr pgdst = graph(graName, icha, dstName);
     if ( pgdst ) {
       ppad->add(pgdst.get(), "P");
-      pleg->AddEntry(ppad->objects().back().get(), dstName.c_str(), "p");
+      pleg->AddEntry(ppad->objects().back(), dstName.c_str(), "p");
       ++nextra;
     }
   }
@@ -1103,7 +1103,7 @@ int AdcCalibGraphs::writeFcl(Name calName, Name filNameIn) {
   const double* yvals = pgsum->GetY();
   const double* yerrs = pgsum->GetEY();
   Name slab = calName + "_" + label(varName) + "$"; 
-  StringManipulator sman (slab);
+  StringManipulator sman (slab, false);
   sman.replace(":(", "-");
   sman.replace(")$", "");
   sman.replace("$", "");
@@ -1111,7 +1111,6 @@ int AdcCalibGraphs::writeFcl(Name calName, Name filNameIn) {
   sman.replace(")", "-");
   sman.replace(",", "-");
   sman.replace(".", "p");
-  slab = sman.string();
   //for ( Index ich=0; ich<slab.size(); ++ich ) if ( slab[ich] == ' ' ) slab[ich] = '_';
   for ( char& ch : slab ) if ( ch == ' ' ) ch = '_';
   string filName = filNameIn;

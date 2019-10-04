@@ -19,6 +19,7 @@ services.RawDigitPrepService.AdcChannelToolNames: [
 ]
 
 tools.pdcht_Apa3z.DataType: 0
+tools.pdcht_Apa3z.PlotFileName: "adcprp_%CRNAME%_run%0RUN%_evt%0EVENT%.png"
 tools.pdcht_Apa3z.HistName: "hadcmit_%CRNAME%_run%0RUN%_evt%0EVENT%"
 tools.pdcht_Apa3z.HistTitle: "Mitigated ADC for run %RUN% event %EVENT% %CRLABEL% (%CRLABEL2%: %CRLABEL1%) Trigger %TRIG%"
 tools.pdcht_Apa3z.HistTitle: "Mitigated ADC for run %RUN% event %EVENT% %CRLABEL% (%CRLABEL2%: %CRLABEL1%) %TRIGNAMECAP% trigger"
