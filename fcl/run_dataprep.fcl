@@ -74,24 +74,20 @@ physics: {
   producers: {
     timingrawdecoder: @local::timing_raw_decoder   
     ssprawdecoder: @local::ssp_raw_decoder  
-    tpcrawdecoder: @local::pdsp_tpc_raw_decoder
     ctbrawdecoder: @local::ctb_raw_decoder
     beamevent: @local::proto_beamevent
     dataprep: {
-      module_type: DataPrepModule
-      DecoderTool: "pdsp_decoder"
-      DigitLabel: "tpcrawdecoder:daq"
-      TimeStampName: dataprep
-      OutputDigitName: ""
+      module_type: DataPrepByApaModule
       LogLevel: 2
-      DoAssns: false
-      DoGroups: false
-      ChannelRanges: []
+      DecoderTool: "pdsp_decoder"
       BeamEventLabel: "beamevent"
-      IntermediateStates: []
-      KeepChannelBegin:    0
-      KeepChannelEnd:      0
+      OutputTimeStampName: dataprep
+      OutputDigitName: ""
+      OutputWireName: ""
+      ChannelGroups: ["apas"]
       OnlineChannelMapTool: pd_onlineChannelMapByFemb
+      SkipChannels: []
+      ApaChannelCounts: [2560]
     }
   }
 
@@ -117,4 +113,3 @@ physics.filters.trigfilter.LogLevel: 2
 physics.filters.trigfilter.LogLevel: 2
 
 process_name: processNp04Data
- 
