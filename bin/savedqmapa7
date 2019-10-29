@@ -26,10 +26,16 @@ while [ ${#SEVT2} -lt 6 ]; do SEVT2="0"$SEVT2; done
 echo ${SRUN}
 RUNDIR=dqmapa7/event$SEVT/run${SRUN}evts${SEVT1}-${SEVT2}
 if [ ! -r $RUNDIR ]; then
-  echo Run directory not found: $RUNDIR
-  exit 1
+  RUNDIR1=$RUNDIR
+  RUNDIR=dqmapa7/event$SEVT/run${SRUN}
+  if [ ! -r $RUNDIR ]; then
+    echo Run directory not found:
+    echo "  "$RUNDIR
+    echo "  "$RUNDIR1
+    exit 1
+  fi
 fi
-OUTBASEDIR=$HOME/wwwdune/protodune/data/dqmapa7
+OUTBASEDIR=$HOME/wwwdune/protodune/data/coldbox/dqm
 OUTRUNDIR=$OUTBASEDIR/run$SRUN
 if [ ! -r $OUTRUNDIR ]; then
   echo Creating $OUTRUNDIR
