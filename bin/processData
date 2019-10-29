@@ -113,6 +113,7 @@ makeFcl() {
     while [ ${NUM:0:1} = 0 -a ${#NUM} -gt 1 ]; do NUM=${NUM:1}; done
     echo "physics.producers.dataprep.KeepChannelBegin: $NUM" >$FCLFILE
     echo "physics.producers.dataprep.KeepChannelEnd: $((NUM+1))" >>$FCLFILE
+    echo "physics.producers.dataprep.KeepChannels: [$NUM]" >>$FCLFILE
   # FFT size
   elif [ ${FCLNAME:0:7} = fftsize ]; then
     SIZE=${FCLNAME:7}
