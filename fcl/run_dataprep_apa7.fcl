@@ -19,8 +19,7 @@ services:
   LArFFT:                       @local::dunefd_larfft  
   DatabaseUtil:                 @local::dunefd_database
   SignalShapingServiceDUNE:     @local::protodunesp_signalshapingservice
-  ChannelGroupService:          @local::changroup_apa_keepall
-  ChannelStatusService:         @local::pdsp_channel_status
+  ChannelStatusService:         @local::apa7_channel_status
   TFileService: { 
    closeFileFast: true  # default
    fileName:  "RunRawDecoderTFile.root"
@@ -73,9 +72,7 @@ physics: {
 
   producers: {
     timingrawdecoder: @local::timing_raw_decoder   
-    ssprawdecoder: @local::ssp_raw_decoder  
-    ctbrawdecoder: @local::ctb_raw_decoder
-    beamevent: @local::proto_beamevent
+    #ctbrawdecoder: @local::ctb_raw_decoder
     dataprep: {
       module_type: DataPrepByApaModule
       LogLevel: 2
@@ -84,7 +81,7 @@ physics: {
       OutputTimeStampName: dataprep
       OutputDigitName: ""
       OutputWireName: ""
-      ChannelGroups: ["apas"]
+      ChannelGroups: ["apa7"]
       OnlineChannelMapTool: pd_onlineChannelMapByFemb
       SkipChannels: []
       ApaChannelCounts: [2560]
@@ -94,14 +91,11 @@ physics: {
   #Create path to run module
   #nfreco: [ timingrawdecoder, ssprawdecoder, tpcrawdecoder, dataprep ] 
   #freco: [ eventfilter, timingrawdecoder, trigfilter, ssprawdecoder, tpcrawdecoder, ctbrawdecoder, beamevent, dataprep ] 
-  freco: [ eventfilter, timingrawdecoder, trigfilter, ssprawdecoder, ctbrawdecoder, beamevent, dataprep ] 
-  # avoid-crash-in-decoder freco: [ eventfilter, timingrawdecoder, trigfilter, ssprawdecoder, beamevent, dataprep ] 
+  freco: [ eventfilter, timingrawdecoder, dataprep ] 
   output: [ out1 ]
   #trigger_paths : [ produce ]
   end_paths: [ output ]
 }
-
-#physics.producers.timingrawdecoder.MakeEventTimeFile: true
 
 source:
 {
@@ -113,4 +107,6 @@ source:
 physics.filters.trigfilter.LogLevel: 2
 physics.filters.trigfilter.LogLevel: 2
 
-process_name: processNp04Data
+process_name: processNp04Apa7Data
+ 
+tools.channelRanges: @local::tools.channelRangesApa7

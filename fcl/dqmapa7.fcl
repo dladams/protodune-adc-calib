@@ -1,0 +1,19 @@
+# dqmapa7
+#
+# David Adams
+# October 2019
+#
+# Run DQM for APA 7 in the coldbox.
+
+#include "run_dataprep_apa7.fcl"
+#include "coldbox_dqm.fcl"
+
+tools.rawAdcDetectorPlotColl.SkipBadChannels: true
+tools.rawAdcDetectorPlotColl.Title: "Cleaned raw ADC collection view"
+
+tools.pdcht_All.TickRebin: 5
+tools.pdcht_Zplanes.TickRebin: 5
+tools.pdcht_Cplanes.TickRebin: 5
+tools.pdcht_Iplanes.TickRebin: 5
+tools.tickRanges.plotTicks: @local::tools.tickRanges.allTicks
+
