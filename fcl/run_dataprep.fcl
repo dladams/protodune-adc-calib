@@ -99,6 +99,7 @@ physics: {
   #nfreco: [ timingrawdecoder, ssprawdecoder, tpcrawdecoder, dataprep ] 
   #freco: [ eventfilter, timingrawdecoder, trigfilter, ssprawdecoder, tpcrawdecoder, ctbrawdecoder, beamevent, dataprep ] 
   freco: [ eventfilter, timingrawdecoder, trigfilter, ssprawdecoder, ctbrawdecoder, beamevent, dataprep ] 
+  # avoid-crash-in-decoder freco: [ eventfilter, timingrawdecoder, trigfilter, ssprawdecoder, beamevent, dataprep ] 
   output: [ out1 ]
   #trigger_paths : [ produce ]
   end_paths: [ output ]
