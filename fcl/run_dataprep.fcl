@@ -86,6 +86,7 @@ physics: {
       OutputWireName: ""
       ChannelGroups: ["apas"]
       OnlineChannelMapTool: pd_onlineChannelMapByFemb
+      KeepChannels: []
       SkipChannels: []
       ApaChannelCounts: [2560]
     }
