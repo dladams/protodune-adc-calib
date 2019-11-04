@@ -4,8 +4,12 @@
 #include "dataprep_dune.fcl"
 #include "RawDecoder.fcl"
 
+#include "channelstatus_apa7.fcl"
+
 # This must come after all prologs.
 #include "protodune_tools_dune.fcl"
+#include "stickycodes_apa7warm.fcl"
+#include "stickycodes_apa7cold.fcl"
 
 services:
 {
@@ -73,6 +77,7 @@ physics: {
   producers: {
     timingrawdecoder: @local::timing_raw_decoder   
     #ctbrawdecoder: @local::ctb_raw_decoder
+    beamevent: @local::proto_beamevent
     dataprep: {
       module_type: DataPrepByApaModule
       LogLevel: 2
@@ -92,7 +97,7 @@ physics: {
   #Create path to run module
   #nfreco: [ timingrawdecoder, ssprawdecoder, tpcrawdecoder, dataprep ] 
   #freco: [ eventfilter, timingrawdecoder, trigfilter, ssprawdecoder, tpcrawdecoder, ctbrawdecoder, beamevent, dataprep ] 
-  freco: [ eventfilter, timingrawdecoder, dataprep ] 
+  freco: [ eventfilter, timingrawdecoder, beamevent, dataprep ] 
   output: [ out1 ]
   #trigger_paths : [ produce ]
   end_paths: [ output ]
