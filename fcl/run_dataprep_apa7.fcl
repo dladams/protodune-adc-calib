@@ -116,3 +116,6 @@ physics.filters.trigfilter.LogLevel: 2
 process_name: processNp04Apa7Data
  
 tools.channelRanges: @local::tools.channelRangesApa7
+
+# To allow 100 ms readout
+tools.pdsp_decoder.FELIXBufferSizeCheckLimit: 100000000
