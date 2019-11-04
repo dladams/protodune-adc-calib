@@ -541,6 +541,12 @@ if [ $IRUN != '0' ]; then
   else
     echo "Job succeeded."
   fi
+  grep ERROR: run.log >errors.log
+  head -10 errors.log
+  echo Error count: `wc -l errors.log | awk '{print $1}'`
+  grep WARNING: run.log >warnings.log
+  echo Warning cout: `wc -l warnings.log | awk '{print $1}'`
+  head -10 warnings.log
 fi
 echo Run directory: $DIR
 echo ARGS: '-c' $FCLFILE '-s' $INFILES $OPTNEVT '--nskip' $NSKP
