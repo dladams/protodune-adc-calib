@@ -15,5 +15,10 @@ tools.pdcht_All.TickRebin: 5
 tools.pdcht_Zplanes.TickRebin: 5
 tools.pdcht_Cplanes.TickRebin: 5
 tools.pdcht_Iplanes.TickRebin: 5
-tools.tickRanges.plotTicks: @local::tools.tickRanges.allTicks
+tools.tickRanges.plotTicks: {
+  begin: 0
+  end: 6000
+  labels: ["6k ticks"]
+}
+
 

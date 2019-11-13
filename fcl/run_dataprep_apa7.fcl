@@ -26,7 +26,7 @@ services:
   ChannelStatusService:         @local::apa7_channel_status
   TFileService: { 
    closeFileFast: true  # default
-   fileName:  "RunRawDecoderTFile.root"
+   fileName:  "dontwantthis.root"
    tmpDir: "<parent-path-of-filename>"  # default
   }
   #soon PdspChannelMapService:   @local::pdspchannelmap

@@ -8,7 +8,4 @@
 #include "run_dataprep.fcl"
 
 services.LArFFT: @erase
-
-#services.ChannelStatusService:         @local::pdsp_channel_status
-#services.ChannelStatusService.BadChannels: [1, 2]
-#services.ChannelStatusService: @erase
+services.TFileService: @erase
