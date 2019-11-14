@@ -57,11 +57,12 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   if ( oldMacroPath.size() ) newMacroPath += ":" + oldMacroPath;
   gROOT->SetMacroPath(newMacroPath.c_str());
 
+#if 0
   // Load the dunetpc and other supporting libraries.
   vector<string> libs;
   libs.push_back("$FHICLCPP_LIB/libfhiclcpp");
-  libs.push_back("$DUNETPC_LIB/libdune_ArtSupport");
-  libs.push_back("$DUNETPC_LIB/libdune_DuneServiceAccess");
+  //dla libs.push_back("$DUNETPC_LIB/libdune_ArtSupport");
+  //dla libs.push_back("$DUNETPC_LIB/libdune_DuneServiceAccess");
   libs.push_back("$DUNETPC_LIB/libdune_DuneCommon");
   libs.push_back("$DUNETPC_LIB/libdune_Geometry");
   libs.push_back("$DUNETPC_LIB/libdune_DataPrep_Utility");
@@ -78,14 +79,14 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   // Load the dunetpc classes we would like available on the command line.
   cout << "Loading dunetpc classes." << endl;
   gROOT->ProcessLine(".L $ART_INC/art/Framework/Services/Registry/ServiceHandle.h+");
-  gROOT->ProcessLine(".L $DUNETPC_INC/dune/ArtSupport/DuneToolManager.h+");
-  gROOT->ProcessLine(".L $DUNETPC_INC/dune/ArtSupport/ArtServiceHelper.h+");
+  //dla gROOT->ProcessLine(".L $DUNETPC_INC/dune/ArtSupport/DuneToolManager.h+");
+  //dla gROOT->ProcessLine(".L $DUNETPC_INC/dune/ArtSupport/ArtServiceHelper.h+");
   //dict gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/TPadManipulator.h+");
   //gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/LineColors.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneCommon/RootPalette.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/AdcChannelData.h+");
-  gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/Tool/IndexRangeTool.h+");
-  gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/Tool/IndexMapTool.h+");
+  //dla gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/Tool/IndexRangeTool.h+");
+  //dla gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/Tool/IndexMapTool.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/Tool/AdcChannelTool.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DuneInterface/Tool/FloatArrayTool.h+");
   //gROOT->ProcessLine(".L $DUNETPC_INC/dune/ArtSupport/ArtServiceHelper.h+");
@@ -101,7 +102,7 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/DataPrep/Utility/ParabolicInterpolator.h+");
   gROOT->ProcessLine(".L $DUNE_RAW_DATA_INC/dune-raw-data/Services/ChannelMap/PdspChannelMapService.h+");
   gROOT->ProcessLine(".L $LARCORE_INC/larcore/Geometry/Geometry.h+");
-  gROOT->ProcessLine(".L $LAREVT_INC/larevt/CalibrationDBI/Interface/ChannelStatusService.h+");
+  //dla gROOT->ProcessLine(".L $LAREVT_INC/larevt/CalibrationDBI/Interface/ChannelStatusService.h+");
   gROOT->ProcessLine(".L $LARDATA_INC/lardata/Utilities/LArFFT.h+");
 
   // Build scripts to be used only from the Root command line.
@@ -109,7 +110,7 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   gROOT->ProcessLine(".L Script/drawRois.C");
   gROOT->ProcessLine(".L Script/drawSums.C");
   gROOT->ProcessLine(".L Script/drawChanSum.C");
-  gROOT->ProcessLine(".L Script/testAll.C");
+  //dla gROOT->ProcessLine(".L Script/testAll.C");
 
   // Build utilities, i.e. classes, functions, etc. whose libraries
   // are installed at buildDir/lib and so visible to clients.
@@ -127,7 +128,7 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
     gROOT->ProcessLine(line.c_str());
   }
   gSystem->SetBuildDir(oldBuildDir.c_str());
- 
+
   // Build local tools.
   // These are art tools--configured with fcl and discovered automatically.
   // The source for tool TNAME is taken from Tool/TNAME_tool.cc.
@@ -150,6 +151,7 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   } else {
     cout << "Local startup file not found: " << sfile << endl;
   }
+#endif
 
   cout << "Finished loading." << endl;
   return 0;

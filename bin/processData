@@ -7,7 +7,9 @@
 # Script to process event data and create calibration histograms.
 
 if [ "$1" = "-H" ]; then
-  echo Usage: $0 FCL RUNPAT [NEVT] [NSKIP]
+  echo Usage: $0 FCL RUNPAT [NEVT] [NSKIP] [FLAG]
+  echo "       FLAG=clean to remove existing run directory"
+  echo "       FLAG=output to save event output"
   echo
   echo Runs a lar job in a dedicated directory.
   echo
@@ -325,7 +327,7 @@ if [ $NEVT -gt 0 ]; then
   while [ ${#SEVT} -lt 6 ]; do SEVT=0$SEVT; done
   SEVT=proc$SEVT
 fi
-if [ -n "$4" ]; then
+if [ -n "$4" -a "$4" != "." ]; then
   NSKP=$4
   SSKP=$4
   while [ ${#SSKP} -lt 6 ]; do SSKP=0$SSKP; done
@@ -339,8 +341,8 @@ else
   exit 0
 fi
 if [ -n "$5" ]; then
-  OUTPUT=1
   if [ $5 = clean ]; then CLEAN=true; fi
+  if [ $5 = output ]; then OUTPUT=1; fi
 fi
 FRUN=$IRUN
 RUNSUF=
@@ -388,6 +390,7 @@ else
 fi
 RUNNAME0=$FRUN
 RUNNAME=run${FRUN}${SEVT}${SSKP}
+if [ $OUTPUT -eq 1 ]; then RUNNAME=${RUNNAME}output; fi
 echo runname: $RUNNAME
 
 DIR=`echo ${FCLPATH}/$RUNNAME | sed 's#:#/#g'`
