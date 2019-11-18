@@ -98,7 +98,8 @@ else
       echo '{' >> $FOUT
       echo '  gROOT->ProcessLine(".x pkginit.C");' >> $FOUT
       echo '  gROOT->ProcessLine("ArtServiceHelper::load(\"load_dataprep.fcl\")");' >> $FOUT
-      echo '  gROOT->ProcessLine("DuneToolManager::instance(\"load_dataprep.fcl\")");' >> $FOUT
+      echo '  gROOT->ProcessLine("DuneToolManager* ptm = DuneToolManager::instance(\"load_dataprep.fcl\")");' >> $FOUT
+      echo '  gROOT->ProcessLine(".x postinit.C");' >> $FOUT
       echo '}' >> $FOUT
       echo Created $FOUT
     fi
