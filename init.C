@@ -76,6 +76,7 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   }
 
   // Load the dunetpc classes we would like available on the command line.
+#if 0
   cout << "Loading dunetpc classes." << endl;
   gROOT->ProcessLine(".L $ART_INC/art/Framework/Services/Registry/ServiceHandle.h+");
   gROOT->ProcessLine(".L $DUNETPC_INC/dune/ArtSupport/DuneToolManager.h+");
@@ -110,6 +111,7 @@ int init(string pkgDir =".", string buildDirIn =".aclic/$DUNETPC_VERSION") {
   gROOT->ProcessLine(".L Script/drawSums.C");
   gROOT->ProcessLine(".L Script/drawChanSum.C");
   gROOT->ProcessLine(".L Script/testAll.C");
+#endif
 
   // Build utilities, i.e. classes, functions, etc. whose libraries
   // are installed at buildDir/lib and so visible to clients.
