@@ -44,9 +44,9 @@ tools.adcRoiViewer.SumHists: [
 ]
 
 tools.adcRoiViewer.ChanSumHists: [
-  {name:"hcsNevt_%CRNAME%"       title:"Event count run %RUN% %CRLABEL%"             valHist:"hse_ch%0CHAN%"  valType:entries  errType:none        nbins:0    plot:"%HNAME%.png" pran:"0:1.02:nevt" cr:list},
-  {name:"hcsCount_%CRNAME%"      title:"ROI %LAB0% count run %RUN% %CRLABEL%"        valHist:"hsa_ch%0CHAN%"  valType:count    errType:none        nbins:0    plot:"%HNAME%.png" pran:"0:6:nevt"    cr:list},
-  {name:"hcsTime_%CRNAME%"       title:"ROI %LAB0% count run %RUN% %CRLABEL%"        valHist:"hst_ch%0CHAN%"  valType:mean     errType:rms         nbins:0    plot:"%HNAME%.png" pran:"0:1000"      cr:list},
-  {name:"hcsArea_%CRNAME%"       title:"ROI %LAB0% area run %RUN% %CRLABEL%"         valHist:"hsa_ch%0CHAN%"  valType:mean     errType:meanError   nbins:0    plot:"%HNAME%.png" pran:"0:150"       cr:list},
-  {name:"hcsWidth_%CRNAME%"      title:"ROI %LAB0% width run %RUN% %CRLABEL%"        valHist:"hsw_ch%0CHAN%"  valType:mean     errType:meanError   nbins:0    plot:"%HNAME%.png" pran:"0:100"    cr:list}
+  {name:"hcsNevt_%CRNAME%"       title:"Event count run %RUN% %CRLABEL%"             valHist:"hse_ch%0CHAN%"  valType:entries  errType:none        nbins:0    plot:"%HNAME%.{png,tpad}" pran:"0:1.02:nevt" cr:list},
+  {name:"hcsCount_%CRNAME%"      title:"ROI %LAB0% count run %RUN% %CRLABEL%"        valHist:"hsa_ch%0CHAN%"  valType:count    errType:none        nbins:0    plot:"%HNAME%.{png,tpad}" pran:"0:6:nevt"    cr:list},
+  {name:"hcsTime_%CRNAME%"       title:"ROI %LAB0% count run %RUN% %CRLABEL%"        valHist:"hst_ch%0CHAN%"  valType:mean     errType:rms         nbins:0    plot:"%HNAME%.{png,tpad}" pran:"0:1000"      cr:list},
+  {name:"hcsArea_%CRNAME%"       title:"ROI %LAB0% area run %RUN% %CRLABEL%"         valHist:"hsa_ch%0CHAN%"  valType:mean     errType:meanError   nbins:0    plot:"%HNAME%.{png,tpad}" pran:"0:150"       cr:list},
+  {name:"hcsWidth_%CRNAME%"      title:"ROI %LAB0% width run %RUN% %CRLABEL%"        valHist:"hsw_ch%0CHAN%"  valType:mean     errType:meanError   nbins:0    plot:"%HNAME%.{png,tpad}" pran:"0:100"       cr:list}
 ]
