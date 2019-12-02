@@ -16,11 +16,16 @@ while [ ${#SRUN} -lt 6 ]; do SRUN="0"$SRUN; done
 while [ ${#SEVT} -lt 6 ]; do SEVT="0"$SEVT; done
 while [ ${#SEVT1} -lt 6 ]; do SEVT1="0"$SEVT1; done
 while [ ${#SEVT2} -lt 6 ]; do SEVT2="0"$SEVT2; done
-echo ${SRUN}
+#echo ${SRUN}
 RUNDIR=dqmw/event$SEVT/run${SRUN}evts${SEVT1}-${SEVT2}
 if [ ! -r $RUNDIR ]; then
-  echo Run directory not found: $RUNDIR
-  exit 1
+  RUNDIR=dqmw/*/event$SEVT/run${SRUN}evts${SEVT1}-${SEVT2}
+  if [ ! -r $RUNDIR ]; then
+    echo Run directory not found: $RUNDIR
+    exit 1
+  else
+    echo Taking plots from $RUNDIR
+  fi
 fi
 OUTBASEDIR=$HOME/wwwdune/protodune/data/dqmw
 OUTRUNDIR=$OUTBASEDIR/run$SRUN
