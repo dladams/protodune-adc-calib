@@ -8,7 +8,10 @@
 
 int postinit() {
   const string myname = "postinit: ";
-  cout << "Welcome to the protoDUNE ADC post-initialization." << endl;
+  cout << myname << "Welcome to the protoDUNE ADC post-initialization." << endl;
+
+  cout << myname << "Skipping postinit." << endl;
+  return 0;
 
   // Load the dunetpc and other supporting libraries.
   vector<string> libs;
