@@ -1,0 +1,7 @@
+for FILE in $(find . -name warnings.log); do
+  LINE=$(cat $FILE | grep -v "AdcRoiViewer::State::getChannelStatus: WARNING: Status not found for channel" | wc -l)
+  COUNT=$(echo $LINE | sed 's/ .*//g')
+  SCOUNT=$COUNT
+  while [ ${#SCOUNT} -lt 5 ]; do SCOUNT=" "$SCOUNT; done
+  echo "$SCOUNT $FILE"
+done
