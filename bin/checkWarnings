@@ -1,7 +1,29 @@
-for FILE in $(find . -name warnings.log); do
-  LINE=$(cat $FILE | grep -v "AdcRoiViewer::State::getChannelStatus: WARNING: Status not found for channel" | wc -l)
+DIR=$1
+OPT=$2
+NSKIP=0
+if [ -z "$OPT" ]; then
+  echo Usage: $0 DIR OPT
+  echo "  OPT = all, nostat, noise"
+  exit 0
+fi
+for FILE in $(find $DIR -name warnings.log); do
+  if [ $OPT = all ]; then
+    LINE=$(cat $FILE | wc -l)
+  elif [ $OPT = nostat ]; then
+    LINE=$(cat $FILE | grep -v "AdcRoiViewer::State::getChannelStatus: WARNING: Status not found for channel" | wc -l)
+  elif [ $OPT = noise ]; then
+    LINE=$(cat $FILE | grep AdcNoiseSignalFinder::update | wc -l)
+  else
+    echo Invalid OPT: $OPT
+    exit 1
+  fi
   COUNT=$(echo $LINE | sed 's/ .*//g')
+  if [ $COUNT -eq 0 ]; then
+    NSKIP=$(($NSKIP+1))
+    continue
+  fi
   SCOUNT=$COUNT
-  while [ ${#SCOUNT} -lt 5 ]; do SCOUNT=" "$SCOUNT; done
+  while [ ${#SCOUNT} -lt 10 ]; do SCOUNT=" "$SCOUNT; done
   echo "$SCOUNT $FILE"
 done
+echo "# logs with no matching warnings: $NSKIP"
