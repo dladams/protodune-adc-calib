@@ -10,6 +10,10 @@ if [ "$1" = "-H" ]; then
   echo Usage: $0 FCL RUNPAT [NEVT] [NSKIP] [FLAG]
   echo "       FLAG=clean to remove existing run directory"
   echo "       FLAG=output to save event output"
+  echo "       FLAG=val to run with valgrind log mixed with process log"
+  echo "       FLAG=valout to run with valgrind logged to valgrind.out"
+  echo "       FLAG=valgdb to run to memcheck error and then wait for gdb"
+  echo "       FLAG=valstop to stop at first memcheck error"
   echo
   echo Runs a lar job in a dedicated directory.
   echo
@@ -313,6 +317,7 @@ SEVT=    # # events to proc padded with zeroes
 NSKP=0   # # events to skip
 SSKP=    # # events to skip padded with zeroes
 OUTPUT=0
+VALOPT=
 CLEAN=
 #RUN=run001191
 if [ -n "$1" ]; then
@@ -340,10 +345,18 @@ else
   echo "Use option -H for details"
   exit 0
 fi
-if [ -n "$5" ]; then
-  if [ $5 = clean ]; then CLEAN=true; fi
-  if [ $5 = output ]; then OUTPUT=1; fi
-fi
+for ARG in $5 $6; do
+  if   [ $ARG = clean ]; then CLEAN=true
+  elif [ $ARG = output ]; then OUTPUT=1
+  elif [ $ARG = val ]; then VALOPT=val
+  elif [ $ARG = valout ]; then VALOPT=valout
+  elif [ $ARG = valgdb ]; then VALOPT=valgdb
+  elif [ $ARG = valstop ]; then VALOPT=valstop
+  else
+    echo "Invalid flag: $ARG"
+    exit 1
+  fi
+done
 FRUN=$IRUN
 RUNSUF=
 RUNPAT=
@@ -390,6 +403,9 @@ else
 fi
 RUNNAME0=$FRUN
 RUNNAME=run${FRUN}${SEVT}${SSKP}
+if [ -n "$VALOPT" ]; then
+  RUNNAME=$RUNNAME-$VALOPT
+fi
 if [ $OUTPUT -eq 1 ]; then RUNNAME=${RUNNAME}output; fi
 echo runname: $RUNNAME
 
@@ -529,15 +545,34 @@ OPTNEVT=
 if [ "$NEVT" -gt 0 ]; then
   OPTNEVT="-n $NEVT"
 fi
+COMBASE="lar -c $FCLFILE $INSPEC $OPTNEVT --nskip $NSKP"
 if [ $OUTPUT -eq 1 ]; then
-  echo "lar -c $FCLFILE $INSPEC $OPTNEVT --nskip $NSKP" >run
+  COM=$COMBASE
 else
-  echo "lar -c $FCLFILE $INSPEC $OPTNEVT --nskip $NSKP --no-output" >run
+  COM="$COMBASE --no-output"
 fi
+VALBASE="valgrind --tool=memcheck --leak-check=no --track-origins=yes --num-callers=20 --error-limit=no --suppressions=${ROOTSYS}/etc/valgrind-root.supp"
+SUPFILES="$DUNETPC_INC/valgrind_dune.sup"
+for SUPFILE in $SUPFILES; do
+  if [ -r $SUPFILE ]; then
+    VALBASE="$VALBASE --suppressions=$SUPFILE"
+  fi
+done
+echo $COM >run
+echo $VALBASE $COM >runval
+echo $VALBASE --log-file=valgrind.out $COM >runvalout
+echo $VALBASE --vgdb-error=1 $COM >runvalgdb
+echo $VALBASE --error-exitcode=5 --exit-on-first-error=yes $COM >runvalstop
+
 chmod +x run
+chmod +x runval
+chmod +x runvalout
+chmod +x runvalgdb
+chmod +x runvalstop
+RUNCOM=./run$VALOPT
 if [ $IRUN != '0' ]; then
   ulimit -c unlimited
-  ./run 2>&1 | tee run.log
+  $RUNCOM 2>&1 | tee run.log
   STAT=$?
   if [ $STAT -ne 0 ]; then
     echo "Job failed with error $STAT"
@@ -548,8 +583,11 @@ if [ $IRUN != '0' ]; then
   head -10 errors.log
   echo Error count: `wc -l errors.log | awk '{print $1}'`
   grep WARNING: run.log >warnings.log
-  echo Warning cout: `wc -l warnings.log | awk '{print $1}'`
+  echo Warning count: `wc -l warnings.log | awk '{print $1}'`
   head -10 warnings.log
+  if [ -r valgrind.out ]; then
+    tail -1 valgrind.out
+  fi
 fi
 echo Run directory: $DIR
 echo ARGS: '-c' $FCLFILE '-s' $INFILES $OPTNEVT '--nskip' $NSKP
