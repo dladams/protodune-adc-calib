@@ -88,6 +88,7 @@ physics: {
       OnlineChannelMapTool: pd_onlineChannelMapByFemb
       KeepChannels: []
       SkipChannels: []
+      SkipEmptyChannels: true
       ApaChannelCounts: [2560]
     }
   }
