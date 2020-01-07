@@ -21,12 +21,14 @@ RUNDIR=dqmw/event$SEVT/run${SRUN}evts${SEVT1}-${SEVT2}
 if [ ! -r $RUNDIR ]; then
   RUNDIR=dqmw/*/event$SEVT/run${SRUN}evts${SEVT1}-${SEVT2}
   if [ ! -r $RUNDIR ]; then
-    echo Run directory not found: $RUNDIR
-    exit 1
-  else
-    echo Taking plots from $RUNDIR
+    RUNDIR=dqmw/event$SEVT/run${SRUN}*
+    if [ ! -r $RUNDIR ]; then
+      echo Run directory not found: $RUNDIR
+      exit 1
+    fi
   fi
 fi
+echo Taking plots from $RUNDIR
 OUTBASEDIR=$HOME/wwwdune/protodune/data/dqmw
 OUTRUNDIR=$OUTBASEDIR/run$SRUN
 if [ ! -r $OUTRUNDIR ]; then

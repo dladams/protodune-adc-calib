@@ -89,6 +89,7 @@ physics: {
       KeepChannels: []
       SkipChannels: []
       SkipEmptyChannels: true
+      DeltaTickCount: 0.005
       ApaChannelCounts: [2560]
     }
   }
